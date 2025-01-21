@@ -5,7 +5,6 @@
             <p>User Email: {{ user.user_email }}</p>
             <p>Account Unique ID: {{ user.account_unique_id }}</p>
             <NuxtLink :to="`/users/${user.id}?account=${user.account_unique_id}`">View User</NuxtLink>
-
         </div>
     </div>
 </template>
