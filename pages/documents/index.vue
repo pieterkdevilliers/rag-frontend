@@ -3,13 +3,17 @@
         <div v-for="folder in folders.folders">
             <p>Folder ID: {{ folder.id }}</p>
             <p>Folder Name: {{ folder.folder_name }}</p>
-            <!-- <NuxtLink :to="`/users/${user.id}?account=${user.account_unique_id}`">View User</NuxtLink> -->
+            <NuxtLink :to="`/documents/folders/${folder.id}`">View User</NuxtLink>
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
-const { account_unique_id } = useRoute().query;
+
+import { useAuthStore } from '~/stores/auth';
+const authStore = useAuthStore();
+
+const account_unique_id = authStore.uniqueAccountId
 const apiAuthorizationToken = useRuntimeConfig().public.apiAuthorizationToken;
     // Fetch folders data with headers
 const { data: folders, error } = await useFetch(`https://fastapi-rag-2705cfd4c41a.herokuapp.com/api/v1/folders/${account_unique_id}`, {
@@ -27,6 +31,7 @@ if (error.value) {
   // Check if the response has the expected structure
   if (folders.value) {
     console.log('Folders:', folders.value);
+    console.log('Stored Unique Account ID:', authStore.uniqueAccountId);
   } else {
     console.error('Unexpected response format:', folders.value);
   }

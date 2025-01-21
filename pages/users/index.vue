@@ -1,15 +1,17 @@
 <template>
-    <div class="grid grid-cols-4 gap-5">
-        <div v-for="user in users.users" :key="user.id">
-            <p>User ID: {{ user.id }}</p>
-            <p>User Email: {{ user.user_email }}</p>
-            <p>Account Unique ID: {{ user.account_unique_id }}</p>
-            <NuxtLink :to="`/users/${user.id}?account=${user.account_unique_id}`">View User</NuxtLink>
-        </div>
+  <div class="grid grid-cols-4 gap-5">
+    <div v-for="user in users.users" :key="user.id">
+      <UserCard :user = "user"/>
     </div>
+  </div>
 </template>
 
 <script setup lang="ts">
+
+import { useAuthStore } from '~/stores/auth';
+
+const authStore = useAuthStore();
+
 const apiAuthorizationToken = useRuntimeConfig().public.apiAuthorizationToken;
     // Fetch users data with headers
 const { data: users, error } = await useFetch('https://fastapi-rag-2705cfd4c41a.herokuapp.com/api/v1/users', {
@@ -24,9 +26,12 @@ const { data: users, error } = await useFetch('https://fastapi-rag-2705cfd4c41a.
 if (error.value) {
   console.error('Error fetching users:', error.value);
 } else {
-  // Check if the response has the expected structure
+  // Check if the response has the expected structure and set the unique account ID
   if (users.value && users.value.users) {
-    console.log('Users:', users.value.users);
+    const uniqueAccountId = users.value.users[0].account_unique_id;
+    authStore.setUniqueAccountId(uniqueAccountId);
+    console.log('Stored Unique Account ID:', authStore.uniqueAccountId);
+    
   } else {
     console.error('Unexpected response format:', users.value);
   }

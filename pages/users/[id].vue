@@ -1,18 +1,21 @@
 <template>
     <div>
-        <p>User ID: {{ user.user.id }}</p>
-        <p>User Email: {{ user.user.user_email }}</p>
-        <p>Account Unique ID: {{ user.user.account_unique_id }}</p>
+      <UserDetailCard :user = "user"/>
+        <!-- <p>User ID: {{ user.user.id }}</p>
+        <p>User Email: {{ user.user.user_email }}</p> -->
     </div>
 </template>
 
 <script setup lang="ts">
+import { useAuthStore } from '~/stores/auth';
+
+const authStore = useAuthStore();
+const account_unique_id = authStore.uniqueAccountId
 const { id } = useRoute().params;
-const account = useRoute().query.account;
 
 const apiAuthorizationToken = useRuntimeConfig().public.apiAuthorizationToken;
     // Fetch users data with headers
-const { data: user, error } = await useFetch(`https://fastapi-rag-2705cfd4c41a.herokuapp.com/api/v1/users/${account}/${id}`, {
+const { data: user, error } = await useFetch(`https://fastapi-rag-2705cfd4c41a.herokuapp.com/api/v1/users/${account_unique_id}/${id}`, {
   method: 'GET',
   headers: {
     'accept': 'application/json',

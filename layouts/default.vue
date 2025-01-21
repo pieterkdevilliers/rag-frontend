@@ -6,7 +6,7 @@
                 <li><NuxtLink class="btn" to="/">Home</NuxtLink></li>
                 <li><NuxtLink to="/login">Login</NuxtLink></li>
                 <li><NuxtLink to="/users">Users</NuxtLink></li>
-                <li><NuxtLink to="/documents">Documents</NuxtLink></li>
+                <li><NuxtLink to="/folders">Documents</NuxtLink></li>
             </ul>
         </nav>
     </header>
@@ -14,6 +14,10 @@
         <slot />
     </div>
 </template>
+
+<script setup lang="ts" >
+
+</script>
 
 <style scoped>
 .router-link-exact-active {
