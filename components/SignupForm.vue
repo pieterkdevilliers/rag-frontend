@@ -1,7 +1,7 @@
 <template>
     <div class="max-w-md mx-auto p-4">
-        <form @submit.prevent="handleLogin">
-        <h2 class="text-2xl font-bold mb-4">Login</h2>
+        <form @submit.prevent="handleSignup">
+        <h2 class="text-2xl font-bold mb-4">Create your account</h2>
         <div class="mb-4">
             <label class="block text-sm font-medium text-gray-700" for="username">Username</label>
             <input
@@ -24,11 +24,22 @@
             autocomplete="off"
             />
         </div>
+        <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700" for="password">Account Organisation</label>
+            <input
+            v-model="account_organisation"
+            id="account_organisation"
+            type="text"
+            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+            placeholder="Enter your comapny name"
+            autocomplete="off"
+            />
+        </div>
         <button
             type="submit"
             class="w-full bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700"
         >
-            Login
+            Create Account
         </button>
         </form>
         <p v-if="errorMessage" class="text-red-600 mt-4">{{ errorMessage }}</p>
@@ -45,15 +56,17 @@ const router = useRouter();
 
 const username = ref('');
 const password = ref('');
+const account_organisation = ref('');
 const errorMessage = ref('');
 
-const handleLogin = async () => {
+const handleSignup = async () => {
   try {
     const formData = new URLSearchParams();
     formData.append('username', username.value);
     formData.append('password', password.value);
+    formData.append('account_organisation', account_organisation.value);
 
-    const response = await fetch('https://fastapi-rag-2705cfd4c41a.herokuapp.com/token', {
+    const account = await fetch(`https://fastapi-rag-2705cfd4c41a.herokuapp.com/api/v1/accounts/${account_organisation.value}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -62,20 +75,31 @@ const handleLogin = async () => {
       body: formData.toString(),
     });
 
-    if (!response.ok) {
-      throw new Error('Invalid credentials');
+    if (!account.ok) {
+      throw new Error('Unable to create account');
     }
 
-    const data = await response.json();
+    const data = await account.json();
     console.log('Response:', data);
     const uniqueAccountId = data.account_unique_id;
-    const access_token = data.access_token;
+    console.log('Unique Account ID:', uniqueAccountId);
+    
     authStore.setUniqueAccountId(uniqueAccountId);
-    authStore.setAuthToken(access_token);
 
+    const user = await fetch(`https://fastapi-rag-2705cfd4c41a.herokuapp.com/api/v1/users/${uniqueAccountId}/${username.value}/${password.value}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        accept: 'application/json',
+      },
+      body: formData.toString(),
+    });
 
+    if (!user.ok) {
+      throw new Error('Unable to create user');
+    }
     // Redirect to a secure route
-    router.push('/users');
+    router.push('/login');
   } catch (error) {
     console.error('Error:', error);
     errorMessage.value = 'Login failed. Please check your credentials.';

@@ -1,8 +1,9 @@
 <template>
     <div>
-        <h2>This is the home page</h2>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Saepe deserunt amet repellat dignissimos sit eum quos ab, quas soluta accusamus!</p>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Saepe deserunt amet repellat dignissimos sit eum quos ab, quas soluta accusamus!</p>
+        <h2>Create an account</h2>
+        <SignupForm />
+       <p>Already have an account?</p>
+       <NuxtLink to="/login" class="btn">Log In</NuxtLink>
     </div>
 </template>
 
@@ -11,14 +12,5 @@
 </script>
 
 <style scoped>
-    h2 {
-        color: blue;
-        margin-bottom: 20px;
-        font-size: 36px;
-    }
-    p {
-        color: green;
-        margin: 20px 0;
-    }
 
 </style>

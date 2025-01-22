@@ -5,7 +5,7 @@
             <NuxtLink class="font-bold" to="/">Private Rag</NuxtLink>
             <h1 class="font-bold">{{ account_organisation }}</h1>
             <ul class="flex gap-4">
-                <li><NuxtLink to="/">Home</NuxtLink></li>
+                <li><NuxtLink v-if="!account_unique_id" to="/">Home</NuxtLink></li>
                 <li v-if="!account_unique_id"><NuxtLink to="/login">Login</NuxtLink></li>
                 <li v-if="account_unique_id"><NuxtLink to="/users">Users</NuxtLink></li>
                 <li v-if="account_unique_id"><NuxtLink to="/folders">Documents</NuxtLink></li>
@@ -59,5 +59,6 @@ watchEffect(async () => {
 <style scoped>
 .router-link-exact-active {
     color: #12b448;
+
 }
 </style>

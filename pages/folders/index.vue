@@ -11,13 +11,13 @@ import { useAuthStore } from '~/stores/auth';
 const authStore = useAuthStore();
 
 const account_unique_id = authStore.uniqueAccountId
-const apiAuthorizationToken = useRuntimeConfig().public.apiAuthorizationToken;
+const apiAuthorizationToken = authStore.access_token;
   // Fetch folders data with headers
 const { data: folders, error } = await useFetch(`https://fastapi-rag-2705cfd4c41a.herokuapp.com/api/v1/folders/${account_unique_id}`, {
 method: 'GET',
 headers: {
   'accept': 'application/json',
-  'Authorization': apiAuthorizationToken,
+  'Authorization': `Bearer ${apiAuthorizationToken}`,
 }
 });
 
