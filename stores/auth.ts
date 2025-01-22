@@ -2,17 +2,24 @@ import { defineStore } from 'pinia';
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
-    uniqueAccountId: null as string | null, // Initialize as null
+    uniqueAccountId: null as string | null,
+    access_token: null as string | null,
   }),
   actions: {
-    // Action to set the account ID
     setUniqueAccountId(id: string) {
       this.uniqueAccountId = id;
     },
 
-    // Optional: Clear the account ID (e.g., on logout)
     clearUniqueAccountId() {
       this.uniqueAccountId = null;
+    },
+
+    setAuthToken(access_token: string) {
+      this.access_token = access_token;
+    },
+
+    clearAuthToken() {
+      this.access_token = null;
     },
   },
   persist: true,

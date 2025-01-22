@@ -1,12 +1,13 @@
 <template>
-    <div>
-        <h2>This is the login page</h2>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Saepe deserunt amet repellat dignissimos sit eum quos ab, quas soluta accusamus!</p>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Saepe deserunt amet repellat dignissimos sit eum quos ab, quas soluta accusamus!</p>
-    </div>
+    <LoginForm />
 </template>
 
 <script setup lang="ts">
+import { useAuthStore } from '~/stores/auth';
+const authStore = useAuthStore();
+
+authStore.clearUniqueAccountId();
+authStore.clearAuthToken();
 
 </script>
 

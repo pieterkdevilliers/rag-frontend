@@ -12,13 +12,15 @@ import { useAuthStore } from '~/stores/auth';
 
 const authStore = useAuthStore();
 
-const apiAuthorizationToken = useRuntimeConfig().public.apiAuthorizationToken;
+const apiAuthorizationToken = authStore.access_token;
+console.log('API Authorization Token:', apiAuthorizationToken);
+
     // Fetch users data with headers
 const { data: users, error } = await useFetch('https://fastapi-rag-2705cfd4c41a.herokuapp.com/api/v1/users', {
   method: 'GET',
   headers: {
     'accept': 'application/json',
-    'Authorization': apiAuthorizationToken,
+    'Authorization': `Bearer ${apiAuthorizationToken}`,
   }
 });
 
@@ -28,8 +30,8 @@ if (error.value) {
 } else {
   // Check if the response has the expected structure and set the unique account ID
   if (users.value && users.value.users) {
-    const uniqueAccountId = users.value.users[0].account_unique_id;
-    authStore.setUniqueAccountId(uniqueAccountId);
+    // const uniqueAccountId = users.value.users[0].account_unique_id;
+    // authStore.setUniqueAccountId(uniqueAccountId);
     console.log('Stored Unique Account ID:', authStore.uniqueAccountId);
     
   } else {
