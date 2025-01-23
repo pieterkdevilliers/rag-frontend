@@ -4,43 +4,41 @@
         <h2 class="text-2xl font-bold mb-4">Create your account</h2>
         <div class="mb-4">
             <label class="block text-sm font-medium text-gray-700" for="username">Username</label>
-            <input
+            <UInput
             v-model="username"
             id="username"
             type="text"
-            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
             placeholder="Enter your username"
             autocomplete="off"
             />
         </div>
         <div class="mb-4">
             <label class="block text-sm font-medium text-gray-700" for="password">Password</label>
-            <input
+            <UInput
             v-model="password"
             id="password"
             type="password"
-            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
             placeholder="Enter your password"
             autocomplete="off"
             />
         </div>
         <div class="mb-4">
             <label class="block text-sm font-medium text-gray-700" for="password">Account Organisation</label>
-            <input
+            <UInput
             v-model="account_organisation"
             id="account_organisation"
             type="text"
-            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
             placeholder="Enter your comapny name"
             autocomplete="off"
             />
         </div>
-        <button
+        <UButton
             type="submit"
-            class="w-full bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700"
+            label='Create Account'
+            variant="solid"
+            icon="i-heroicons:squares-plus"
         >
-            Create Account
-        </button>
+        </UButton>
         </form>
         <p v-if="errorMessage" class="text-red-600 mt-4">{{ errorMessage }}</p>
     </div>

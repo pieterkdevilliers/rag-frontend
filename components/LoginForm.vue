@@ -4,32 +4,30 @@
         <h2 class="text-2xl font-bold mb-4">Login</h2>
         <div class="mb-4">
             <label class="block text-sm font-medium text-gray-700" for="username">Username</label>
-            <input
+            <UInput
             v-model="username"
             id="username"
             type="text"
-            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
             placeholder="Enter your username"
             autocomplete="off"
             />
         </div>
         <div class="mb-4">
             <label class="block text-sm font-medium text-gray-700" for="password">Password</label>
-            <input
+            <UInput
             v-model="password"
             id="password"
             type="password"
-            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
             placeholder="Enter your password"
             autocomplete="off"
             />
         </div>
-        <button
+        <UButton
             type="submit"
-            class="w-full bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700"
+            icon="i-heroicons:arrow-right-end-on-rectangle"
+            label="Login"
         >
-            Login
-        </button>
+        </UButton>
         </form>
         <p v-if="errorMessage" class="text-red-600 mt-4">{{ errorMessage }}</p>
     </div>

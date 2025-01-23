@@ -1,14 +1,35 @@
 <template>
     <header class="shadow-sm bg-white">
         <nav class="container mx-auto p-4 flex justify-between">
-            <NuxtLink v-if="account_unique_id" to="/login">Logout</NuxtLink>
-            <NuxtLink class="font-bold" to="/">Private Rag</NuxtLink>
-            <h1 class="font-bold">{{ account_organisation }}</h1>
+            <!-- <NuxtLink class="btn" to="/">Your Docs AI</NuxtLink> -->
+            <h1 class="font-bold text-xl text-primary">{{ account_organisation }}</h1>
             <ul class="flex gap-4">
-                <li><NuxtLink v-if="!account_unique_id" to="/">Home</NuxtLink></li>
-                <li v-if="!account_unique_id"><NuxtLink to="/login">Login</NuxtLink></li>
-                <li v-if="account_unique_id"><NuxtLink to="/users">Users</NuxtLink></li>
-                <li v-if="account_unique_id"><NuxtLink to="/folders">Documents</NuxtLink></li>
+                <li><UButton v-if="!account_unique_id" 
+                  to="/"
+                  label="Home"
+                  icon="i-heroicons:home">
+                </UButton></li>
+                <li v-if="!account_unique_id"><UButton
+                  to="/login"
+                  icon="i-heroicons:arrow-right-end-on-rectangle"
+                  label="Login">
+                </UButton></li>
+                <li v-if="account_unique_id"><UButton 
+                  to="/users"
+                  label="Users"
+                  icon="i-heroicons:users">
+                </UButton></li>
+                <li v-if="account_unique_id"><UButton 
+                  to="/folders"
+                  label="Documents"
+                  icon="i-heroicons:document-magnifying-glass">
+                </UButton></li>
+                <li v-if="account_unique_id"><UButton
+                    to="/login"
+                    label="Logout"
+                    icon="i-heroicons:arrow-left-end-on-rectangle">
+                  </UButton>
+                </li>
             </ul>
         </nav>
     </header>
@@ -57,8 +78,8 @@ watchEffect(async () => {
 </script>
 
 <style scoped>
-.router-link-exact-active {
-    color: #12b448;
-
-}
+/* Apply styles when the link is active
+  :deep(.router-link-exact-active) {
+    @apply bg-white text-[#08bfb3] px-3 py-2 rounded-md text-sm;
+  } */
 </style>

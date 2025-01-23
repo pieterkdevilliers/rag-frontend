@@ -1,7 +1,7 @@
 <template>
-        <div class="card text-center">
+        <div class="card text-left">
             <p class="font-bold text-gray-500 m-4">User Email: {{ user.user.user_email }}</p>
-            <p>User ID: {{ user.user.id }}</p>
+            <p class="font-bold text-gray-500 m-4">User ID: {{ user.user.id }}</p>
         </div>
 </template>
 

@@ -1,9 +1,17 @@
 <template>
-    <div>
-        <h2>Create an account</h2>
-        <SignupForm />
-       <p>Already have an account?</p>
-       <NuxtLink to="/login" class="btn">Log In</NuxtLink>
+    <div class="grid grid-cols-2">
+        <div>
+            <h2>Create an account</h2>
+            <SignupForm />
+        </div>
+        <div>
+            <p>Already have an account?</p>
+            <UButton
+                icon="i-heroicons:arrow-right-end-on-rectangle"
+                to="/login"
+                label="Access Account">
+             </UButton>
+        </div>
     </div>
 </template>
 
