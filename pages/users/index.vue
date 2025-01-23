@@ -1,4 +1,10 @@
 <template>
+  <div class="flex justify-end mb-4">
+    <UButton
+      icon="i-heroicons:plus-circle-16-solid"
+      variant="outline">
+    </UButton>
+  </div>
   <div class="grid grid-cols-4 gap-5">
     <div v-for="user in users.users" :key="user.id">
       <UserCard :user = "user"/>

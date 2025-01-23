@@ -3,11 +3,18 @@
                 <p class="font-bold text-gray-500 m-4">{{ folder.id }}</p>
                 <p class="font-bold text-gray-500 m-4">{{ folder.folder_name }}</p>
             <template #footer>
-                <UButton 
-                    :to="`/folders/${folder.id}`"
-                    label="View Documents"
-                    icon="i-heroicons:clipboard-document-list">
-                </UButton>
+                <div class="flex gap-2">
+                    <UButton 
+                        :to="`/folders/${folder.id}`"
+                        icon="i-heroicons:clipboard-document-list">
+                    </UButton>
+                    <UButton 
+                        icon="i-heroicons:pencil-square">
+                    </UButton>
+                    <UButton 
+                        icon="i-heroicons:trash">
+                    </UButton>
+                </div>
             </template>
         </UCard>
 </template>
