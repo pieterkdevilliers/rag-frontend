@@ -1,4 +1,7 @@
 <template>
+  <div>
+    <h1 class="text-xl text-primary" >Users</h1>
+  </div>
   <div class="flex justify-end mb-4">
     <UButton
       icon="i-heroicons:plus-circle-16-solid"

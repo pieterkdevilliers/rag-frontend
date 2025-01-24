@@ -1,7 +1,6 @@
 <template>
     <header class="shadow-sm bg-white">
         <nav class="container mx-auto p-4 flex justify-between">
-            <!-- <NuxtLink class="btn" to="/">Your Docs AI</NuxtLink> -->
             <h1 class="font-bold text-xl text-primary">{{ account_organisation }}</h1>
             <ul class="flex gap-4">
                 <li><UButton v-if="!account_unique_id" 
