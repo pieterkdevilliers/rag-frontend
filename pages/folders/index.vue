@@ -21,6 +21,10 @@
 </template>
 
 <script setup lang="ts">
+
+  definePageMeta({
+    layout: 'user-access',
+  });
   import { useAuthStore } from '~/stores/auth';
   const authStore = useAuthStore();
 

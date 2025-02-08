@@ -28,6 +28,10 @@
 </template>
 
 <script setup lang="ts">
+
+    definePageMeta({
+    layout: 'user-access',
+    });
     const { id } = useRoute().params;
 
     import { useAuthStore } from '~/stores/auth';
