@@ -1,5 +1,6 @@
 <template>
-  <div class="max-w-md mx-auto p-4">
+  <div class="mx-auto p-4">
+    <div class="max-w-xl mx-auto p-4">
       <form @submit.prevent="handleQuery">
           <h2 class="text-2xl font-bold mb-4">Ask me anything</h2>
           <div class="mb-4">
@@ -23,17 +24,29 @@
       <p v-if="errorMessage" class="text-red-600 mt-4">{{ errorMessage }}</p>
 
       <!-- Show loading state -->
-      <p v-if="loading" class="text-gray-500 mt-4">Fetching response...</p>
+       <div v-if="loading" class="mt-4">
+
+         <UAlert title="Fetching response..." />
+       </div>
+    </div>
 
       <!-- Show response -->
       <div v-if="queryResponseText" class="mt-4 p-4 border border-gray-300 rounded bg-gray-100">
-          <h3 class="text-lg font-semibold mb-2">Response:</h3>
+        <UCard>
+          <template #header>
+            <h3 class="text-lg font-semibold mb-2">Response:</h3>
+          </template>
+
           <p>{{ queryResponseText }}</p>
-          <h3 class="text-lg font-semibold mt-4 mb-2">Sources:</h3>
-          <div v-for="source in queryResponseSources">
-            <li>{{ source }}</li>
-            <br>
-          </div>
+
+          <template #footer>
+            <h3 class="text-lg font-semibold mb-2">Sources:</h3>
+            <div v-for="source in queryResponseSources">
+              <li>{{ source }}</li>
+              <br>
+            </div>
+          </template>
+        </UCard>
       </div>
   </div>
 </template>
