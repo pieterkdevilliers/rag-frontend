@@ -5,8 +5,9 @@
   <div class="flex justify-end mb-4">
     <UButton
       icon="i-heroicons:plus-circle-16-solid"
-      variant="outline">
-    </UButton>
+      variant="outline"
+      @click="openModal"
+    />
   </div>
   <div>
     <div class="flex px-3 py-3.5">
@@ -16,7 +17,13 @@
     <div v-for="folder in filteredFolders" :key="folder.id">
         <FolderCard :folder="folder" />
     </div>
-</div>
+  </div>
+  <!-- Modal -->
+  <UModal v-model="isModalOpen">
+      <div class="p-5">
+        <AddFolderForm @close="closeModal" @folderAdded="refreshFolders" />
+      </div>
+    </UModal>
   </div>
 </template>
 
@@ -25,13 +32,15 @@
   definePageMeta({
     layout: 'user-access',
   });
+  import { ref } from 'vue';
   import { useAuthStore } from '~/stores/auth';
+  import AddFolderForm from '~/components/AddFolderForm.vue'; // Import modal component
   const authStore = useAuthStore();
 
   const account_unique_id = authStore.uniqueAccountId
   const apiAuthorizationToken = authStore.access_token;
     // Fetch folders data with headers
-  const { data: folders, error } = await useFetch(`https://fastapi-rag-2705cfd4c41a.herokuapp.com/api/v1/folders/${account_unique_id}`, {
+  const { data: folders, error, refresh } = await useFetch(`https://fastapi-rag-2705cfd4c41a.herokuapp.com/api/v1/folders/${account_unique_id}`, {
   method: 'GET',
   headers: {
     'accept': 'application/json',
@@ -64,6 +73,24 @@
           })
       })
       })
+    
+  // Modal state
+const isModalOpen = ref(false);
+
+const openModal = () => {
+  isModalOpen.value = true;
+  console.log('Modal opened');
+};
+
+const closeModal = () => {
+  isModalOpen.value = false;
+  console.log('Modal closed');
+};
+
+const refreshFolders = async () => {
+  console.log('Refreshing folders...');
+  await refresh();
+};
 
   </script>
 

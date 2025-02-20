@@ -19,7 +19,6 @@
     <!-- Modal -->
     <UModal v-model="isModalOpen">
       <div class="p-5">
-        <h2 class="text-lg font-semibold">Add New User</h2>
         <AddUserForm @close="closeModal" @userAdded="refreshUsers" />
       </div>
     </UModal>

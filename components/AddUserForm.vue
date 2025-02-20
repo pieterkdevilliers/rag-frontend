@@ -1,7 +1,7 @@
 <template>
     <div class="max-w-md mx-auto p-4">
         <form @submit.prevent="handleAddUser">
-        <h2 class="text-2xl font-bold mb-4">Login</h2>
+        <h2 class="text-2xl font-bold mb-4">Add New User</h2>
         <div class="mb-4">
             <label class="block text-sm font-medium text-gray-700" for="username">Email Address</label>
             <UInput
