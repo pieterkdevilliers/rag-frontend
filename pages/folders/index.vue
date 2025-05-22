@@ -15,15 +15,29 @@
     </div>
     <div class="grid grid-cols-6 gap-5">
     <div v-for="folder in filteredFolders" :key="folder.id">
-        <FolderCard :folder="folder" @folder-deleted="handleFolderRemoved"  />
+        <FolderCard 
+          :folder="folder"
+          @folder-deleted="handleFolderRemoved" 
+          @edit-folder-clicked="openEditFolderModal"
+           />
     </div>
   </div>
-  <!-- Modal -->
+  <!-- Add Folder Modal -->
   <UModal v-model="isModalOpen">
       <div class="p-5">
         <AddFolderForm @close="closeModal" @folderAdded="refreshFolders" />
       </div>
     </UModal>
+  
+    <!-- Edit Folder Modal -->
+  <EditFolderModal
+    :is-open="isEditModalOpen"
+    :folder="folderToEdit"
+    @close="closeEditFolderModal"
+    @folder-updated="handleFolderUpdated"
+    />
+
+    <UNotifications />
   </div>
 </template>
 
@@ -32,6 +46,11 @@
   definePageMeta({
     layout: 'user-access',
   });
+
+  interface Folder {
+    id: number;
+    folder_name: string;
+  }
   import { ref } from 'vue';
   import { useAuthStore } from '~/stores/auth';
   import AddFolderForm from '~/components/AddFolderForm.vue'; // Import modal component
@@ -39,6 +58,7 @@
 
   const account_unique_id = authStore.uniqueAccountId
   const apiAuthorizationToken = authStore.access_token;
+
     // Fetch folders data with headers
   const { data: folders, error, refresh } = await useFetch(`https://fastapi-rag-2705cfd4c41a.herokuapp.com/api/v1/folders/${account_unique_id}`, {
   method: 'GET',
@@ -81,24 +101,43 @@
       })
     
   // Modal state
-const isModalOpen = ref(false);
+  const isModalOpen = ref(false);
 
-const openModal = () => {
-  isModalOpen.value = true;
-  console.log('Modal opened');
-};
+  const openModal = () => {
+    isModalOpen.value = true;
+    console.log('Modal opened');
+  };
 
-const closeModal = () => {
-  isModalOpen.value = false;
-  console.log('Modal closed');
-};
+  const closeModal = () => {
+    isModalOpen.value = false;
+    console.log('Modal closed');
+  };
 
-const refreshFolders = async () => {
-  console.log('Refreshing folders...');
-  await refresh();
-};
+  const refreshFolders = async () => {
+    console.log('Refreshing folders...');
+    await refresh();
+  };
 
-  </script>
+  // --- State for Edit Folder Modal ---
+  const isEditModalOpen = ref(false);
+  const folderToEdit = ref<Folder | null>(null);
+
+  const openEditFolderModal = (folder: Folder) => {
+    folderToEdit.value = folder;
+    isEditModalOpen.value = true;
+  };
+
+  const closeEditFolderModal = () => {
+    isEditModalOpen.value = false;
+    folderToEdit.value = null; // Clear the selected folder
+  };
+
+  const handleFolderUpdated = async (updatedFolder: Folder) => {
+    // Option 1: Refresh the whole list (simpler)
+    await refreshFolders();
+  }
+
+</script>
 
   <style scoped>
     h2 {

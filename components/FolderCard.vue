@@ -12,7 +12,7 @@
         <UButton 
           icon="i-heroicons-pencil-square"
           aria-label="Edit folder"
-          @click="handleEdit" 
+          @click="emitEditFolder"
         />
         <UButton
           icon="i-heroicons-trash"
@@ -26,9 +26,9 @@
 
   <!-- Confirmation Modal -->
   <ConfirmDeleteModal
-    :is-open="isModalOpen"
+    :is-open="isDeleteModalOpen"
     :item-name="folder.folder_name"
-    @update:is-open="isModalOpen = $event"
+    @update:is-open="isDeleteModalOpen = $event"
     @confirm="handleDeleteFolder"
     @cancel="closeConfirmDeleteModal"
     @close="closeConfirmDeleteModal"
@@ -48,23 +48,22 @@ const props = defineProps<{
   };
 }>();
 
-const emit = defineEmits(['folderDeleted', 'editFolder']); // Added 'editFolder' for completeness
+const emit = defineEmits(['folderDeleted', 'editFolderClicked']); 
 
 const toast = useToast(); // For notifications
 const authStore = useAuthStore();
-const router = useRouter();
-const isModalOpen = ref(false);
+const isDeleteModalOpen = ref(false);
 const isDeleting = ref(false);
 
 const uniqueAccountId = authStore.uniqueAccountId;
 const apiAuthorizationToken = authStore.access_token;
 
 const openConfirmDeleteModal = () => {
-  isModalOpen.value = true;
+  isDeleteModalOpen.value = true;
 };
 
 const closeConfirmDeleteModal = () => {
-  isModalOpen.value = false;
+  isDeleteModalOpen.value = false;
 };
 
 const handleDeleteFolder = async () => {
@@ -92,6 +91,9 @@ const handleDeleteFolder = async () => {
   }
 };
 
+const emitEditFolder = () => {
+  emit('editFolderClicked', props.folder); // Emit the folder object
+};
 
 </script>
 
