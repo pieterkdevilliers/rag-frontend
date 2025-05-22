@@ -40,6 +40,10 @@
           <Queries />
       </div>
     </footer>
+
+    <!-- Add UNotifications here -->
+    <UNotifications />
+    
 </template>
 
 <script setup lang="ts">
