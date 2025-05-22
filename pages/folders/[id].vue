@@ -3,8 +3,10 @@
     <h1 class="text-xl text-primary">Documents</h1>
   </div>
   <div class="flex justify-end mb-4">
-    <UButton icon="i-heroicons:plus-circle-16-solid" variant="outline" @click="openAddFileModal">
-      <!-- Add File Modal would be here if you have one -->
+    <UButton
+      icon="i-heroicons:plus-circle-16-solid"
+      variant="outline" 
+      @click="openAddFileModal">
     </UButton>
   </div>
   <div>
@@ -13,7 +15,7 @@
     </div>
 
     <UTable :rows="filteredRows" :columns="columns" :loading="isLoadingFiles">
-      <template #file_name-data="{ row }"> <!-- Adjusted key to match 'file_name' -->
+      <template #file_name-data="{ row }"> 
         <span>{{ row.file_name }}</span>
       </template>
 
@@ -30,6 +32,15 @@
       </template>
     </UTable>
   </div>
+
+  <!-- Add File Modal -->
+    <UModal v-model="isAddFileModalOpen">
+      <div class="p-5">
+        <AddFileForm @close="closeAddFileModal" @fileAdded="refreshFiles" @files-added="handleFilesAddedToList"/>
+      </div>
+    </UModal>
+  
+    <UNotifications />
 
   <!-- Confirmation Modal for Deleting Files -->
   <ConfirmDeleteModal
@@ -58,6 +69,8 @@
     const { id } = useRoute().params;
     const toast = useToast();
     import { useAuthStore } from '~/stores/auth';
+    import { ref, computed } from 'vue';
+    import AddFileForm from '~/components/AddFileForm.vue'; 
     const authStore = useAuthStore();
 
     const account_unique_id = authStore.uniqueAccountId
@@ -113,6 +126,31 @@
         class: 'text-primary'
         }];
 
+
+    
+      // Add File Modal state
+    const isAddFileModalOpen = ref(false);
+
+    const openAddFileModal = () => {
+      isAddFileModalOpen.value = true;
+      console.log('Modal opened');
+    };
+
+    const closeAddFileModal = () => {
+      isAddFileModalOpen.value = false;
+      console.log('Modal closed');
+    };
+
+    closeAddFileModal(); 
+
+    // This method will be called when 'filesAdded' is emitted
+    const handleFilesAddedToList = async () => {
+      console.log('Files added, refreshing list...');
+      await refreshFiles(); // Call the refresh function from useFetch
+      // The modal will be closed by the 'close' event from AddFileForm after the timeout
+    };
+
+    // --- State for Delete File Modal ---
     const openDeleteConfirmation = (file: FileType) => {
         fileToDelete.value = file;
         isConfirmDeleteModalOpen.value = true;
@@ -132,18 +170,18 @@
   // Close modal optimistically, or wait for API response
     closeConfirmDeleteModal(); 
 
-      try {
-        await $fetch(`https://fastapi-rag-2705cfd4c41a.herokuapp.com/api/v1/files/${account_unique_id}/${fileBeingDeleted.id}`, {
-        method: 'DELETE',
-        headers: {
-            // 'Content-Type': 'application/x-www-form-urlencoded', // DELETE often doesn't need Content-Type for body
-            'accept': 'application/json',
-            'Authorization': `Bearer ${apiAuthorizationToken}`,
-        },
-        });
+    try {
+      await $fetch(`https://fastapi-rag-2705cfd4c41a.herokuapp.com/api/v1/files/${account_unique_id}/${fileBeingDeleted.id}`, {
+      method: 'DELETE',
+      headers: {
+          // 'Content-Type': 'application/x-www-form-urlencoded', // DELETE often doesn't need Content-Type for body
+          'accept': 'application/json',
+          'Authorization': `Bearer ${apiAuthorizationToken}`,
+      },
+      });
 
-        toast.add({ title: 'File Deleted', description: `File "${fileBeingDeleted.file_name}" has been deleted.`, color: 'green' });
-        await refreshFiles(); // Refresh the list from the server
+      toast.add({ title: 'File Deleted', description: `File "${fileBeingDeleted.file_name}" has been deleted.`, color: 'green' });
+      await refreshFiles(); // Refresh the list from the server
     } catch (err: any) {
         console.error('Error deleting file:', err);
         const errorMessage = err.data?.detail || err.message || 'Could not delete file.';
