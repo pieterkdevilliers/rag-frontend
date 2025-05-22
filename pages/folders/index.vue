@@ -23,7 +23,7 @@
     </div>
   </div>
   <!-- Add Folder Modal -->
-  <UModal v-model="isModalOpen">
+    <UModal v-model="isModalOpen">
       <div class="p-5">
         <AddFolderForm @close="closeModal" @folderAdded="refreshFolders" />
       </div>
