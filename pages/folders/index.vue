@@ -15,7 +15,7 @@
     </div>
     <div class="grid grid-cols-6 gap-5">
     <div v-for="folder in filteredFolders" :key="folder.id">
-        <FolderCard :folder="folder" />
+        <FolderCard :folder="folder" @folder-deleted="handleFolderRemoved"  />
     </div>
   </div>
   <!-- Modal -->
@@ -47,6 +47,12 @@
     'Authorization': `Bearer ${apiAuthorizationToken}`,
   }
   });
+
+
+  const handleFolderRemoved = (deletedFolderId: number) => {
+    console.log(`Folder with ID ${deletedFolderId} was reported as deleted. Triggering refresh.`);
+    refreshFolders();
+  };
 
   // Check for errors
   if (error.value) {
