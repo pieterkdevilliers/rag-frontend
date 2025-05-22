@@ -1,30 +1,45 @@
 <template>
-    <div>
-        <h1 class="text-xl text-primary" >Documents</h1>
-    </div>
-    <div class="flex justify-end mb-4">
-    <UButton
-      icon="i-heroicons:plus-circle-16-solid"
-      variant="outline">
+  <div>
+    <h1 class="text-xl text-primary">Documents</h1>
+  </div>
+  <div class="flex justify-end mb-4">
+    <UButton icon="i-heroicons:plus-circle-16-solid" variant="outline" @click="openAddFileModal">
+      <!-- Add File Modal would be here if you have one -->
     </UButton>
+  </div>
+  <div>
+    <div class="flex px-3 py-3.5">
+      <UInput v-model="q" placeholder="Filter documents..." />
     </div>
-    <div>
-        <div class="flex px-3 py-3.5">
-            <UInput v-model="q" placeholder="Filter documents..." />
+
+    <UTable :rows="filteredRows" :columns="columns" :loading="isLoadingFiles">
+      <template #file_name-data="{ row }"> <!-- Adjusted key to match 'file_name' -->
+        <span>{{ row.file_name }}</span>
+      </template>
+
+      <template #actions-data="{ row }">
+        <UDropdown :items="actionItems(row)">
+          <UButton color="gray" variant="ghost" icon="i-heroicons-ellipsis-horizontal-20-solid" />
+        </UDropdown>
+      </template>
+       <template #empty-state>
+        <div class="flex flex-col items-center justify-center py-6 gap-3">
+          <span class="italic text-sm">No files found!</span>
+          <UButton label="Add file" @click="openAddFileModal" />
         </div>
+      </template>
+    </UTable>
+  </div>
 
-        <UTable :rows="filteredRows" :columns="columns">
-            <template #name-data="{ row }">
-            <span :class="[selected.find(file => file.id === row.id) && 'text-primary-500 dark:text-primary-400']">{{ row.name }}</span>
-            </template>
-
-            <template #actions-data="{ row }">
-            <UDropdown :items="items(row)">
-                <UButton color="gray" variant="ghost" icon="i-heroicons-ellipsis-horizontal-solid" />
-            </UDropdown>
-            </template>
-        </UTable>
-    </div>
+  <!-- Confirmation Modal for Deleting Files -->
+  <ConfirmDeleteModal
+    :is-open="isConfirmDeleteModalOpen"
+    :item-name="fileToDelete ? fileToDelete.file_name : ''"
+    @update:is-open="isConfirmDeleteModalOpen = $event"
+    @confirm="handleDeleteFileConfirmed"
+    @cancel="closeConfirmDeleteModal"
+    @close="closeConfirmDeleteModal"
+  />
 </template>
 
 <script setup lang="ts">
@@ -32,15 +47,28 @@
     definePageMeta({
     layout: 'user-access',
     });
-    const { id } = useRoute().params;
 
+    interface FileType {
+        id: number;
+        file_name: string;
+        included_in_source_data: boolean | string; // API might return string "True"/"False"
+        already_processed_to_source_data: boolean | string;
+    }
+
+    const { id } = useRoute().params;
+    const toast = useToast();
     import { useAuthStore } from '~/stores/auth';
     const authStore = useAuthStore();
 
     const account_unique_id = authStore.uniqueAccountId
     const apiAuthorizationToken = authStore.access_token;
+
+    const isConfirmDeleteModalOpen = ref(false);
+    const fileToDelete = ref<FileType | null>(null);
+    const isDeletingInProgress = ref(false);
+
         // Fetch folders data with headers
-    const { data: files, error } = await useFetch(`https://fastapi-rag-2705cfd4c41a.herokuapp.com/api/v1/files/${account_unique_id}/${id}`, {
+    const { data: files, error, refresh } = await useFetch(`https://fastapi-rag-2705cfd4c41a.herokuapp.com/api/v1/files/${account_unique_id}/${id}`, {
     method: 'GET',
     headers: {
         'accept': 'application/json',
@@ -48,9 +76,11 @@
     }
     });
 
+
     // Check for errors
     if (error.value) {
     console.error('Error fetching files:', error.value);
+    toast.add({ title: 'Error', description: `Could not fetch files: ${error.value.message || 'Unknown error'}`, color: 'red' });
     } else {
     // Check if the response has the expected structure
     if (files.value) {
@@ -83,20 +113,68 @@
         class: 'text-primary'
         }];
 
+    const openDeleteConfirmation = (file: FileType) => {
+        fileToDelete.value = file;
+        isConfirmDeleteModalOpen.value = true;
+    };
 
-    const items = row => [
+    const closeConfirmDeleteModal = () => {
+        isConfirmDeleteModalOpen.value = false;
+        fileToDelete.value = null;
+    };
+
+    const handleDeleteFileConfirmed = async () => {
+        if (!fileToDelete.value) return;
+
+        isDeletingInProgress.value = true; // You can use this for a global loading indicator or pass to modal
+    const fileBeingDeleted = fileToDelete.value; // Keep a reference
+  
+  // Close modal optimistically, or wait for API response
+    closeConfirmDeleteModal(); 
+
+      try {
+        await $fetch(`https://fastapi-rag-2705cfd4c41a.herokuapp.com/api/v1/files/${account_unique_id}/${fileBeingDeleted.id}`, {
+        method: 'DELETE',
+        headers: {
+            // 'Content-Type': 'application/x-www-form-urlencoded', // DELETE often doesn't need Content-Type for body
+            'accept': 'application/json',
+            'Authorization': `Bearer ${apiAuthorizationToken}`,
+        },
+        });
+
+        toast.add({ title: 'File Deleted', description: `File "${fileBeingDeleted.file_name}" has been deleted.`, color: 'green' });
+        await refreshFiles(); // Refresh the list from the server
+    } catch (err: any) {
+        console.error('Error deleting file:', err);
+        const errorMessage = err.data?.detail || err.message || 'Could not delete file.';
+        toast.add({ title: 'Error', description: errorMessage, color: 'red' });
+    } finally {
+        isDeletingInProgress.value = false;
+    }
+    };
+
+    const actionItems = (row: FileType) => [
     [{
         label: 'Edit',
-        icon: 'i-heroicons-pencil-square-solid',
-        click: () => console.log('Edit', row.id)
+        icon: 'i-heroicons-pencil-square-20-solid',
+        click: () => console.log('Edit file:', row.id) // Implement edit logic
     }, {
         label: 'Process',
-        icon: 'i-heroicons:arrow-path-solid'
-    }], [{
+        icon: 'i-heroicons-arrow-path-20-solid',
+        click: () => console.log('Process file:', row.id) // Implement process logic
+    }],
+    [{
         label: 'Delete',
-        icon: 'i-heroicons-trash-solid'
+        icon: 'i-heroicons-trash-20-solid',
+        click: () => openDeleteConfirmation(row)
     }]
     ];
+
+
+    const refreshFiles = async () => {
+        console.log('Refreshing folders...');
+        await refresh();
+        };
 
     const q = ref('');
 
