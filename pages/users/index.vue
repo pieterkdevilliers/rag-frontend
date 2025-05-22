@@ -12,7 +12,7 @@
   
     <div class="grid grid-cols-4 gap-5">
       <div v-for="user in users?.users" :key="user.id">
-        <UserCard :user="user" />
+        <UserCard :user="user" @user-deleted="handleUserRemoved" />
       </div>
     </div>
   
@@ -51,6 +51,10 @@ if (error.value) {
   console.log('Stored Unique Account ID:', authStore.uniqueAccountId);
 }
 
+  const handleUserRemoved = (deletedUserId: number) => {
+    console.log(`Folder with ID ${deletedUserId} was reported as deleted. Triggering refresh.`);
+    refreshUsers();
+  };
 // Modal state
 const isModalOpen = ref(false);
 
