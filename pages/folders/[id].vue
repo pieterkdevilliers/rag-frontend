@@ -114,10 +114,10 @@
         label: 'File Name',
         class: 'text-primary'
         }, {
-        key: 'included_in_source_data',
-        label: 'Included in source data',
-        class: 'text-primary'
-        }, {
+        // key: 'included_in_source_data',
+        // label: 'Included in source data',
+        // class: 'text-primary'
+        // }, {
         key: 'already_processed_to_source_data',
         label: 'Already processed to source data',
         class: 'text-primary'
@@ -192,15 +192,15 @@
     };
 
     const actionItems = (row: FileType) => [
-    [{
-        label: 'Edit',
-        icon: 'i-heroicons-pencil-square-20-solid',
-        click: () => console.log('Edit file:', row.id) // Implement edit logic
-    }, {
-        label: 'Process',
-        icon: 'i-heroicons-arrow-path-20-solid',
-        click: () => console.log('Process file:', row.id) // Implement process logic
-    }],
+    // [{
+    //     label: 'Edit',
+    //     icon: 'i-heroicons-pencil-square-20-solid',
+    //     click: () => console.log('Edit file:', row.id) // Implement edit logic
+    // }, {
+    //     label: 'Process',
+    //     icon: 'i-heroicons-arrow-path-20-solid',
+    //     click: () => console.log('Process file:', row.id) // Implement process logic
+    // }],
     [{
         label: 'Delete',
         icon: 'i-heroicons-trash-20-solid',
