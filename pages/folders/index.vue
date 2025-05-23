@@ -1,8 +1,16 @@
 <template>
   <div>
-    <h1 class="text-xl text-primary" >Folders</h1>
+    <h1 class="text-xl text-primary mb-4" >Folders</h1>
   </div>
-  <div class="flex justify-end mb-4">
+  <div class="flex justify-start mb-4">
+    <UButton
+      icon="i-heroicons-arrow-path-20-solid"
+      label="Update AI Database"
+      variant="solid"
+      @click="openRefreshDBModal"
+    />
+  </div>
+    <div class="flex justify-end mb-4">
     <UButton
       icon="i-heroicons:plus-circle-16-solid"
       variant="outline"
@@ -37,6 +45,15 @@
     @folder-updated="handleFolderUpdated"
     />
 
+  <!-- Refresh AI DB Modal -->
+    <RefreshDBModal v-model="isRefreshDBModalOpen"
+      :is-open="isRefreshDBModalOpen"
+      @update:is-open="isRefreshDBModalOpen = $event"
+      @confirm="handleConfirmRefreshDB"
+      @cancel="closeRefreshDBModal"
+      @close="closeRefreshDBModal"
+       />
+
     <UNotifications />
   </div>
 </template>
@@ -55,7 +72,7 @@
   import { useAuthStore } from '~/stores/auth';
   import AddFolderForm from '~/components/AddFolderForm.vue'; // Import modal component
   const authStore = useAuthStore();
-
+  const toast = useToast();
   const account_unique_id = authStore.uniqueAccountId
   const apiAuthorizationToken = authStore.access_token;
 
@@ -136,6 +153,64 @@
     // Option 1: Refresh the whole list (simpler)
     await refreshFolders();
   }
+
+  // Refresh AI DB Modal state
+  const isRefreshDBModalOpen = ref(false);
+  const isDbUpdating = ref(false);
+
+  const openRefreshDBModal = () => {
+    isRefreshDBModalOpen.value = true;
+    console.log('Modal opened');
+  };
+
+  const closeRefreshDBModal = () => {
+    isRefreshDBModalOpen.value = false;
+    console.log('Modal closed');
+  };
+
+
+  const handleConfirmRefreshDB = async () => {
+    isDbUpdating.value = true; // Start loading indicator
+    closeRefreshDBModal();    // Close the modal immediately
+
+    try {
+      // Replace with your actual API endpoint and any necessary body/params
+      // Assuming a POST request to an endpoint that triggers the DB update
+      // For example, if it takes the account_unique_id:
+      const response = await $fetch(`https://fastapi-rag-2705cfd4c41a.herokuapp.com/api/v1/generate-chroma-db/${account_unique_id}`, {
+        method: 'GET',
+        headers: {
+          'accept': 'application/json',
+          'Authorization': `Bearer ${apiAuthorizationToken}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      console.log('AI Database refresh initiated:', response);
+      toast.add({
+        title: 'Database Update Started',
+        description: 'The AI database update process has been initiated. This may take some time.',
+        color: 'green',
+        timeout: 5000 // Keep message for 5 seconds
+      });
+
+      // Optionally, you might want to refresh some data or navigate,
+      // depending on what the API call does and returns.
+      // For example, if it updates some status you display:
+      // await refreshSomeStatusData();
+
+    } catch (err: any) {
+      console.error('Error initiating AI Database refresh:', err);
+      const errorMessage = err.data?.detail || err.message || 'Could not start database update.';
+      toast.add({
+        title: 'Error',
+        description: errorMessage,
+        color: 'red'
+      });
+    } finally {
+      isDbUpdating.value = false; // Stop loading indicator
+    }
+  };
 
 </script>
 
