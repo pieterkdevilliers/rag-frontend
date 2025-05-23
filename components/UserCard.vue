@@ -5,8 +5,8 @@
             <template #footer>
                 <div class="flex gap-2">
                     <UButton 
-                        :to="`/users/${user.id}`"
                         icon="i-heroicons:pencil-square"
+                        @click="emitEditUser"
                         />
 
                     <UButton 
@@ -38,7 +38,7 @@ const { user } = defineProps<{
     };
 }>();
 
-const emit = defineEmits(['userDeleted', 'editUser']);
+const emit = defineEmits(['userDeleted', 'editUserClicked']);
 
 const toast = useToast(); // For notifications
 const authStore = useAuthStore();
@@ -82,6 +82,9 @@ const handleDeleteUser = async () => {
   }
 };
 
+  const emitEditUser = () => {
+  emit('editUserClicked', user); // Emit the user object
+};
 </script>
 
 <style scoped>
