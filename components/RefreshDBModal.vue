@@ -10,6 +10,12 @@
         </div>
       </template>
 
+      <UCheckbox
+        v-model="replace"
+        label="Replace or Update?"
+        class="mb-4"
+      />
+      <p>Check this box to replace the existing AI Database with the latest documents, leave it unchecked to simply update your existing AI Database.</p>
       <div class="p-4">
         <p>Are you sure you want to update the AI Database with the latest documents?</p>
         <p class="text-sm text-gray-500 dark:text-gray-400">This action may take some time and cannot be undone easily.</p>
@@ -20,7 +26,7 @@
           <UButton color="gray" variant="ghost" @click="$emit('cancel')">
             Cancel
           </UButton>
-          <UButton @click="$emit('confirm')">
+          <UButton @click="$emit('confirm', replace)">
             Complete AI Database Update
           </UButton>
         </div>
@@ -30,10 +36,21 @@
 </template>
 
 <script setup lang="ts">
-defineProps<{
+import { ref, watch } from 'vue';
+
+const props = defineProps<{
   isOpen: boolean;
   isProcessing?: boolean;
 }>();
+
+const replace = ref(false);
+
+watch(() => props.isOpen, (newVal) => {
+  if (newVal) {
+    // Modal is opening
+    replace.value = false;
+  }
+});
 
 defineEmits(['update:isOpen', 'confirm', 'cancel', 'close']);
 </script>

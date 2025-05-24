@@ -168,16 +168,14 @@
     console.log('Modal closed');
   };
 
-
-  const handleConfirmRefreshDB = async () => {
+  const handleConfirmRefreshDB = async ( replace: boolean ) => {
     isDbUpdating.value = true; // Start loading indicator
     closeRefreshDBModal();    // Close the modal immediately
 
+    console.log('Replace value received from modal:', replace); // For debugging
+
     try {
-      // Replace with your actual API endpoint and any necessary body/params
-      // Assuming a POST request to an endpoint that triggers the DB update
-      // For example, if it takes the account_unique_id:
-      const response = await $fetch(`https://fastapi-rag-2705cfd4c41a.herokuapp.com/api/v1/generate-chroma-db/${account_unique_id}`, {
+      const response = await $fetch(`https://fastapi-rag-2705cfd4c41a.herokuapp.com/api/v1/generate-chroma-db/${account_unique_id}?replace=${replace}`, {
         method: 'GET',
         headers: {
           'accept': 'application/json',
