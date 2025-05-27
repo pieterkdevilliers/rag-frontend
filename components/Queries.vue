@@ -110,7 +110,7 @@ const processedSources = computed(() => {
     // Step 3: Construct the (future) URL to your backend proxy endpoint
     // This URL will be used by the modal later.
     // For now, it's just for structure.
-    const viewUrl = `/api/v1/documents/view/${account_unique_id}/${encodeURIComponent(fileIdentifier)}`;
+    const viewUrl = `/api/v1/files/view/${account_unique_id}/${encodeURIComponent(fileIdentifier)}`;
 
     return {
       displayName: displayName.trim() || fileIdentifier, // Fallback to fileIdentifier if displayName ends up empty
