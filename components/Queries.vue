@@ -35,6 +35,7 @@
         <UCard>
           <template #header>
             <h3 class="text-lg font-semibold mb-2">Response:</h3>
+            <p> {{ queryResponseText }}</p>
           <ul v-if="processedSources.length > 0">
             <li v-for="source in processedSources" :key="source.fileIdentifier" class="mb-1">
               <!-- This link will eventually open the modal. For now, it's a placeholder link -->
