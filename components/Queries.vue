@@ -35,7 +35,8 @@
         <UCard>
           <template #header>
             <h3 class="text-lg font-semibold mb-2">Response:</h3>
-            <p> {{ queryResponseText }}</p>
+            <p class="mb-2"> {{ queryResponseText }}</p>
+            <h3 class="text-lg font-semibold mb-2">Key Source Documents:</h3>
           <ul v-if="processedSources.length > 0">
             <li v-for="source in processedSources" :key="source.fileIdentifier" class="mb-1">
               <!-- This link will eventually open the modal. For now, it's a placeholder link -->
@@ -63,6 +64,7 @@
         @close="closeDocumentModal"
         @update:is-open="isDocumentModalOpen = $event"
       />
+      <UNotifications />
   </div>
 </template>
 
@@ -166,17 +168,17 @@ const handleQuery = async () => {
   }
 };
 
-// --- Methods for document viewing (will be fleshed out later) ---
-const prepareToOpenDocument = (fileIdentifier: string) => {
-  console.log("Prepare to open document:", fileIdentifier);
-  selectedFileToView.value = fileIdentifier;
-  isDocumentModalOpen.value = true; // This will trigger the modal once it's added
-  // In the next step, this method (or the modal itself) will fetch and display the document
+// --- Methods for document viewing modal ---
+const prepareToOpenDocument = (fileIdentifierFromSource: string) => {
+  console.log("Opening document modal for file:", fileIdentifierFromSource);
+  selectedFileToView.value = fileIdentifierFromSource; // This is the S3 filename
+  isDocumentModalOpen.value = true; // This will show the modal
 };
 
 const closeDocumentModal = () => {
+  console.log("Closing document modal");
   isDocumentModalOpen.value = false;
-  selectedFileToView.value = null;
+  selectedFileToView.value = null; // Clear selection when modal closes
 };
-// --- End Methods for document viewing ---
+// --- End Methods for document viewing modal ---
 </script>
