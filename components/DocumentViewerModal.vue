@@ -1,5 +1,5 @@
 <template>
-  <UModal :model-value="isOpen" @update:model-value="handleModalUpdate" :prevent-close="isLoading">
+  <UModal :model-value="isOpen" @update:model-value="handleModalUpdate" :prevent-close="isLoading" :ui="{ width: 'sm:max-w-3xl md:max-w-4xl lg:max-w-5xl' }"> <!-- Added UI for wider modal -->
     <UCard :ui="{ ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
       <template #header>
         <div class="flex items-center justify-between">
@@ -18,25 +18,41 @@
         </div>
       </template>
 
-      <!-- Placeholder content for now -->
-      <div class="p-4 min-h-[200px]"> <!-- min-h to give it some size -->
-        <div v-if="isLoading" class="text-center py-10">
-          <p>Loading document...</p>
-          <!-- You can add a UProgress or USkeleton here later -->
+      <div class="p-1 min-h-[70vh] max-h-[80vh] overflow-y-auto"> <!-- Adjusted padding and height for iframe -->
+        <div v-if="isLoading && !pdfUrl" class="flex justify-center items-center h-full py-10">
+          <div>
+            <svg class="animate-spin h-8 w-8 text-primary mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            <p class="mt-2">Loading document...</p>
+          </div>
         </div>
-        <div v-else-if="errorLoadingDocument" class="text-red-500">
+        <div v-else-if="errorLoadingDocument" class="text-red-500 p-4">
           <p>Error loading document: {{ errorLoadingDocument }}</p>
+          <p class="text-sm mt-1">Please ensure the file exists and you have permission to view it. Try closing this viewer and trying again.</p>
         </div>
-        <div v-else>
-          <p>Modal is open for file: <strong>{{ displayFilename || 'No file selected' }}</strong></p>
-          <p class="mt-4">Document content will be displayed here.</p>
-          <!-- This is where the iframe or PDF.js canvas will go later -->
+        <!-- IFRAME APPROACH -->
+        <div v-else-if="pdfUrl" class="w-full h-[calc(70vh-2rem)]"> <!-- Adjust height as needed -->
+          <iframe
+            :src="pdfUrl"
+            width="100%"
+            height="100%"
+            frameborder="0"
+            title="PDF Viewer"
+            allowfullscreen
+          >
+            Your browser does not support embedded PDFs. You can <a :href="pdfUrl" target="_blank" rel="noopener noreferrer">download the PDF</a> instead.
+          </iframe>
+        </div>
+        <div v-else-if="!isLoading && !props.fileIdentifier" class="p-4">
+             <p>No document selected.</p>
         </div>
       </div>
 
-      <template #footer v-if="!isLoading && !errorLoadingDocument">
+      <template #footer>
         <div class="flex justify-end">
-          <UButton color="gray" variant="solid" @click="closeModal">
+          <UButton color="gray" variant="solid" @click="closeModal" :disabled="isLoading">
             Close
           </UButton>
         </div>
@@ -50,20 +66,18 @@ import { ref, watch, computed } from 'vue';
 
 const props = defineProps<{
   isOpen: boolean;
-  fileIdentifier: string | null; // The S3 filename, e.g., original_name_randomid.pdf
-  accountUniqueId: string | null; // Needed to construct the view URL
+  fileIdentifier: string | null;
+  accountUniqueId: string | null;
 }>();
 
 const emit = defineEmits(['update:isOpen', 'close']);
 
-const isLoading = ref(false); // For loading the document content
+const isLoading = ref(false);
 const errorLoadingDocument = ref<string | null>(null);
-// const documentUrl = ref<string | null>(null); // We'll use this later for the iframe src
+const pdfUrl = ref<string | null>(null); // Will store the URL for the iframe src
 
-// Computed property for a slightly cleaner display name in the modal header
 const displayFilename = computed(() => {
   if (!props.fileIdentifier) return '';
-  // Simple removal of a potential ID and .pdf for display in header
   const lastUnderscoreIndex = props.fileIdentifier.lastIndexOf('_');
   let name = props.fileIdentifier;
   if (lastUnderscoreIndex !== -1) {
@@ -75,45 +89,69 @@ const displayFilename = computed(() => {
   return name.replace(/\.pdf$/i, '').replace(/_/g, ' ');
 });
 
-
-watch(() => props.isOpen, (newVal) => {
+watch(() => props.isOpen, async (newVal) => { // Make the watch callback async
   if (newVal && props.fileIdentifier && props.accountUniqueId) {
-    // Modal is opening with a file selected, let's "pretend" to load for now
-    console.log(`Modal opened for file: ${props.fileIdentifier}, account: ${props.accountUniqueId}`);
+    console.log(`Modal opening for file: ${props.fileIdentifier}, account: ${props.accountUniqueId}`);
     isLoading.value = true;
     errorLoadingDocument.value = null;
-    // documentUrl.value = null; // Reset
+    pdfUrl.value = null; // Reset pdfUrl
 
-    // Simulate a delay for fetching the document (we'll replace this with actual fetch later)
-    setTimeout(() => {
-      // In a real scenario, here you would construct documentUrl and fetch.
-      // For now, just stop loading.
-      // documentUrl.value = `/api/v1/documents/view/${props.accountUniqueId}/${encodeURIComponent(props.fileIdentifier!)}`;
-      // console.log('Document URL would be:', documentUrl.value);
+    // Construct the URL to your backend proxy endpoint
+    const constructedPdfUrl = `https://fastapi-rag-2705cfd4c41a.herokuapp.com/api/v1/files/view/${props.accountUniqueId}/${encodeURIComponent(props.fileIdentifier)}`;
+    console.log('Constructed PDF URL for iframe/fetch:', constructedPdfUrl);
+
+
+    try {
+      // Optional: Perform a HEAD request to check validity before setting iframe src
+      // This helps catch 404s or 403s early.
+      const headResponse = await fetch(constructedPdfUrl, {
+        method: 'HEAD',
+      });
+
+      if (!headResponse.ok) {
+        let errorDetail = `Server responded with status: ${headResponse.status}`;
+        if (headResponse.status === 404) {
+            errorDetail = "Document not found (404).";
+        } else if (headResponse.status === 403) {
+            errorDetail = "Access denied (403). You may not have permission to view this document.";
+        }
+        throw new Error(errorDetail);
+      }
+      
+      // If HEAD request is OK, set the pdfUrl for the iframe
+      pdfUrl.value = constructedPdfUrl;
+
+    } catch (error: any) {
+      console.error('Error preparing PDF URL or pre-flight check:', error);
+      errorLoadingDocument.value = error.message || 'Failed to load document information.';
+      pdfUrl.value = null; // Ensure iframe doesn't try to load a bad URL
+    } finally {
       isLoading.value = false;
-    }, 1500); // Simulate 1.5 second load time
+    }
 
   } else if (!newVal) {
     // Modal is closing, reset state
     isLoading.value = false;
     errorLoadingDocument.value = null;
-    // documentUrl.value = null;
+    pdfUrl.value = null;
   }
 });
 
 const closeModal = () => {
-  emit('close'); // Emit 'close' to parent
+  emit('close');
 };
 
-// Handles v-model updates from UModal
 const handleModalUpdate = (value: boolean) => {
   emit('update:isOpen', value);
   if (!value) {
-    closeModal(); // Ensure our close logic runs if UModal closes itself
+    closeModal();
   }
 };
 </script>
 
 <style scoped>
-/* You can add specific styles for the modal if needed */
+/* Ensures the iframe takes up the intended space */
+.w-full.h-\[calc\(70vh-2rem\)\] iframe {
+  display: block; /* Removes any extra space below the iframe */
+}
 </style>
