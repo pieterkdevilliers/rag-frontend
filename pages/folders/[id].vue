@@ -6,8 +6,15 @@
     <UButton
       icon="i-heroicons:plus-circle-16-solid"
       variant="outline" 
-      @click="openAddFileModal">
-    </UButton>
+      @click="openAddFileModal"
+    />
+    <UButton
+      icon="i-heroicons:plus-circle-16-solid"
+      variant="outline" 
+      @click="openAddFileFromURLModal"
+      />
+
+    
   </div>
   <div>
     <div class="flex px-3 py-3.5">
@@ -27,7 +34,8 @@
        <template #empty-state>
         <div class="flex flex-col items-center justify-center py-6 gap-3">
           <span class="italic text-sm">No files found!</span>
-          <UButton label="Add file" @click="openAddFileModal" />
+          <UButton label="Upload file" @click="openAddFileModal" />
+          <UButton label="Add file from URL" @click="openAddFileFromURLModal" />
         </div>
       </template>
     </UTable>
@@ -36,7 +44,20 @@
   <!-- Add File Modal -->
     <UModal v-model="isAddFileModalOpen">
       <div class="p-5">
-        <AddFileForm @close="closeAddFileModal" @fileAdded="refreshFiles" @files-added="handleFilesAddedToList"/>
+        <AddFileForm
+            @close="closeAddFileModal"
+            @item-added="handleItemAdded"
+        />
+      </div>
+    </UModal>
+
+    <!-- Add File From URL Modal -->
+    <UModal v-model="isAddFileFromURLModalOpen">
+      <div class="p-5">
+        <AddFileFromURL
+            @close="closeAddFileFromURLModal"
+            @item-added="handleItemAdded"
+        />
       </div>
     </UModal>
   
@@ -70,7 +91,8 @@
     const toast = useToast();
     import { useAuthStore } from '~/stores/auth';
     import { ref, computed } from 'vue';
-    import AddFileForm from '~/components/AddFileForm.vue'; 
+    import AddFileForm from '~/components/AddFileForm.vue';
+    import AddFileFromURL from '~/components/AddFileFromURL.vue';
     const authStore = useAuthStore();
 
     const account_unique_id = authStore.uniqueAccountId
@@ -143,11 +165,25 @@
 
     closeAddFileModal(); 
 
+    // Add File From URL Modal state
+    const isAddFileFromURLModalOpen = ref(false);
+
+    const openAddFileFromURLModal = () => {
+      isAddFileFromURLModalOpen.value = true;
+      console.log('Modal opened');
+    };
+
+    const closeAddFileFromURLModal = () => {
+      isAddFileFromURLModalOpen.value = false;
+      console.log('Modal closed');
+    };
+
+    closeAddFileFromURLModal(); 
+
     // This method will be called when 'filesAdded' is emitted
-    const handleFilesAddedToList = async () => {
+    const handleItemAdded = async () => {
       console.log('Files added, refreshing list...');
       await refreshFiles(); // Call the refresh function from useFetch
-      // The modal will be closed by the 'close' event from AddFileForm after the timeout
     };
 
     // --- State for Delete File Modal ---
