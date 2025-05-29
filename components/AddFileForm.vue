@@ -50,7 +50,7 @@ import { useRoute, useRouter } from 'vue-router';
 import { useAuthStore } from '~/stores/auth';
 const toast = useToast();
 
-const emit = defineEmits(['close', 'filesAdded']);
+const emit = defineEmits(['close', 'itemAdded']);
 const authStore = useAuthStore();
 const router = useRouter();
 const route = useRoute();
@@ -139,7 +139,7 @@ const handleAddFiles = async () => { // Changed event type to any or FormSubmitE
       fileInputRef.value.value = ''; // Resets the file input
     }
 
-    emit('filesAdded');
+    emit('itemAdded');
     // Wait a bit for the user to see the message, then emit close
     setTimeout(() => {
       emit('close'); // Tell the parent to close the modal
