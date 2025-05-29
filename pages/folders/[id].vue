@@ -5,16 +5,16 @@
   <div class="flex justify-end mb-4">
     <UButton
       icon="i-heroicons:plus-circle-16-solid"
-      variant="outline" 
-      @click="openAddFileModal"
-    />
-    <UButton
-      icon="i-heroicons:plus-circle-16-solid"
-      variant="outline" 
+      label="Add file from URL"
       @click="openAddFileFromURLModal"
       />
-
-    
+  </div>
+  <div class="flex justify-end mb-4">
+    <UButton
+      icon="i-heroicons:plus-circle-16-solid"
+      label="Upload file"
+      @click="openAddFileModal"
+    />
   </div>
   <div>
     <div class="flex px-3 py-3.5">
@@ -34,8 +34,16 @@
        <template #empty-state>
         <div class="flex flex-col items-center justify-center py-6 gap-3">
           <span class="italic text-sm">No files found!</span>
-          <UButton label="Upload file" @click="openAddFileModal" />
-          <UButton label="Add file from URL" @click="openAddFileFromURLModal" />
+          <UButton
+            label="Add file from URL"
+            icon="i-heroicons:plus-circle-16-solid"
+            @click="openAddFileFromURLModal"
+          />
+          <UButton
+            label="Upload file"
+            icon="i-heroicons:plus-circle-16-solid"
+            @click="openAddFileModal"
+          />
         </div>
       </template>
     </UTable>
