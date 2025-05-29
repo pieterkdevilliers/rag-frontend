@@ -76,6 +76,13 @@
 
 <script setup lang="ts">
 
+  function toTitleCase(str) {
+    if (!str) return "";
+    return str.split(' ').map(word => {
+      return (word.charAt(0).toUpperCase() + word.slice(1));
+    }).join(' ');
+  }
+
     definePageMeta({
     layout: 'user-access',
     });
@@ -127,6 +134,31 @@
     }
 
 
+    const originalString = "why shutters are better for allergies than curtains or blinds";
+    const titleCasedString = toTitleCase(originalString);
+
+    // Create a user-friendly display name
+    // Removes the unique ID part (e.g., "_xyz123") and the .pdf extension
+    for (const file of files.value.files) {
+    const fileIdentifier = file.file_name; // Assuming file.file_name is the identifier
+    const lastUnderscoreIndex = file.file_name.lastIndexOf('_');
+    let displayNameWithoutId = fileIdentifier;
+    if (lastUnderscoreIndex !== -1) {
+      // Check if the part after the last underscore looks like an ID (hex + .pdf)
+      const potentialIdPart = fileIdentifier.substring(lastUnderscoreIndex + 1);
+      if (/^[a-f0-9]+\.pdf$/i.test(potentialIdPart)) { // Checks for hex characters followed by .pdf
+        displayNameWithoutId = fileIdentifier.substring(0, lastUnderscoreIndex);
+      }
+    }
+    // Remove .pdf extension for display if it's still there
+    displayNameWithoutId = displayNameWithoutId.replace(/\.pdf$/i, '');
+    // Replace underscores with spaces for better readability
+    const displayName = displayNameWithoutId.replace(/_/g, ' ');
+    file.file_name = displayName.trim() || fileIdentifier; // Fallback to fileIdentifier if displayName ends up empty
+    file.file_name = toTitleCase(file.file_name); // Convert to Title Case
+    console.log('Processed file name:', displayName);
+    }
+
     const columns = [{
         key: 'id',
         label: 'ID',
@@ -163,7 +195,7 @@
       console.log('Modal closed');
     };
 
-    closeAddFileModal(); 
+    // closeAddFileModal(); 
 
     // Add File From URL Modal state
     const isAddFileFromURLModalOpen = ref(false);
@@ -178,7 +210,7 @@
       console.log('Modal closed');
     };
 
-    closeAddFileFromURLModal(); 
+    // closeAddFileFromURLModal(); 
 
     // This method will be called when 'filesAdded' is emitted
     const handleItemAdded = async () => {
