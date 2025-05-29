@@ -110,7 +110,7 @@
     const isDeletingInProgress = ref(false);
 
         // Fetch folders data with headers
-    const { data: files, error, refresh } = await useFetch(`https://fastapi-rag-2705cfd4c41a.herokuapp.com/api/v1/files/${account_unique_id}/${id}`, {
+    const { data: filesResponse, error, refresh: doFetchRefresh } = await useFetch(`https://fastapi-rag-2705cfd4c41a.herokuapp.com/api/v1/files/${account_unique_id}/${id}`, {
     method: 'GET',
     headers: {
         'accept': 'application/json',
@@ -125,46 +125,57 @@
     toast.add({ title: 'Error', description: `Could not fetch files: ${error.value.message || 'Unknown error'}`, color: 'red' });
     } else {
     // Check if the response has the expected structure
-    if (files.value) {
-        console.log('Files:', files.value);
+    if (filesResponse.value) {
+        console.log('Files:', filesResponse.value);
         console.log('Stored Unique Account ID:', authStore.uniqueAccountId);
     } else {
-        console.error('Unexpected response format:', files.value);
+        console.error('Unexpected response format:', filesResponse.value);
     }
     }
 
+// Computed property that transforms the raw API data for display
+  const filesWithDisplayNames = computed(() => {
+    if (!filesResponse.value || !filesResponse.value.files) {
+      return [];
+    }
+    return filesResponse.value.files.map(file => {
+      const originalFileName = file.file_name; // Keep the original for reference or filtering
 
-    const originalString = "why shutters are better for allergies than curtains or blinds";
-    const titleCasedString = toTitleCase(originalString);
+      // --- Logic to create display name ---
+      let displayNameInProgress = originalFileName;
+      const lastUnderscoreIndex = originalFileName.lastIndexOf('_');
 
-    // Create a user-friendly display name
-    // Removes the unique ID part (e.g., "_xyz123") and the .pdf extension
-    for (const file of files.value.files) {
-    const fileIdentifier = file.file_name; // Assuming file.file_name is the identifier
-    const lastUnderscoreIndex = file.file_name.lastIndexOf('_');
-    let displayNameWithoutId = fileIdentifier;
-    if (lastUnderscoreIndex !== -1) {
-      // Check if the part after the last underscore looks like an ID (hex + .pdf)
-      const potentialIdPart = fileIdentifier.substring(lastUnderscoreIndex + 1);
-      if (/^[a-f0-9]+\.pdf$/i.test(potentialIdPart)) { // Checks for hex characters followed by .pdf
-        displayNameWithoutId = fileIdentifier.substring(0, lastUnderscoreIndex);
+      if (lastUnderscoreIndex !== -1) {
+        const potentialIdPart = originalFileName.substring(lastUnderscoreIndex + 1);
+        // Regex to check for common ID patterns like _hexchars.pdf or _number.pdf
+        if (/^[a-f0-9]+(\.pdf|\.txt|\.docx|\.doc|\.md)$/i.test(potentialIdPart) || /^[0-9]+(\.pdf|\.txt|\.docx|\.doc|\.md)$/i.test(potentialIdPart)) {
+          displayNameInProgress = originalFileName.substring(0, lastUnderscoreIndex);
+        }
       }
-    }
-    // Remove .pdf extension for display if it's still there
-    displayNameWithoutId = displayNameWithoutId.replace(/\.pdf$/i, '');
-    // Replace underscores with spaces for better readability
-    const displayName = displayNameWithoutId.replace(/_/g, ' ');
-    file.file_name = displayName.trim() || fileIdentifier; // Fallback to fileIdentifier if displayName ends up empty
-    file.file_name = toTitleCase(file.file_name); // Convert to Title Case
-    console.log('Processed file name:', displayName);
-    }
+      // Remove any remaining common file extensions for display
+      displayNameInProgress = displayNameInProgress.replace(/\.(pdf|txt|docx|doc|md)$/i, '');
+      // Replace underscores with spaces
+      displayNameInProgress = displayNameInProgress.replace(/_/g, ' ');
+      // Convert to Title Case
+      const finalDisplayName = toTitleCase(displayNameInProgress.trim());
+      // --- End logic to create display name ---
+
+      return {
+        ...file, // Spread all original file properties
+        display_name: finalDisplayName || originalFileName, // Add the new display_name property
+                                                          // Fallback to original if display name is empty
+        // Keep original file_name if you need it for filtering or other logic
+        // file_name: originalFileName 
+      };
+    });
+  });
 
     const columns = [{
         key: 'id',
         label: 'ID',
         class: 'text-primary'
         }, {
-        key: 'file_name',
+        key: 'display_name',
         label: 'File Name',
         class: 'text-primary'
         }, {
@@ -278,24 +289,36 @@
 
 
     const refreshFiles = async () => {
-        console.log('Refreshing folders...');
-        await refresh();
-        };
+      console.log('Refreshing files list...');
+      await doFetchRefresh(); // This re-fetches data into filesResponse.value
+      // filesWithDisplayNames and filteredRows will automatically update.
+    };
 
     const q = ref('');
 
+    // filteredRows now operates on filesWithDisplayNames
     const filteredRows = computed(() => {
-    if (!q.value) {
-        return files.value.files
-    }
-    
-    return files.value.files.filter((file) => {
-        
+      const filesToFilter = filesWithDisplayNames.value; // Use the transformed data
+
+      if (!q.value) {
+        return filesToFilter;
+      }
+      
+      return filesToFilter.filter((file) => {
+        // Filter based on the display_name or other relevant fields
         return Object.values(file).some((value) => {
-        return String(value).toLowerCase().includes(q.value.toLowerCase())
-        })
-    })
-    })
+          // Specifically target display_name for searching, or original_filename if preferred
+          if (typeof value === 'string' && (
+              value.toLowerCase().includes(q.value.toLowerCase()) ||
+              (file.display_name && file.display_name.toLowerCase().includes(q.value.toLowerCase())) ||
+              (file.file_name && file.file_name.toLowerCase().includes(q.value.toLowerCase())) // Search original too
+          )) {
+            return true;
+          }
+          return false;
+        });
+      });
+    });
 
 </script>
 
