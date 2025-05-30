@@ -23,6 +23,11 @@
                   label="Documents"
                   icon="i-heroicons:document-magnifying-glass">
                 </UButton></li>
+                <li v-if="account_unique_id"><UButton 
+                  to="/web-widgets"
+                  label="Web Widgets"
+                  icon="i-heroicons:code-bracket">
+                </UButton></li>
                 <li v-if="account_unique_id"><UButton
                     to="/login"
                     label="Logout"
