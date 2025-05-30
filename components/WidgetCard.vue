@@ -13,6 +13,10 @@
             <template #footer>
                 <div class="flex gap-2">
                     <UButton 
+                        icon="i-heroicons:code-bracket"
+                        @click="emitViewSnippet"
+                        />
+                    <UButton 
                         icon="i-heroicons:pencil-square"
                         @click="emitEditWidget"
                         />
@@ -36,6 +40,15 @@
     @close="closeConfirmDeleteModal"
   />
 
+<!-- In parent component template -->
+<UModal v-model="isViewCodeSnippetModalOpen">
+    <ViewCodeSnippetModal
+        v-if="isViewCodeSnippetModalOpen" 
+        :widget="widget" 
+        @close="isViewCodeSnippetModalOpen = false"
+    />
+</UModal>
+
 </template>
 
 <script setup lang="ts">
@@ -46,10 +59,12 @@ const { widget } = defineProps<{
         allowed_origins: string[];
         created_at: string;
         display_prefix: string;
+        account_unique_id: string;
     };
 }>();
 
-const emit = defineEmits(['widgetDeleted', 'editWidgetClicked']);
+
+const emit = defineEmits(['widgetDeleted', 'editWidgetClicked', 'viewCodeSnippetClicked']);
 
 const toast = useToast(); // For notifications
 const authStore = useAuthStore();
@@ -96,6 +111,16 @@ const handleDeleteWidget = async () => {
   const emitEditWidget = () => {
   emit('editWidgetClicked', widget); // Emit the widget object
 };
+
+const isViewCodeSnippetModalOpen = ref(false);
+const emitViewSnippet = () => {
+  isViewCodeSnippetModalOpen.value = true;
+};
+
+const closeViewCodeSnippetModal = () => {
+  isViewCodeSnippetModalOpen.value = false;
+};
+
 </script>
 
 <style scoped>
