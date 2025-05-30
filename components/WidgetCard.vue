@@ -1,12 +1,20 @@
 <template>
         <UCard>
-            <p class="font-bold text-gray-500 m-4">Email: {{ user.user_email }}</p>
-            <p class="font-bold text-gray-500 m-4">User ID: {{ user.id }}</p>
+            <p class="font-bold text-gray-500 m-4">Widget Name:</p>
+            <p class="text-gray-500 m-4">{{ widget.name }}</p>
+            <p class="font-bold text-gray-500 m-4">Allowed Origins:</p>
+            <p class="text-gray-500 m-4">{{ widget.allowed_origins.join(', ') }}</p>
+            <p class="font-bold text-gray-500 m-4">Created At:</p>
+            <p class="text-gray-500 m-4">{{ new Date(widget.created_at).toLocaleDateString() }}</p>
+            <p class="font-bold text-gray-500 m-4">Display Prefix:</p>
+            <p class="text-gray-500 m-4">{{ widget.display_prefix }}</p>
+
+            
             <template #footer>
                 <div class="flex gap-2">
                     <UButton 
                         icon="i-heroicons:pencil-square"
-                        @click="emitEditUser"
+                        @click="emitEditWidget"
                         />
 
                     <UButton 
@@ -21,9 +29,9 @@
   <!-- Confirmation Modal -->
   <ConfirmDeleteModal
     :is-open="isModalOpen"
-    :item-name="user.user_email"
+    :item-name="widget.name"
     @update:is-open="isModalOpen = $event"
-    @confirm="handleDeleteUser"
+    @confirm="handleDeleteWidget"
     @cancel="closeConfirmDeleteModal"
     @close="closeConfirmDeleteModal"
   />
@@ -31,14 +39,17 @@
 </template>
 
 <script setup lang="ts">
-const { user } = defineProps<{
-    user: {
+const { widget } = defineProps<{
+    widget: {
         id: number;
-        user_email: string;
+        name: string;
+        allowed_origins: string[];
+        created_at: string;
+        display_prefix: string;
     };
 }>();
 
-const emit = defineEmits(['userDeleted', 'editUserClicked']);
+const emit = defineEmits(['widgetDeleted', 'editWidgetClicked']);
 
 const toast = useToast(); // For notifications
 const authStore = useAuthStore();
@@ -57,12 +68,12 @@ const closeConfirmDeleteModal = () => {
   isModalOpen.value = false;
 };
 
-const handleDeleteUser = async () => {
+const handleDeleteWidget = async () => {
   isDeleting.value = true;
   closeConfirmDeleteModal(); // Close modal immediately
 
   try {
-    await $fetch(`https://fastapi-rag-2705cfd4c41a.herokuapp.com/api/v1/users/${uniqueAccountId}/${user.id}`, {
+    await $fetch(`https://fastapi-rag-2705cfd4c41a.herokuapp.com/api/v1/delete-api-key/${uniqueAccountId}/${widget.id}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -71,19 +82,19 @@ const handleDeleteUser = async () => {
       },
     });
 
-    toast.add({ title: 'User Deleted', description: `User "${user.id} - ${user.user_email}" has been deleted.`, color: 'green' });
-    emit('userDeleted', user.id); // Emit event with user ID
+    toast.add({ title: 'Widget Deleted', description: `Widget "${widget.id} - ${widget.name}" has been deleted.`, color: 'green' });
+    emit('widgetDeleted', widget.id); // Emit event with widget ID
   } catch (error: any) {
-    console.error('Error deleting user:', error);
-    const errorMessage = error.data?.detail || error.message || 'Could not delete user.';
+    console.error('Error deleting widget:', error);
+    const errorMessage = error.data?.detail || error.message || 'Could not delete widget.';
     toast.add({ title: 'Error', description: errorMessage, color: 'red' });
   } finally {
     isDeleting.value = false;
   }
 };
 
-  const emitEditUser = () => {
-  emit('editUserClicked', user); // Emit the user object
+  const emitEditWidget = () => {
+  emit('editWidgetClicked', widget); // Emit the widget object
 };
 </script>
 

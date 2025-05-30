@@ -12,7 +12,7 @@
     </div>
   
     <div class="grid grid-cols-4 gap-5">
-      <div v-for="widget in widgets?.widgets" :key="widget.id">
+      <div v-for="widget in widgets?.api_keys" :key="widget.id">
         <WidgetCard 
           :widget="widget" 
           @widget-deleted="handleWidgetRemoved"
@@ -41,78 +41,82 @@
 </template>
 
 <script setup lang="ts">
-  import { ref } from 'vue';
-  import { useAuthStore } from '~/stores/auth';
-  import AddWidgetForm from '~/components/AddWidgetForm.vue'; // Import modal component
-import type { list } from 'postcss';
+    import { ref } from 'vue';
+    import { useAuthStore } from '~/stores/auth';
+    import AddWidgetForm from '~/components/AddWidgetForm.vue'; // Import modal component
+    import type { list } from 'postcss';
+    import WidgetCard from '~/components/WidgetCard.vue';
 
-  definePageMeta({
+    definePageMeta({
     layout: 'user-access',
-  });
+    });
 
-  interface Widget {
+    interface Widget {
     id: number;
     name: string;
     allowed_origins: string[];
     created_at: string;
     display_prefix: string;
-  }
+    }
 
-  const authStore = useAuthStore();
-  const apiAuthorizationToken = authStore.access_token;
+    const authStore = useAuthStore();
+    const apiAuthorizationToken = authStore.access_token;
+    const uniqueAccountId = authStore.uniqueAccountId;
 
-  const { data: widgets, error, refresh } = await useFetch(`https://fastapi-rag-2705cfd4c41a.herokuapp.com/api/v1/list-api-keys/${unique_account_id}`, {
+    const { data: widgets, error, refresh } = await useFetch(`https://fastapi-rag-2705cfd4c41a.herokuapp.com/api/v1/list-api-keys/${uniqueAccountId}`, {
     method: 'GET',
     headers: {
-      accept: 'application/json',
-      Authorization: `Bearer ${apiAuthorizationToken}`,
+        accept: 'application/json',
+        Authorization: `Bearer ${apiAuthorizationToken}`,
     },
-  });
+    });
 
-  if (error.value) {
+    console.log('Widgets fetched:', widgets.value.api_keys || []);
+
+    if (error.value) {
     console.error('Error fetching widgets:', error.value);
-  } else {
+    } else {
     console.log('Stored Unique Account ID:', authStore.uniqueAccountId);
-  }
+    }
 
-  const handleWidgetRemoved = (deletedWidgetId: number) => {
+    const handleWidgetRemoved = (deletedWidgetId: number) => {
     console.log(`Widget with ID ${deletedWidgetId} was reported as deleted. Triggering refresh.`);
     refreshWidgets();
-  };
-  // Modal state
-  const isAddWidgetModalOpen = ref(false);
+    };
+    // Modal state
+    const isAddWidgetModalOpen = ref(false);
 
-  const openAddWidgetModal = () => {
+    const openAddWidgetModal = () => {
     isAddWidgetModalOpen.value = true;
     console.log('Add Widget Modal opened');
-  };
+    };
 
-  const closeAddWidgetModal = () => {
+    const closeAddWidgetModal = () => {
     isAddWidgetModalOpen.value = false;
     console.log('Add Widget Modal closed');
-  };
+    };
 
-  const refreshWidgets = async () => {
+    const refreshWidgets = async () => {
     console.log('Refreshing widgets...');
     await refresh();
-  };
+    };
 
     // --- State for Edit Widget Modal ---
-  const isEditWidgetModalOpen = ref(false);
-  const widgetToEdit = ref<Widget | null>(null);
+    const isEditWidgetModalOpen = ref(false);
+    const widgetToEdit = ref<Widget | null>(null);
 
-  const openEditWidgetModal = (widget: Widget) => {
+    const openEditWidgetModal = (widget: Widget) => {
     widgetToEdit.value = widget;
     isEditWidgetModalOpen.value = true;
-  };
+    };
 
-  const closeEditWidgetModal = () => {
+    const closeEditWidgetModal = () => {
     isEditWidgetModalOpen.value = false;
     widgetToEdit.value = null; // Clear the selected widget
-  };
+    };
 
-  const handleWidgetUpdated = async (updatedWidget: Widget) => {
+    const handleWidgetUpdated = async (updatedWidget: Widget) => {
     // Option 1: Refresh the whole list (simpler)
     await refreshWidgets();
-  }
+    }
 </script>
