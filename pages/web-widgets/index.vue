@@ -21,10 +21,10 @@
       </div>
     </div>
   
-    <!-- Modal -->
+    <!-- Add Widget Modal -->
     <UModal v-model="isAddWidgetModalOpen">
       <div class="p-5">
-        <AddwidgetForm @close="closeAddWidgetModal" @widgetAdded="refreshWidgets" />
+        <AddWidgetForm @close="closeAddWidgetModal" @widgetAdded="refreshWidgets" />
       </div>
     </UModal>
 
