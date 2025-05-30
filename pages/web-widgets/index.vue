@@ -46,6 +46,8 @@
     import AddWidgetForm from '~/components/AddWidgetForm.vue'; // Import modal component
     import type { list } from 'postcss';
     import WidgetCard from '~/components/WidgetCard.vue';
+    import EditWidgetModal from '~/components/EditWidgetModal.vue';
+    import { useFetch } from '#app'; // Ensure you have this import for useFetch
 
     definePageMeta({
     layout: 'user-access',
