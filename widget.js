@@ -268,7 +268,7 @@
     try {
       console.log('Sending query to API:', question, 'for accountId:', accountId, 'with apiKey:', apiKey.substring(0, 5) + "...");
       const response = await fetch(widgetApiEndpoint, {
-        method: 'GET',
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'X-API-Key': apiKey,
