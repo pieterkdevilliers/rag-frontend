@@ -289,13 +289,14 @@
 
       const data = await response.json();
       console.log('API Success Response:', data);
-      displayMessage(data.answer, 'bot');
-    } catch (error) {
-      console.error('Widget API Call Error:', error);
-      if (messagesContainer.contains(loadingElement)) { // Ensure loading element is still there before removing
-          messagesContainer.removeChild(loadingElement);
+      // --- CORRECT WAY TO ACCESS THE ANSWER ---
+      if (data && data.response && data.response.response_text) {
+        displayMessage(data.response.response_text, 'bot');
+      } else {
+        // Handle case where the response structure is not as expected
+        console.error('API response structure is unexpected. Expected data.response.response_text.', data);
+        displayMessage('Sorry, I received an unexpected response from the server.', 'error');
       }
-      displayMessage(`Error: ${error.message}`, 'error');
     } finally {
       messageInput.disabled = false;
       sendButton.disabled = false;
