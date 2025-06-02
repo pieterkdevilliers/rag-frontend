@@ -59,7 +59,7 @@ const toast = useToast();
 
 // These are for generating the snippet structure
 // The actual API key will be a placeholder the user needs to fill in.
-const widgetJsUrl = ref('https://your-cdn.com/or/your-app-static-path/widget.js'); // TODO: Update this to your actual widget.js URL
+const widgetJsUrl = ref('https://d31env5c5sjhq3.cloudfront.net/static/widget.js'); // TODO: Update this to your actual widget.js URL
 const placeholderApiKey = 'YOUR_WIDGET_API_KEY'; // Placeholder
 
 const accountIdToUse = computed(() => {
