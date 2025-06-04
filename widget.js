@@ -428,7 +428,7 @@ function displayMessage(responseText, processedSourcesArray, type) {
     sourcesWrapper.className = 'ai-chat-message-sources';
 
     const sourcesTitle = document.createElement('strong');
-    sourcesTitle.textContent = 'Sources:';
+    sourcesTitle.textContent = 'Sources - For more information, click on the source links below:';
     sourcesWrapper.appendChild(sourcesTitle);
 
     const sourcesList = document.createElement('ul');
