@@ -1,19 +1,19 @@
-// Description: This script creates a chat widget that allows users to interact with an AI service.
 // widget.js
 (function() {
   // --- Configuration & Initial Checks ---
-  console.log('widget.js executing'); // First log to ensure it runs
+  console.log('widget.js executing');
 
   const config = window.myAIChatWidgetConfig;
   console.log('Widget Config received:', config);
 
   if (!config || !config.accountId || !config.apiKey) {
     console.error('AI Chat Widget: Configuration (accountId or apiKey) is missing or invalid from window.myAIChatWidgetConfig.');
-    return; // Stop execution if essential config is missing
+    return;
   }
 
   const { accountId, apiKey } = config;
-  const apiBaseUrl = config.apiBaseUrl || 'https://fastapi-rag-2705cfd4c41a.herokuapp.com'; // Default or from config
+  // Use apiBaseUrl from config if provided, otherwise default
+  const apiBaseUrl = config.apiBaseUrl || 'https://fastapi-rag-2705cfd4c41a.herokuapp.com';
   const widgetApiEndpoint = `${apiBaseUrl}/api/v1/widget/query`;
 
   // --- DOM Elements (will be created) ---
@@ -40,7 +40,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 28px; /* Chat bubble icon or text */
+        font-size: 28px;
         cursor: pointer;
         box-shadow: 0 4px 8px rgba(0,0,0,0.2);
         z-index: 99998;
@@ -52,7 +52,7 @@
       }
       .ai-chat-widget-window {
         position: fixed;
-        bottom: 90px; /* Above toggle button */
+        bottom: 90px;
         right: 20px;
         width: 350px;
         max-width: 90vw;
@@ -62,11 +62,11 @@
         border: 1px solid #ccc;
         border-radius: 10px;
         box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-        display: flex; /* Changed from none to flex, visibility controlled by class */
+        display: flex;
         flex-direction: column;
         overflow: hidden;
         z-index: 99999;
-        transform: translateY(100%) scale(0.5); /* Initial state for animation */
+        transform: translateY(100%) scale(0.5);
         opacity: 0;
         visibility: hidden;
         transition: transform 0.3s ease-out, opacity 0.3s ease-out, visibility 0s linear 0.3s;
@@ -85,8 +85,8 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        border-top-left-radius: 9px; /* Match parent */
-        border-top-right-radius: 9px; /* Match parent */
+        border-top-left-radius: 9px;
+        border-top-right-radius: 9px;
       }
       .ai-chat-close-button {
         background: none;
@@ -134,6 +134,34 @@
         align-self: flex-start;
         padding: 8px 12px;
       }
+      .ai-chat-message-sources {
+        margin-top: 8px;
+        font-size: 0.85em;
+        color: #555;
+      }
+      .ai-chat-message-sources strong {
+        display: block;
+        margin-bottom: 4px;
+      }
+      .ai-chat-message-sources ul {
+        list-style-type: disc;
+        margin-left: 20px;
+        padding-left: 0;
+        margin-top: 2px;
+        margin-bottom: 0;
+      }
+      .ai-chat-message-sources li {
+        margin-bottom: 2px;
+      }
+      /* Optional: Styling for clickable source links if you implement them
+      .ai-chat-message-sources a {
+        color: ${config.themeColor || '#007bff'};
+        text-decoration: underline;
+      }
+      .ai-chat-message-sources a:hover {
+        text-decoration: none;
+      }
+      */
       .ai-chat-input-area {
         display: flex;
         padding: 10px;
@@ -158,6 +186,64 @@
         font-size: 14px;
         font-weight: bold;
       }
+
+      .ai-chat-iframe-modal-overlay { /* <<<< ENSURE THESE STYLES ARE PRESENT */
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0,0,0,0.6);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 100000; /* Higher than chat window */
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease, visibility 0s linear 0.3s;
+      }
+      .ai-chat-iframe-modal-overlay.open {
+        opacity: 1;
+        visibility: visible;
+        transition: opacity 0.3s ease, visibility 0s linear 0s;
+      }
+      .ai-chat-iframe-modal-content {
+        background-color: white;
+        padding: 10px;
+        border-radius: 8px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+        width: 80vw;
+        height: 85vh;
+        display: flex;
+        flex-direction: column;
+      }
+      .ai-chat-iframe-modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #eee;
+      }
+      .ai-chat-iframe-modal-header h3 {
+        margin: 0;
+        font-size: 1.1em;
+      }
+      .ai-chat-iframe-modal-close-btn {
+        background: none;
+        border: none;
+        font-size: 24px;
+        cursor: pointer;
+        color: #777;
+      }
+      .ai-chat-iframe-modal-body {
+        flex-grow: 1;
+        overflow: hidden; 
+      }
+      .ai-chat-iframe-modal-body iframe {
+        width: 100%;
+        height: 100%;
+        border: none;
+      }
     `;
     document.head.appendChild(style);
     console.log('Widget styles injected.');
@@ -170,7 +256,7 @@
     chatToggleButton.innerHTML = config.widgetButtonIcon || `
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="28px" height="28px">
         <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 10H6v-2h12v2zm0-3H6V7h12v2z"/>
-      </svg>`; // Default chat icon
+      </svg>`;
     chatToggleButton.setAttribute('aria-label', 'Open Chat');
     chatToggleButton.onclick = toggleChatWindow;
     document.body.appendChild(chatToggleButton);
@@ -179,28 +265,25 @@
 
   function createChatWindow() {
     chatWindow = document.createElement('div');
-    chatWindow.className = 'ai-chat-widget-window'; // Initially hidden by CSS opacity/transform
+    chatWindow.className = 'ai-chat-widget-window';
 
-    // Header
     const header = document.createElement('div');
     header.className = 'ai-chat-header';
     const title = document.createElement('span');
     title.textContent = config.widgetTitle || 'Chat with Us';
     const closeButton = document.createElement('button');
     closeButton.className = 'ai-chat-close-button';
-    closeButton.innerHTML = '×'; // '×' character
+    closeButton.innerHTML = '×';
     closeButton.setAttribute('aria-label', 'Close Chat');
     closeButton.onclick = toggleChatWindow;
     header.appendChild(title);
     header.appendChild(closeButton);
     chatWindow.appendChild(header);
 
-    // Messages Area
     messagesContainer = document.createElement('div');
     messagesContainer.className = 'ai-chat-messages-container';
     chatWindow.appendChild(messagesContainer);
 
-    // Input Area
     const inputArea = document.createElement('div');
     inputArea.className = 'ai-chat-input-area';
     messageInput = document.createElement('input');
@@ -208,7 +291,7 @@
     messageInput.placeholder = config.inputPlaceholder || 'Type your message...';
     messageInput.onkeypress = (e) => {
       if (e.key === 'Enter' && !e.shiftKey) {
-        e.preventDefault(); // Prevent newline on enter
+        e.preventDefault();
         handleSendMessage();
       }
     };
@@ -232,7 +315,7 @@
       chatToggleButton.innerHTML = config.widgetCloseIcon || `
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24px" height="24px">
           <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
-        </svg>`; // Default close icon
+        </svg>`;
       chatToggleButton.setAttribute('aria-label', 'Close Chat');
     } else {
       chatWindow.classList.remove('open');
@@ -245,28 +328,149 @@
     console.log('Chat window toggled:', isChatOpen);
   }
 
-  function displayMessage(text, type) { // type can be 'user', 'bot', 'error', 'loading'
-    const messageElement = document.createElement('div');
-    messageElement.classList.add('ai-chat-message', type);
-    messageElement.textContent = text;
-    messagesContainer.appendChild(messageElement);
-    messagesContainer.scrollTop = messagesContainer.scrollHeight; // Scroll to bottom
-    return messageElement;
+  // --- Source Processing Function (Plain JavaScript) ---
+  function processSourcesForDisplay(rawSourcesArray, accountUniqueIdForSourceLink) {
+    if (!rawSourcesArray || !Array.isArray(rawSourcesArray)) {
+      return [];
+    }
+
+    return rawSourcesArray.map(sourceString => {
+      let fileIdentifier = sourceString.split('/').pop() || sourceString;
+      const originalFileIdentifier = fileIdentifier; // Keep original for linking if needed
+
+      const lastUnderscoreIndex = fileIdentifier.lastIndexOf('_');
+      let displayNameWithoutId = fileIdentifier;
+
+      if (lastUnderscoreIndex !== -1) {
+        // More robust check for ID-like pattern before an extension
+        const partAfterUnderscore = fileIdentifier.substring(lastUnderscoreIndex + 1);
+        if (/[a-f0-9]+\.(pdf|txt|docx|md)$/i.test(partAfterUnderscore)) { // Hex ID + common extensions
+            displayNameWithoutId = fileIdentifier.substring(0, lastUnderscoreIndex);
+        }
+      }
+      displayNameWithoutId = displayNameWithoutId.replace(/\.(pdf|txt|docx|md)$/i, '');
+      let displayName = displayNameWithoutId.replace(/_/g, ' ').replace(/-/g, ' ');
+
+      // Construct an ABSOLUTE URL for viewing the source if you implement a backend proxy
+      const viewUrl = `${apiBaseUrl}/api/v1/files/view/${accountUniqueIdForSourceLink}/${encodeURIComponent(originalFileIdentifier)}`;
+
+      return {
+        displayName: displayName.trim() || originalFileIdentifier, // Fallback to original identifier
+        fileIdentifier: originalFileIdentifier, // The actual filename.pdf
+        viewUrl: viewUrl // For future clickable links
+      };
+    });
   }
 
+// --- Function to create and show the iframe modal ---
+let currentIframeModal = null; // To keep track of the currently open modal
+
+function showPdfInIframeModal(sourceName, sourceUrl) {
+  if (currentIframeModal) {
+    document.body.removeChild(currentIframeModal); // Remove previous modal if any
+  }
+
+  // Overlay
+  const overlay = document.createElement('div');
+  overlay.className = 'ai-chat-iframe-modal-overlay';
+
+  // Modal Content
+  const modalContent = document.createElement('div');
+  modalContent.className = 'ai-chat-iframe-modal-content';
+
+  // Modal Header
+  const modalHeader = document.createElement('div');
+  modalHeader.className = 'ai-chat-iframe-modal-header';
+  const title = document.createElement('h3');
+  title.textContent = sourceName;
+  const closeBtn = document.createElement('button');
+  closeBtn.className = 'ai-chat-iframe-modal-close-btn';
+  closeBtn.innerHTML = '×';
+  closeBtn.onclick = () => {
+    document.body.removeChild(overlay);
+    currentIframeModal = null;
+  };
+  modalHeader.appendChild(title);
+  modalHeader.appendChild(closeBtn);
+
+  // Modal Body (for iframe)
+  const modalBody = document.createElement('div');
+  modalBody.className = 'ai-chat-iframe-modal-body';
+  const iframe = document.createElement('iframe');
+  iframe.src = sourceUrl;
+  iframe.title = `Document: ${sourceName}`;
+  modalBody.appendChild(iframe);
+
+  modalContent.appendChild(modalHeader);
+  modalContent.appendChild(modalBody);
+  overlay.appendChild(modalContent);
+  document.body.appendChild(overlay);
+  currentIframeModal = overlay;
+
+  // Trigger the transition
+  requestAnimationFrame(() => { // Ensures the element is in DOM before adding class
+      overlay.classList.add('open');
+  });
+}
+
+
+// --- Modify displayMessage to make sources clickable ---
+function displayMessage(responseText, processedSourcesArray, type) {
+  const messageElement = document.createElement('div');
+  messageElement.classList.add('ai-chat-message', type);
+
+  const textElement = document.createElement('p');
+  textElement.textContent = responseText;
+  messageElement.appendChild(textElement);
+
+  if (type === 'bot' && processedSourcesArray && processedSourcesArray.length > 0) {
+    const sourcesWrapper = document.createElement('div');
+    sourcesWrapper.className = 'ai-chat-message-sources';
+
+    const sourcesTitle = document.createElement('strong');
+    sourcesTitle.textContent = 'Sources:';
+    sourcesWrapper.appendChild(sourcesTitle);
+
+    const sourcesList = document.createElement('ul');
+    processedSourcesArray.forEach(source => {
+      const listItem = document.createElement('li');
+      const link = document.createElement('a');
+      link.href = '#'; // Prevent default link navigation
+      link.textContent = source.displayName;
+      link.style.color = config.themeColor || '#007bff';
+      link.style.textDecoration = 'underline';
+      link.style.cursor = 'pointer';
+      link.onclick = (e) => {
+        e.preventDefault();
+        console.log('Opening source:', source.displayName, source.viewUrl);
+        showPdfInIframeModal(source.displayName, source.viewUrl);
+      };
+      listItem.appendChild(link);
+      sourcesList.appendChild(listItem);
+    });
+    sourcesWrapper.appendChild(sourcesList);
+    messageElement.appendChild(sourcesWrapper);
+  }
+
+  messagesContainer.appendChild(messageElement);
+  messagesContainer.scrollTop = messagesContainer.scrollHeight;
+  return messageElement;
+}
+
+  // --- Send Message API Call ---
   async function handleSendMessage() {
     const question = messageInput.value.trim();
     if (!question) return;
 
-    displayMessage(question, 'user');
-    messageInput.value = ''; // Clear input
+    displayMessage(question, [], 'user');
+    messageInput.value = '';
     messageInput.disabled = true;
     sendButton.disabled = true;
 
-    const loadingElement = displayMessage('Thinking...', 'loading');
+    const loadingElement = displayMessage('Thinking...', [], 'loading');
 
     try {
-      console.log('Sending query to API:', question, 'for accountId:', accountId, 'with apiKey:', apiKey.substring(0, 5) + "...");
+      console.log('Sending query to API:', question, 'for accountId:', accountId, 'with apiKey:', apiKey.substring(0, 8) + "...");
       const response = await fetch(widgetApiEndpoint, {
         method: 'POST',
         headers: {
@@ -282,21 +486,29 @@
       messagesContainer.removeChild(loadingElement);
 
       if (!response.ok) {
-        const errorData = await response.json().catch(() => ({ detail: 'Server returned an error, but no details were provided.' }));
+        const errorData = await response.json().catch(() => ({ detail: 'Server returned an unparsable error.' }));
         console.error('API Error Response:', errorData);
         throw new Error(errorData.detail || `API Error: ${response.status}`);
       }
 
       const data = await response.json();
       console.log('API Success Response:', data);
-      // --- CORRECT WAY TO ACCESS THE ANSWER ---
+
       if (data && data.response && data.response.response_text) {
-        displayMessage(data.response.response_text, 'bot');
+        const rawSources = data.response.sources || [];
+        const displayableSources = processSourcesForDisplay(rawSources, accountId); // Pass accountId here
+        displayMessage(data.response.response_text, displayableSources, 'bot');
       } else {
-        // Handle case where the response structure is not as expected
-        console.error('API response structure is unexpected. Expected data.response.response_text.', data);
-        displayMessage('Sorry, I received an unexpected response from the server.', 'error');
+        console.error('API response structure unexpected. Expected data.response.response_text.', data);
+        displayMessage('Sorry, I received an unexpected response from the server.', [], 'error');
       }
+    } catch (error) {
+        console.error('Widget API Call Error:', error);
+        // Ensure loadingElement is removed if it still exists
+        if (loadingElement && messagesContainer.contains(loadingElement)) {
+            messagesContainer.removeChild(loadingElement);
+        }
+        displayMessage(`Error: ${error.message}`, [], 'error');
     } finally {
       messageInput.disabled = false;
       sendButton.disabled = false;
@@ -311,69 +523,17 @@
     createChatToggleButton();
     createChatWindow();
 
-    // Optional: Display an initial greeting from the bot
     if (config.initialBotMessage) {
-        displayMessage(config.initialBotMessage, 'bot');
+      displayMessage(config.initialBotMessage, [], 'bot'); // No sources for initial message
     }
     console.log('Widget initialized.');
   }
 
   // --- Start the Widget ---
-  // Wait for the DOM to be fully loaded before initializing
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initializeWidget);
   } else {
-    // DOMContentLoaded has already fired
     initializeWidget();
   }
 
-})(); // Immediately Invoked Function Expression (IIFE)
-
-
-
-// End of widget.js
-
-
-
-// Explanation of the Full widget.js:
-// IIFE (Immediately Invoked Function Expression): (function() { ... })();
-// This wraps the entire widget code in a private scope to avoid polluting the global namespace of the host website.
-// Configuration Reading:
-// It reads window.myAIChatWidgetConfig.
-// It checks if accountId and apiKey are present and logs an error if not.
-// injectStyles():
-// Creates a <style> tag and injects all the CSS needed for the widget directly into the <head> of the host page. This makes the widget self-contained stylistically.
-// Uses config.themeColor for basic theming.
-// createChatToggleButton():
-// Creates the floating button that users click to open the chat.
-// Appends it to document.body so it's always on top (controlled by z-index).
-// Attaches toggleChatWindow to its click event.
-// createChatWindow():
-// Creates the main chat panel div.
-// Creates the header (with title and close button).
-// Creates the messagesContainer where chat messages will appear.
-// Creates the input area with a text field and send button.
-// Attaches event listeners for sending messages.
-// Appends it to document.body. It's initially hidden by CSS (opacity: 0, transform, visibility: hidden) and made visible by adding the open class.
-// toggleChatWindow():
-// Toggles the visibility of the chatWindow by adding/removing the .open class.
-// Changes the icon/text on the toggle button.
-// Focuses the input field when the chat opens.
-// displayMessage(text, type):
-// A helper function to create a message div (styled based on type: 'user', 'bot', 'error', 'loading') and append it to messagesContainer.
-// Scrolls the message area to the bottom.
-// handleSendMessage():
-// This is your askQuestion logic, but integrated to:
-// Get text from messageInput.
-// Call displayMessage for the user's question.
-// Clear the input.
-// Show a loading indicator.
-// Make the fetch call to your API.
-// Call displayMessage for the bot's response or an error.
-// Re-enable input.
-// initializeWidget():
-// This function is called once the DOM is ready.
-// It calls injectStyles(), createChatToggleButton(), and createChatWindow() to build the entire UI.
-// Optionally displays an initial bot message if configured in window.myAIChatWidgetConfig.initialBotMessage.
-// DOM Ready Check:
-// It ensures initializeWidget is only called after the HTML document is fully parsed, so all elements are available.
+})();
