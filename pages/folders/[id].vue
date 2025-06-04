@@ -2,13 +2,13 @@
   <div>
     <h1 class="text-xl text-primary">Documents</h1>
   </div>
-  <div class="flex justify-end mb-4">
+  <!-- <div class="flex justify-end mb-4">
     <UButton
       icon="i-heroicons:plus-circle-16-solid"
       label="Add file from URL"
       @click="openAddFileFromURLModal"
       />
-  </div>
+  </div> -->
   <div class="flex justify-end mb-4">
     <UButton
       icon="i-heroicons:plus-circle-16-solid"
@@ -34,11 +34,11 @@
        <template #empty-state>
         <div class="flex flex-col items-center justify-center py-6 gap-3">
           <span class="italic text-sm">No files found!</span>
-          <UButton
+          <!-- <UButton
             label="Add file from URL"
             icon="i-heroicons:plus-circle-16-solid"
             @click="openAddFileFromURLModal"
-          />
+          /> -->
           <UButton
             label="Upload file"
             icon="i-heroicons:plus-circle-16-solid"
