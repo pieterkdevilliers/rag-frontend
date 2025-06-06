@@ -69,6 +69,7 @@
 import { ref } from 'vue';
 import { useAuthStore } from '~/stores/auth';
 import { useRouter } from 'vue-router';
+import { error } from 'zod/v4/locales/ar.js';
 
 const authStore = useAuthStore();
 const router = useRouter();
@@ -106,18 +107,27 @@ const handleSignup = async () => {
     
     authStore.setUniqueAccountId(uniqueAccountId);
 
-    const user = await fetch(`https://fastapi-rag-2705cfd4c41a.herokuapp.com/api/v1/users/${uniqueAccountId}/${email_address.value}/${password.value}`, {
+    const userPayload = {
+      user_email: email_address.value,
+      user_password: password.value
+    };
+
+    console.log('User payload being sent:', JSON.stringify(userPayload));
+
+    const user = await fetch(`https://fastapi-rag-2705cfd4c41a.herokuapp.com/api/v1/first-user/${uniqueAccountId}`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
+        'Content-Type': 'application/json',
         accept: 'application/json',
       },
-      body: formData.toString(),
+      body: JSON.stringify(userPayload),
     });
     console.log('User creation response:', user);
 
     if (!user.ok) {
-      throw new Error('Unable to create user');
+      const errorData = await user.json();
+      console.error('User creation error:', errorData);
+      throw new Error(errorData.detail || 'Failed to create user');
     }
 
     // Redirect to a secure route
