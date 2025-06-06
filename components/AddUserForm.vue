@@ -47,14 +47,20 @@ const password = ref('');
 const errorMessage = ref('');
 const uniqueAccountId = authStore.uniqueAccountId;
 
+const userPayload = {
+  email: username.value,
+  password: password.value
+};
+
 const handleAddUser = async () => {
   try {
-    const response = await fetch(`https://fastapi-rag-2705cfd4c41a.herokuapp.com/api/v1/users/${uniqueAccountId}/${username.value}/${password.value}`, {
+    const response = await fetch(`https://fastapi-rag-2705cfd4c41a.herokuapp.com/api/v1/users/${uniqueAccountId}`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
+        'Content-Type': 'application/json',
         accept: 'application/json',
       },
+      body: JSON.stringify(userPayload),
     });
     emit('close');
     emit('userAdded')
