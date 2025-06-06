@@ -93,6 +93,7 @@ const handleSignup = async () => {
       },
       body: formData.toString(),
     });
+    console.log('Account creation response:', account);
 
     if (!account.ok) {
       throw new Error('Unable to create account');
@@ -105,7 +106,7 @@ const handleSignup = async () => {
     
     authStore.setUniqueAccountId(uniqueAccountId);
 
-    const user = await fetch(`https://fastapi-rag-2705cfd4c41a.herokuapp.com/api/v1/users/${uniqueAccountId}/${username.value}/${password.value}`, {
+    const user = await fetch(`https://fastapi-rag-2705cfd4c41a.herokuapp.com/api/v1/users/${uniqueAccountId}/${email_address.value}/${password.value}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -113,16 +114,35 @@ const handleSignup = async () => {
       },
       body: formData.toString(),
     });
+    console.log('User creation response:', user);
 
     if (!user.ok) {
       throw new Error('Unable to create user');
     }
+
     // Redirect to a secure route
     router.push('/login');
   } catch (error) {
     console.error('Error:', error);
     errorMessage.value = 'Login failed. Please check your credentials.';
   }
+
+  const emailPayload = {
+      to_email: email_address.value,
+      subject: 'Welcome to Our Service',
+      message: `Hello ${account_organisation.value},\n\nThank you for creating an account with us! We're excited to have you on board.\n\nBest regards,\nThe Team`,
+      account_unique_id: authStore.uniqueAccountId,
+    }
+
+  const send_welcome_email = await fetch(`https://fastapi-rag-2705cfd4c41a.herokuapp.com/api/v1/send-email`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      accept: 'application/json',
+    },
+    body: JSON.stringify(emailPayload),
+    
+  });
 };
 </script>
 
