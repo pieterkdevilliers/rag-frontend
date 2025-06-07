@@ -12,17 +12,31 @@
   }
 
   const { accountId, apiKey } = config;
-  // Use apiBaseUrl from config if provided, otherwise default
   const apiBaseUrl = config.apiBaseUrl || 'https://fastapi-rag-2705cfd4c41a.herokuapp.com';
   const widgetApiEndpoint = `${apiBaseUrl}/api/v1/widget/query`;
+  const contactApiEndpoint = config.contactApiEndpoint || `${apiBaseUrl}/api/v1/widget/contact`;
 
-  // --- DOM Elements (will be created) ---
+  // --- DOM Elements ---
   let chatToggleButton;
   let chatWindow;
+  let chatHeaderTitle;
   let messagesContainer;
   let messageInput;
   let sendButton;
   let isChatOpen = false;
+
+  // Email Form DOM Elements
+  let chatFooter;
+  let showEmailFormButton;
+  let emailFormContainer;
+  let emailFormNameInput;
+  let emailFormEmailInput;
+  let emailFormMessageInput;
+  let emailFormSendButton;
+  let emailFormCancelButton;
+  let emailFormStatusMessage;
+
+  let isEmailFormVisible = false;
 
   // --- Styles ---
   function injectStyles() {
@@ -35,12 +49,12 @@
         width: 60px;
         height: 60px;
         background-color: ${config.themeColor || '#007bff'};
-        color: white;
+        color: white; /* This color is used by "fill: currentColor" in the SVG */
         border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 28px;
+        font-size: 28px; /* Primarily for if text was used instead of SVG */
         cursor: pointer;
         box-shadow: 0 4px 8px rgba(0,0,0,0.2);
         z-index: 99998;
@@ -153,15 +167,6 @@
       .ai-chat-message-sources li {
         margin-bottom: 2px;
       }
-      /* Optional: Styling for clickable source links if you implement them
-      .ai-chat-message-sources a {
-        color: ${config.themeColor || '#007bff'};
-        text-decoration: underline;
-      }
-      .ai-chat-message-sources a:hover {
-        text-decoration: none;
-      }
-      */
       .ai-chat-input-area {
         display: flex;
         padding: 10px;
@@ -187,7 +192,7 @@
         font-weight: bold;
       }
 
-      .ai-chat-iframe-modal-overlay { /* <<<< ENSURE THESE STYLES ARE PRESENT */
+      .ai-chat-iframe-modal-overlay {
         position: fixed;
         top: 0;
         left: 0;
@@ -197,7 +202,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        z-index: 100000; /* Higher than chat window */
+        z-index: 100000;
         opacity: 0;
         visibility: hidden;
         transition: opacity 0.3s ease, visibility 0s linear 0.3s;
@@ -237,12 +242,104 @@
       }
       .ai-chat-iframe-modal-body {
         flex-grow: 1;
-        overflow: hidden; 
+        overflow: hidden;
       }
       .ai-chat-iframe-modal-body iframe {
         width: 100%;
         height: 100%;
         border: none;
+      }
+
+      /* --- STYLES for Email Form --- */
+      .ai-chat-footer {
+        padding: 10px;
+        text-align: center;
+        border-top: 1px solid #eee;
+        background-color: #f9f9f9;
+        display: flex;
+        justify-content: center;
+      }
+      .ai-chat-show-email-form-button {
+        padding: 8px 15px;
+        background-color: transparent;
+        color: ${config.themeColor || '#007bff'};
+        border: 1px solid ${config.themeColor || '#007bff'};
+        border-radius: 20px;
+        cursor: pointer;
+        font-size: 13px;
+        transition: background-color 0.2s, color 0.2s;
+      }
+      .ai-chat-show-email-form-button:hover {
+        background-color: ${config.themeColor || '#007bff'};
+        color: white;
+      }
+
+      .ai-chat-email-form-container {
+        flex-grow: 1;
+        padding: 15px;
+        overflow-y: auto;
+        display: none; /* Initially hidden */
+        flex-direction: column;
+        gap: 12px;
+      }
+      .ai-chat-email-form-container label {
+        font-size: 14px;
+        color: #333;
+        margin-bottom: -8px;
+      }
+      .ai-chat-email-form-container input[type="text"],
+      .ai-chat-email-form-container input[type="email"],
+      .ai-chat-email-form-container textarea {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 14px;
+        box-sizing: border-box;
+      }
+      .ai-chat-email-form-container textarea {
+        min-height: 80px;
+        resize: vertical;
+      }
+      .ai-chat-email-form-actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 10px;
+      }
+      .ai-chat-email-form-actions button {
+        flex-grow: 1;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 20px;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: bold;
+      }
+      .ai-chat-email-form-actions .send {
+        background-color: ${config.themeColor || '#007bff'};
+        color: white;
+      }
+      .ai-chat-email-form-actions .cancel {
+        background-color: #f0f0f0;
+        color: #333;
+        border: 1px solid #ddd;
+      }
+      .ai-chat-email-form-status {
+        font-size: 13px;
+        padding: 8px;
+        border-radius: 4px;
+        margin-top: 5px;
+        text-align: center;
+      }
+      .ai-chat-email-form-status.success {
+        background-color: #e6ffed;
+        color: #008726;
+        border: 1px solid #b3ffc6;
+      }
+      .ai-chat-email-form-status.error {
+        background-color: #ffebee;
+        color: #c62828;
+        border: 1px solid #ef9a9a;
       }
     `;
     document.head.appendChild(style);
@@ -253,6 +350,7 @@
   function createChatToggleButton() {
     chatToggleButton = document.createElement('button');
     chatToggleButton.className = 'ai-chat-widget-toggle';
+    // This is the original SVG icon logic from your provided code
     chatToggleButton.innerHTML = config.widgetButtonIcon || `
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="28px" height="28px">
         <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 10H6v-2h12v2zm0-3H6V7h12v2z"/>
@@ -269,14 +367,14 @@
 
     const header = document.createElement('div');
     header.className = 'ai-chat-header';
-    const title = document.createElement('span');
-    title.textContent = config.widgetTitle || 'Chat with Us';
+    chatHeaderTitle = document.createElement('span');
+    chatHeaderTitle.textContent = config.widgetTitle || 'Chat with Us';
     const closeButton = document.createElement('button');
     closeButton.className = 'ai-chat-close-button';
     closeButton.innerHTML = '×';
     closeButton.setAttribute('aria-label', 'Close Chat');
     closeButton.onclick = toggleChatWindow;
-    header.appendChild(title);
+    header.appendChild(chatHeaderTitle);
     header.appendChild(closeButton);
     chatWindow.appendChild(header);
 
@@ -302,8 +400,77 @@
     inputArea.appendChild(sendButton);
     chatWindow.appendChild(inputArea);
 
+    chatFooter = document.createElement('div');
+    chatFooter.className = 'ai-chat-footer';
+    showEmailFormButton = document.createElement('button');
+    showEmailFormButton.className = 'ai-chat-show-email-form-button';
+    showEmailFormButton.textContent = config.openEmailFormButtonText || 'Send Us An Email';
+    showEmailFormButton.onclick = switchToEmailFormView;
+    chatFooter.appendChild(showEmailFormButton);
+    chatWindow.appendChild(chatFooter);
+
+    createEmailForm();
+    chatWindow.appendChild(emailFormContainer);
+
     document.body.appendChild(chatWindow);
     console.log('Chat window UI created.');
+  }
+
+  function createEmailForm() {
+    emailFormContainer = document.createElement('div');
+    emailFormContainer.className = 'ai-chat-email-form-container';
+
+    const nameLabel = document.createElement('label');
+    nameLabel.setAttribute('for', 'ai-chat-email-name');
+    nameLabel.textContent = config.emailFormNameLabel || 'Your Name:';
+    emailFormNameInput = document.createElement('input');
+    emailFormNameInput.type = 'text';
+    emailFormNameInput.id = 'ai-chat-email-name';
+    emailFormNameInput.placeholder = config.emailFormNamePlaceholder || 'e.g., Jane Doe';
+
+    const emailLabel = document.createElement('label');
+    emailLabel.setAttribute('for', 'ai-chat-user-email');
+    emailLabel.textContent = config.emailFormEmailLabel || 'Your Email:';
+    emailFormEmailInput = document.createElement('input');
+    emailFormEmailInput.type = 'email';
+    emailFormEmailInput.id = 'ai-chat-user-email';
+    emailFormEmailInput.placeholder = config.emailFormEmailPlaceholder || 'e.g., jane.doe@example.com';
+
+    const messageLabel = document.createElement('label');
+    messageLabel.setAttribute('for', 'ai-chat-email-message');
+    messageLabel.textContent = config.emailFormMessageLabel || 'Your Message:';
+    emailFormMessageInput = document.createElement('textarea');
+    emailFormMessageInput.id = 'ai-chat-email-message';
+    emailFormMessageInput.placeholder = config.emailFormMessagePlaceholder || 'How can we help you?';
+
+    emailFormStatusMessage = document.createElement('div');
+    emailFormStatusMessage.className = 'ai-chat-email-form-status';
+    emailFormStatusMessage.style.display = 'none';
+
+    const actionsDiv = document.createElement('div');
+    actionsDiv.className = 'ai-chat-email-form-actions';
+
+    emailFormSendButton = document.createElement('button');
+    emailFormSendButton.className = 'send';
+    emailFormSendButton.textContent = config.emailFormSendButtonText || 'Send Email';
+    emailFormSendButton.onclick = handleSendEmail;
+
+    emailFormCancelButton = document.createElement('button');
+    emailFormCancelButton.className = 'cancel';
+    emailFormCancelButton.textContent = config.emailFormCancelButtonText || 'Cancel';
+    emailFormCancelButton.onclick = switchToChatView;
+
+    actionsDiv.appendChild(emailFormCancelButton);
+    actionsDiv.appendChild(emailFormSendButton);
+
+    emailFormContainer.appendChild(nameLabel);
+    emailFormContainer.appendChild(emailFormNameInput);
+    emailFormContainer.appendChild(emailLabel);
+    emailFormContainer.appendChild(emailFormEmailInput);
+    emailFormContainer.appendChild(messageLabel);
+    emailFormContainer.appendChild(emailFormMessageInput);
+    emailFormContainer.appendChild(emailFormStatusMessage);
+    emailFormContainer.appendChild(actionsDiv);
   }
 
   // --- Event Handlers & UI Logic ---
@@ -311,7 +478,12 @@
     isChatOpen = !isChatOpen;
     if (isChatOpen) {
       chatWindow.classList.add('open');
-      messageInput.focus();
+      if (isEmailFormVisible) {
+        emailFormNameInput.focus();
+      } else {
+        messageInput.focus();
+      }
+      // This is the original "close" icon logic
       chatToggleButton.innerHTML = config.widgetCloseIcon || `
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24px" height="24px">
           <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
@@ -319,156 +491,174 @@
       chatToggleButton.setAttribute('aria-label', 'Close Chat');
     } else {
       chatWindow.classList.remove('open');
+      // This is the original "open" icon logic (when chat is closed)
       chatToggleButton.innerHTML = config.widgetButtonIcon || `
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="28px" height="28px">
         <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 10H6v-2h12v2zm0-3H6V7h12v2z"/>
       </svg>`;
       chatToggleButton.setAttribute('aria-label', 'Open Chat');
+      if (isEmailFormVisible) {
+        switchToChatView(false);
+      }
     }
     console.log('Chat window toggled:', isChatOpen);
   }
 
-  // --- Source Processing Function (Plain JavaScript) ---
+  function switchToEmailFormView() {
+    isEmailFormVisible = true;
+    messagesContainer.style.display = 'none';
+    chatWindow.querySelector('.ai-chat-input-area').style.display = 'none';
+    chatFooter.style.display = 'none';
+    emailFormContainer.style.display = 'flex';
+
+    chatHeaderTitle.textContent = config.emailFormTitle || 'Contact Us';
+    emailFormNameInput.focus();
+    clearEmailFormStatus();
+    console.log('Switched to email form view.');
+  }
+
+  function switchToChatView(focusChatInput = true) {
+    isEmailFormVisible = false;
+    emailFormContainer.style.display = 'none';
+    messagesContainer.style.display = 'flex';
+    chatWindow.querySelector('.ai-chat-input-area').style.display = 'flex';
+    chatFooter.style.display = 'flex';
+
+    chatHeaderTitle.textContent = config.widgetTitle || 'Chat with Us';
+    clearEmailForm();
+    clearEmailFormStatus();
+    if (focusChatInput && isChatOpen) {
+        messageInput.focus();
+    }
+    console.log('Switched to chat view.');
+  }
+
+  function clearEmailForm() {
+    emailFormNameInput.value = '';
+    emailFormEmailInput.value = '';
+    emailFormMessageInput.value = '';
+  }
+
+  function displayEmailFormStatus(message, isSuccess = true) {
+    emailFormStatusMessage.textContent = message;
+    emailFormStatusMessage.className = 'ai-chat-email-form-status ' + (isSuccess ? 'success' : 'error');
+    emailFormStatusMessage.style.display = 'block';
+  }
+
+  function clearEmailFormStatus() {
+    emailFormStatusMessage.style.display = 'none';
+    emailFormStatusMessage.textContent = '';
+  }
+
   function processSourcesForDisplay(rawSourcesArray, accountUniqueIdForSourceLink) {
     if (!rawSourcesArray || !Array.isArray(rawSourcesArray)) {
       return [];
     }
-
     return rawSourcesArray.map(sourceString => {
       let fileIdentifier = sourceString.split('/').pop() || sourceString;
-      const originalFileIdentifier = fileIdentifier; // Keep original for linking if needed
-
+      const originalFileIdentifier = fileIdentifier;
       const lastUnderscoreIndex = fileIdentifier.lastIndexOf('_');
       let displayNameWithoutId = fileIdentifier;
-
       if (lastUnderscoreIndex !== -1) {
-        // More robust check for ID-like pattern before an extension
         const partAfterUnderscore = fileIdentifier.substring(lastUnderscoreIndex + 1);
-        if (/[a-f0-9]+\.(pdf|txt|docx|md)$/i.test(partAfterUnderscore)) { // Hex ID + common extensions
+        if (/[a-f0-9]+\.(pdf|txt|docx|md)$/i.test(partAfterUnderscore)) {
             displayNameWithoutId = fileIdentifier.substring(0, lastUnderscoreIndex);
         }
       }
       displayNameWithoutId = displayNameWithoutId.replace(/\.(pdf|txt|docx|md)$/i, '');
       let displayName = displayNameWithoutId.replace(/_/g, ' ').replace(/-/g, ' ');
-
-      // Construct an ABSOLUTE URL for viewing the source if you implement a backend proxy
       const viewUrl = `${apiBaseUrl}/api/v1/files/view/${accountUniqueIdForSourceLink}/${encodeURIComponent(originalFileIdentifier)}`;
-
       return {
-        displayName: displayName.trim() || originalFileIdentifier, // Fallback to original identifier
-        fileIdentifier: originalFileIdentifier, // The actual filename.pdf
-        viewUrl: viewUrl // For future clickable links
+        displayName: displayName.trim() || originalFileIdentifier,
+        fileIdentifier: originalFileIdentifier,
+        viewUrl: viewUrl
       };
     });
   }
 
-// --- Function to create and show the iframe modal ---
-let currentIframeModal = null; // To keep track of the currently open modal
-
-function showPdfInIframeModal(sourceName, sourceUrl) {
-  if (currentIframeModal) {
-    document.body.removeChild(currentIframeModal); // Remove previous modal if any
-  }
-
-  // Overlay
-  const overlay = document.createElement('div');
-  overlay.className = 'ai-chat-iframe-modal-overlay';
-
-  // Modal Content
-  const modalContent = document.createElement('div');
-  modalContent.className = 'ai-chat-iframe-modal-content';
-
-  // Modal Header
-  const modalHeader = document.createElement('div');
-  modalHeader.className = 'ai-chat-iframe-modal-header';
-  const title = document.createElement('h3');
-  title.textContent = sourceName;
-  const closeBtn = document.createElement('button');
-  closeBtn.className = 'ai-chat-iframe-modal-close-btn';
-  closeBtn.innerHTML = '×';
-  closeBtn.onclick = () => {
-    document.body.removeChild(overlay);
-    currentIframeModal = null;
-  };
-  modalHeader.appendChild(title);
-  modalHeader.appendChild(closeBtn);
-
-  // Modal Body (for iframe)
-  const modalBody = document.createElement('div');
-  modalBody.className = 'ai-chat-iframe-modal-body';
-  const iframe = document.createElement('iframe');
-  iframe.src = sourceUrl;
-  iframe.title = `Document: ${sourceName}`;
-  modalBody.appendChild(iframe);
-
-  modalContent.appendChild(modalHeader);
-  modalContent.appendChild(modalBody);
-  overlay.appendChild(modalContent);
-  document.body.appendChild(overlay);
-  currentIframeModal = overlay;
-
-  // Trigger the transition
-  requestAnimationFrame(() => { // Ensures the element is in DOM before adding class
-      overlay.classList.add('open');
-  });
-}
-
-
-// --- Modify displayMessage to make sources clickable ---
-function displayMessage(responseText, processedSourcesArray, type) {
-  const messageElement = document.createElement('div');
-  messageElement.classList.add('ai-chat-message', type);
-
-  const textElement = document.createElement('p');
-  textElement.textContent = responseText;
-  messageElement.appendChild(textElement);
-
-  if (type === 'bot' && processedSourcesArray && processedSourcesArray.length > 0) {
-    const sourcesWrapper = document.createElement('div');
-    sourcesWrapper.className = 'ai-chat-message-sources';
-
-    const sourcesTitle = document.createElement('strong');
-    sourcesTitle.textContent = 'Sources - For more information, click on the source links below:';
-    sourcesWrapper.appendChild(sourcesTitle);
-
-    const sourcesList = document.createElement('ul');
-    processedSourcesArray.forEach(source => {
-      const listItem = document.createElement('li');
-      const link = document.createElement('a');
-      link.href = '#'; // Prevent default link navigation
-      link.textContent = source.displayName;
-      link.style.color = config.themeColor || '#007bff';
-      link.style.textDecoration = 'underline';
-      link.style.cursor = 'pointer';
-      link.onclick = (e) => {
-        e.preventDefault();
-        console.log('Opening source:', source.displayName, source.viewUrl);
-        showPdfInIframeModal(source.displayName, source.viewUrl);
-      };
-      listItem.appendChild(link);
-      sourcesList.appendChild(listItem);
+  let currentIframeModal = null;
+  function showPdfInIframeModal(sourceName, sourceUrl) {
+    if (currentIframeModal) {
+      document.body.removeChild(currentIframeModal);
+    }
+    const overlay = document.createElement('div');
+    overlay.className = 'ai-chat-iframe-modal-overlay';
+    const modalContent = document.createElement('div');
+    modalContent.className = 'ai-chat-iframe-modal-content';
+    const modalHeader = document.createElement('div');
+    modalHeader.className = 'ai-chat-iframe-modal-header';
+    const title = document.createElement('h3');
+    title.textContent = sourceName;
+    const closeBtn = document.createElement('button');
+    closeBtn.className = 'ai-chat-iframe-modal-close-btn';
+    closeBtn.innerHTML = '×';
+    closeBtn.onclick = () => {
+      document.body.removeChild(overlay);
+      currentIframeModal = null;
+    };
+    modalHeader.appendChild(title);
+    modalHeader.appendChild(closeBtn);
+    const modalBody = document.createElement('div');
+    modalBody.className = 'ai-chat-iframe-modal-body';
+    const iframe = document.createElement('iframe');
+    iframe.src = sourceUrl;
+    iframe.title = `Document: ${sourceName}`;
+    modalBody.appendChild(iframe);
+    modalContent.appendChild(modalHeader);
+    modalContent.appendChild(modalBody);
+    overlay.appendChild(modalContent);
+    document.body.appendChild(overlay);
+    currentIframeModal = overlay;
+    requestAnimationFrame(() => {
+        overlay.classList.add('open');
     });
-    sourcesWrapper.appendChild(sourcesList);
-    messageElement.appendChild(sourcesWrapper);
   }
 
-  messagesContainer.appendChild(messageElement);
-  messagesContainer.scrollTop = messagesContainer.scrollHeight;
-  return messageElement;
-}
+  function displayMessage(responseText, processedSourcesArray, type) {
+    const messageElement = document.createElement('div');
+    messageElement.classList.add('ai-chat-message', type);
+    const textElement = document.createElement('p');
+    textElement.textContent = responseText;
+    messageElement.appendChild(textElement);
+    if (type === 'bot' && processedSourcesArray && processedSourcesArray.length > 0) {
+      const sourcesWrapper = document.createElement('div');
+      sourcesWrapper.className = 'ai-chat-message-sources';
+      const sourcesTitle = document.createElement('strong');
+      sourcesTitle.textContent = 'Sources - For more information, click on the source links below:';
+      sourcesWrapper.appendChild(sourcesTitle);
+      const sourcesList = document.createElement('ul');
+      processedSourcesArray.forEach(source => {
+        const listItem = document.createElement('li');
+        const link = document.createElement('a');
+        link.href = '#';
+        link.textContent = source.displayName;
+        link.style.color = config.themeColor || '#007bff';
+        link.style.textDecoration = 'underline';
+        link.style.cursor = 'pointer';
+        link.onclick = (e) => {
+          e.preventDefault();
+          console.log('Opening source:', source.displayName, source.viewUrl);
+          showPdfInIframeModal(source.displayName, source.viewUrl);
+        };
+        listItem.appendChild(link);
+        sourcesList.appendChild(listItem);
+      });
+      sourcesWrapper.appendChild(sourcesList);
+      messageElement.appendChild(sourcesWrapper);
+    }
+    messagesContainer.appendChild(messageElement);
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    return messageElement;
+  }
 
-  // --- Send Message API Call ---
   async function handleSendMessage() {
     const question = messageInput.value.trim();
     if (!question) return;
-
     displayMessage(question, [], 'user');
     messageInput.value = '';
     messageInput.disabled = true;
     sendButton.disabled = true;
-
     const loadingElement = displayMessage('Thinking...', [], 'loading');
-
     try {
       console.log('Sending query to API:', question, 'for accountId:', accountId, 'with apiKey:', apiKey.substring(0, 8) + "...");
       const response = await fetch(widgetApiEndpoint, {
@@ -482,21 +672,17 @@ function displayMessage(responseText, processedSourcesArray, type) {
           accountId: accountId,
         }),
       });
-
       messagesContainer.removeChild(loadingElement);
-
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({ detail: 'Server returned an unparsable error.' }));
         console.error('API Error Response:', errorData);
         throw new Error(errorData.detail || `API Error: ${response.status}`);
       }
-
       const data = await response.json();
       console.log('API Success Response:', data);
-
       if (data && data.response && data.response.response_text) {
         const rawSources = data.response.sources || [];
-        const displayableSources = processSourcesForDisplay(rawSources, accountId); // Pass accountId here
+        const displayableSources = processSourcesForDisplay(rawSources, accountId);
         displayMessage(data.response.response_text, displayableSources, 'bot');
       } else {
         console.error('API response structure unexpected. Expected data.response.response_text.', data);
@@ -504,7 +690,6 @@ function displayMessage(responseText, processedSourcesArray, type) {
       }
     } catch (error) {
         console.error('Widget API Call Error:', error);
-        // Ensure loadingElement is removed if it still exists
         if (loadingElement && messagesContainer.contains(loadingElement)) {
             messagesContainer.removeChild(loadingElement);
         }
@@ -516,15 +701,87 @@ function displayMessage(responseText, processedSourcesArray, type) {
     }
   }
 
+  async function handleSendEmail() {
+    clearEmailFormStatus();
+    const name = emailFormNameInput.value.trim();
+    const email = emailFormEmailInput.value.trim();
+    const message = emailFormMessageInput.value.trim();
+
+    if (!name) {
+      displayEmailFormStatus(config.emailFormErrorNameRequired || 'Please enter your name.', false);
+      emailFormNameInput.focus();
+      return;
+    }
+    if (!email) {
+      displayEmailFormStatus(config.emailFormErrorEmailRequired || 'Please enter your email address.', false);
+      emailFormEmailInput.focus();
+      return;
+    }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      displayEmailFormStatus(config.emailFormErrorEmailInvalid || 'Please enter a valid email address.', false);
+      emailFormEmailInput.focus();
+      return;
+    }
+    if (!message) {
+      displayEmailFormStatus(config.emailFormErrorMessageRequired || 'Please enter your message.', false);
+      emailFormMessageInput.focus();
+      return;
+    }
+
+    emailFormSendButton.disabled = true;
+    emailFormCancelButton.disabled = true;
+    emailFormSendButton.textContent = config.emailFormSendingText || 'Sending...';
+
+    try {
+      console.log('Sending email form data to API for accountId:', accountId);
+      const response = await fetch(contactApiEndpoint, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-API-Key': apiKey,
+        },
+        body: JSON.stringify({
+          name: name,
+          email: email,
+          message: message,
+          accountId: accountId,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({ detail: 'Failed to send email. Server error.' }));
+        throw new Error(errorData.detail || `API Error: ${response.status}`);
+      }
+
+      console.log('Email form submitted successfully.');
+      displayEmailFormStatus(config.emailFormSuccessMessage || 'Thank you! Your message has been sent.', true);
+      clearEmailForm();
+      setTimeout(() => {
+        if(isEmailFormVisible) switchToChatView();
+      }, 3000);
+
+    } catch (error) {
+      console.error('Email Form API Call Error:', error);
+      displayEmailFormStatus(error.message || (config.emailFormGenericError || 'An error occurred. Please try again.'), false);
+    } finally {
+      emailFormSendButton.disabled = false;
+      emailFormCancelButton.disabled = false;
+      emailFormSendButton.textContent = config.emailFormSendButtonText || 'Send Email';
+    }
+  }
+
   // --- Initialization Function ---
   function initializeWidget() {
     console.log('Initializing widget...');
     injectStyles();
-    createChatToggleButton();
+    createChatToggleButton(); // Ensures original icon logic is used
     createChatWindow();
 
-    if (config.initialBotMessage) {
-      displayMessage(config.initialBotMessage, [], 'bot'); // No sources for initial message
+    switchToChatView(false); // Start in chat view, don't focus input yet
+
+    if (config.initialBotMessage && !isEmailFormVisible) {
+      displayMessage(config.initialBotMessage, [], 'bot');
     }
     console.log('Widget initialized.');
   }
