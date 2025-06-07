@@ -2,6 +2,17 @@
         <UCard>
             <p class="font-bold text-gray-500 m-4">Email: {{ user.user_email }}</p>
             <p class="font-bold text-gray-500 m-4">User ID: {{ user.id }}</p>
+
+        <!-- New Toggle for Receive Notifications -->
+        <div class="flex items-center justify-between m-4">
+            <label :for="`notifications-toggle-${user.id}`" class="font-bold text-gray-500">Receive Notifications:</label>
+            <UToggle
+                :id="`notifications-toggle-${user.id}`"
+                v-model="localReceiveNotifications"
+                :loading="isUpdatingNotifications"
+                @update:model-value="handleToggleReceiveNotifications"
+            />
+        </div>
             <template #footer>
                 <div class="flex gap-2">
                     <UButton 
@@ -35,16 +46,22 @@ const { user } = defineProps<{
     user: {
         id: number;
         user_email: string;
+        receive_notifications?: boolean;
     };
 }>();
 
-const emit = defineEmits(['userDeleted', 'editUserClicked']);
+const emit = defineEmits(['userDeleted', 'editUserClicked', 'userUpdated']);
 
 const toast = useToast(); // For notifications
 const authStore = useAuthStore();
-const router = useRouter();
 const isModalOpen = ref(false);
 const isDeleting = ref(false);
+const isUpdatingNotifications = ref(false);
+
+const localReceiveNotifications = ref(user.receive_notifications);
+watch(() => user.receive_notifications, (newValue) => {
+  localReceiveNotifications.value = newValue;
+});
 
 const uniqueAccountId = authStore.uniqueAccountId;
 const apiAuthorizationToken = authStore.access_token;
@@ -55,6 +72,40 @@ const openConfirmDeleteModal = () => {
 
 const closeConfirmDeleteModal = () => {
   isModalOpen.value = false;
+};
+
+const handleToggleReceiveNotifications = async (newValue: boolean) => {
+  // The newValue is the new state of the toggle, v-model (localReceiveNotifications) is already updated.
+  isUpdatingNotifications.value = true;
+  const originalValue = !newValue; // For rollback
+
+  try {
+    const updatedUserData = await $fetch(`https://fastapi-rag-2705cfd4c41a.herokuapp.com/api/v1/users/${uniqueAccountId}/${user.id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json', // IMPORTANT: Send JSON for Pydantic model
+        'accept': 'application/json',
+        'Authorization': `Bearer ${apiAuthorizationToken}`,
+      },
+      // Send only the field that changed. FastAPI `exclude_unset=True` handles this.
+      body: {
+        receive_notifications: newValue
+      }
+    });
+
+    toast.add({ title: 'Settings Updated', description: `Notification preference for "${user.user_email}" updated.`, color: 'green' });
+    emit('userUpdated', { ...user, receive_notifications: newValue });
+
+  } catch (error: any) {
+    console.error('Error updating notification settings:', error);
+    const errorMessage = error.data?.detail || error.message || 'Could not update notification settings.';
+    toast.add({ title: 'Error', description: errorMessage, color: 'red' });
+    // Rollback optimistic update
+    localReceiveNotifications.value = originalValue;
+    user.receive_notifications = originalValue; // Also rollback prop if it was directly mutated
+  } finally {
+    isUpdatingNotifications.value = false;
+  }
 };
 
 const handleDeleteUser = async () => {
