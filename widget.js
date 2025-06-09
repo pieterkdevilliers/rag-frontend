@@ -19,6 +19,11 @@
   let sessionId = '';
   let visitorUuid = '';
 
+  console.log('sessionId initialized:', sessionId);
+  console.log('visitorUuid initialized:', visitorUuid);
+  sessionId = new Date().getTime();
+  visitorUuid = config.visitorUuid || `visitor-${sessionId}`;
+
   // --- DOM Elements ---
   let chatToggleButton;
   let chatWindow;
@@ -480,8 +485,6 @@
   function toggleChatWindow() {
     isChatOpen = !isChatOpen;
     if (isChatOpen) {
-        sessionId = new Date().getTime();
-        visitorUuid = config.visitorUuid || `visitor-${sessionId}`;
       chatWindow.classList.add('open');
       if (isEmailFormVisible) {
         emailFormNameInput.focus();
@@ -666,6 +669,7 @@
     const loadingElement = displayMessage('Thinking...', [], 'loading');
     try {
       console.log('Sending chat message to API for accountId:', accountId);
+      console.log('Inside handleSendMessage USER Chat session ID:', sessionId, 'Visitor UUID:', visitorUuid);
       await fetch(chatMessageApiEndpoint, {
         method: 'POST',
         headers: {
@@ -711,6 +715,7 @@
         displayMessage(data.response.response_text, displayableSources, 'bot');
         try {
             console.log('Sending chat message to API for accountId:', accountId);
+            console.log('Inside handleSendMessage BOT Chat session ID:', sessionId, 'Visitor UUID:', visitorUuid);
             await fetch(chatMessageApiEndpoint, {
                 method: 'POST',
                 headers: {
