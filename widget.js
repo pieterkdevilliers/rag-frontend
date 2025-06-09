@@ -15,6 +15,7 @@
   const apiBaseUrl = config.apiBaseUrl || 'https://fastapi-rag-2705cfd4c41a.herokuapp.com';
   const widgetApiEndpoint = `${apiBaseUrl}/api/v1/widget/query`;
   const contactApiEndpoint = config.contactApiEndpoint || `${apiBaseUrl}/api/v1/widget/contact-us`;
+  const chatMessageApiEndpoint = `${apiBaseUrl}/api/v1/widget/messages`;
 
   // --- DOM Elements ---
   let chatToggleButton;
@@ -684,6 +685,25 @@
         const rawSources = data.response.sources || [];
         const displayableSources = processSourcesForDisplay(rawSources, accountId);
         displayMessage(data.response.response_text, displayableSources, 'bot');
+        try {
+            console.log('Sending chat message to API for accountId:', accountId);
+            await fetch(chatMessageApiEndpoint, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-API-Key': apiKey,
+                    },
+            body: JSON.stringify({
+            message_text: data.response.response_text,
+            sender_type: 'bot',
+            accountId: accountId,
+            chat_session_id: config.chatSessionId || 1,
+            visitor_uuid: config.visitorUuid || 'bot-response',  }),
+      });
+    } catch (error) {
+      console.error('Chat Message API Call Error:', error);
+      // We don't want to block the chat response on this call, so we log it but don't display an error message
+    }
       } else {
         console.error('API response structure unexpected. Expected data.response.response_text.', data);
         displayMessage('Sorry, I received an unexpected response from the server.', [], 'error');
@@ -698,6 +718,26 @@
       messageInput.disabled = false;
       sendButton.disabled = false;
       messageInput.focus();
+    }
+    try {
+      console.log('Sending chat message to API for accountId:', accountId);
+      await fetch(chatMessageApiEndpoint, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-API-Key': apiKey,
+        },
+        body: JSON.stringify({
+          message_text: question,
+          sender_type: 'user',
+          accountId: accountId,
+          chat_session_id: config.chatSessionId || 1,
+          visitor_uuid: config.visitorUuid || 'default-visitor',
+        }),
+      });
+    } catch (error) {
+      console.error('Chat Message API Call Error:', error);
+      // We don't want to block the chat response on this call, so we log it but don't display an error message
     }
   }
 
