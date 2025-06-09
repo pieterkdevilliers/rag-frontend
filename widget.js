@@ -16,6 +16,8 @@
   const widgetApiEndpoint = `${apiBaseUrl}/api/v1/widget/query`;
   const contactApiEndpoint = config.contactApiEndpoint || `${apiBaseUrl}/api/v1/widget/contact-us`;
   const chatMessageApiEndpoint = `${apiBaseUrl}/api/v1/widget/messages`;
+  let sessionId = '';
+  let visitorUuid = '';
 
   // --- DOM Elements ---
   let chatToggleButton;
@@ -478,6 +480,8 @@
   function toggleChatWindow() {
     isChatOpen = !isChatOpen;
     if (isChatOpen) {
+        sessionId = new Date().getTime();
+        visitorUuid = config.visitorUuid || `visitor-${sessionId}`;
       chatWindow.classList.add('open');
       if (isEmailFormVisible) {
         emailFormNameInput.focus();
@@ -661,6 +665,26 @@
     sendButton.disabled = true;
     const loadingElement = displayMessage('Thinking...', [], 'loading');
     try {
+      console.log('Sending chat message to API for accountId:', accountId);
+      await fetch(chatMessageApiEndpoint, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-API-Key': apiKey,
+        },
+        body: JSON.stringify({
+          message_text: question,
+          sender_type: 'user',
+          accountId: accountId,
+          chat_session_id: sessionId,
+          visitor_uuid: visitorUuid,
+        }),
+      });
+    } catch (error) {
+      console.error('Chat Message API Call Error:', error);
+      // We don't want to block the chat response on this call, so we log it but don't display an error message
+    }
+    try {
       console.log('Sending query to API:', question, 'for accountId:', accountId, 'with apiKey:', apiKey.substring(0, 8) + "...");
       const response = await fetch(widgetApiEndpoint, {
         method: 'POST',
@@ -670,7 +694,7 @@
         },
         body: JSON.stringify({
           query: question,
-          accountId: accountId,
+          accountId: accountId,  
         }),
       });
       messagesContainer.removeChild(loadingElement);
@@ -697,8 +721,8 @@
             message_text: data.response.response_text,
             sender_type: 'bot',
             accountId: accountId,
-            chat_session_id: config.chatSessionId || 1,
-            visitor_uuid: config.visitorUuid || 'bot-response',  }),
+            chat_session_id: sessionId,
+            visitor_uuid: visitorUuid,}),
       });
     } catch (error) {
       console.error('Chat Message API Call Error:', error);
@@ -718,26 +742,6 @@
       messageInput.disabled = false;
       sendButton.disabled = false;
       messageInput.focus();
-    }
-    try {
-      console.log('Sending chat message to API for accountId:', accountId);
-      await fetch(chatMessageApiEndpoint, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-API-Key': apiKey,
-        },
-        body: JSON.stringify({
-          message_text: question,
-          sender_type: 'user',
-          accountId: accountId,
-          chat_session_id: config.chatSessionId || 1,
-          visitor_uuid: config.visitorUuid || 'default-visitor',
-        }),
-      });
-    } catch (error) {
-      console.error('Chat Message API Call Error:', error);
-      // We don't want to block the chat response on this call, so we log it but don't display an error message
     }
   }
 
