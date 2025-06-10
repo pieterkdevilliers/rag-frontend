@@ -795,6 +795,8 @@
           email: email,
           message: message,
           accountId: accountId,
+          sessionId: sessionId,
+          visitorUuid: visitorUuid,
         }),
       });
 
