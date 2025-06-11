@@ -28,6 +28,8 @@
       <div class="p-5">
         <ViewChatModal
             @close="closeViewChatModal"
+            v-if="selectedSessionId"
+            :session-id="selectedSessionId"
         />
       </div>
     </UModal>
@@ -59,6 +61,8 @@
 
   const toast = useToast();
   const authStore = useAuthStore();
+  const selectedSessionId = ref<number | null>(null);
+  const isViewChatModalOpen = ref(false);
   
   const account_unique_id = authStore.uniqueAccountId;
   const apiAuthorizationToken = authStore.access_token;
@@ -118,13 +122,12 @@
   });
 
   // --- Modal and Actions Logic (unchanged and should now work) ---
-  const isViewChatModalOpen = ref(false);
   const openViewChatModal = (row: ChatSession) => {
-    console.log("Opening modal for session:", row);
-    // You'll want to store the selected row's data to pass to the modal
+    selectedSessionId.value = row.id; 
     isViewChatModalOpen.value = true;
   };
   const closeViewChatModal = () => {
     isViewChatModalOpen.value = false;
+    selectedSessionId.value = null; 
   };
 </script>
