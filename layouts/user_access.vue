@@ -14,6 +14,11 @@
                   label="Login">
                 </UButton></li>
                 <li v-if="account_unique_id"><UButton 
+                  to="/chats"
+                  label="Chat Sessions"
+                  icon="i-heroicons:chat-bubble-bottom-center-text">
+                </UButton></li>
+                <li v-if="account_unique_id"><UButton 
                   to="/users"
                   label="Users"
                   icon="i-heroicons:users">
