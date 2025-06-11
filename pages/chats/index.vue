@@ -11,6 +11,13 @@
       <template #file_name-data="{ row }"> 
         <span>{{ row.file_name }}</span>
       </template>
+        <template #start_time-data="{ row }">
+        <span>{{ formatDateTime(row.start_time) }}</span>
+        </template>
+
+        <template #end_time-data="{ row }">
+        <span>{{ formatDateTime(row.end_time) }}</span>
+        </template>
       <template #view-data="{ row }">
         <UTooltip text="View Chat Session">
             <UButton
@@ -39,6 +46,19 @@
 <script setup lang="ts">
   import { useAuthStore } from '~/stores/auth';
   import { computed, ref } from 'vue';
+
+  import { format, parseISO } from 'date-fns';
+
+// Create a helper function for reusability
+function formatDateTime(isoString: string | null | undefined): string {
+  // Return a placeholder if the date is null or invalid
+  if (!isoString) {
+    return 'N/A';
+  }
+  // parseISO converts the string to a Date object
+  // format then applies your desired output format
+  return format(parseISO(isoString), "d MMMM yyyy - HH:mm");
+}
 
   definePageMeta({
     layout: 'user-access',
