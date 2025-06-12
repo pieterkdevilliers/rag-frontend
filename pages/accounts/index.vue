@@ -2,10 +2,8 @@
     <section>
         <h1 class="font-bold text-gray-500 mb-4">My Subscriptions</h1>
             <div class="grid grid-cols-4 gap-5">
-      <div>
-        <SubscriptionCard 
-
-          />
+      <div v-for="subscription in subscriptions?.subscriptions" :key="subscription.id">
+        <SubscriptionCard :subscription="subscription" />
       </div>
     </div>
     </section>
@@ -52,4 +50,32 @@ const openSubscriptionModal = () => {
 const closeSubscriptionModal = () => {
     isSubscriptionModalOpen.value = false;
 };
+
+interface Subscription {
+    id: number;
+    stripe_subscription_id: string;
+    stripe_customer_id: string;
+    status: string;
+    current_period_end: Date;
+    type: string;  // 'monthly' or 'yearly'
+    trial_start: Date | null;
+    trial_end: Date | null;
+    subscription_start: Date | null;
+    stripe_account_url: string | null;
+}
+
+  const { data: subscriptions, error, refresh } = await useFetch(`https://fastapi-rag-2705cfd4c41a.herokuapp.com/api/v1/stripe-subscriptions/${uniqueAccountId}`, {
+    method: 'GET',
+    headers: {
+      accept: 'application/json',
+      Authorization: `Bearer ${apiAuthorizationToken}`,
+    },
+  });
+
+  if (error.value) {
+    console.error('Error fetching subscriptions:', error.value);
+  } else {
+    console.log('Stored Unique Account ID:', authStore.uniqueAccountId);
+  }
+
 </script>
