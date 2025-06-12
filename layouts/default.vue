@@ -33,6 +33,11 @@
                   label="Web Widgets"
                   icon="i-heroicons:code-bracket">
                 </UButton></li>
+                <li v-if="account_unique_id"><UButton 
+                  to="/accounts"
+                  label="My Account"
+                  icon="i-heroicons:user-circle">
+                </UButton></li>
                 <li v-if="account_unique_id"><UButton
                     to="/login"
                     label="Logout"
