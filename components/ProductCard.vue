@@ -9,6 +9,7 @@
                 <p>Statement Descriptor: {{ product.product_statement_descriptor }}</p>
                 <p>Price: ${{ product.product_price.toFixed(2) }}</p>
                 <p>Plan Cycle: {{ product.product_plan_cycle }}</p>
+                <p>Price ID: {{ product.price_id }}</p>
             </div>
 
         <template #footer>
@@ -16,6 +17,7 @@
                 <UButton
                     icon="i-heroicons:shopping-cart"
                     label="Subscribe"
+                    :to="'https://fastapi-rag-2705cfd4c41a.herokuapp.com/api/v1/checkout/' + product.price_id + '/' + uniqueAccountId"
                     />
             </div>
 
@@ -27,7 +29,11 @@
 
     import { defineProps } from 'vue';
     import { format, parseISO } from 'date-fns';
-import { UButton } from '#components';
+    import { UButton } from '#components';
+    import { useAuthStore } from '~/stores/auth';
+
+    const authStore = useAuthStore();
+    const uniqueAccountId = authStore.uniqueAccountId;
 
     const { product } = defineProps<{
     product: {
@@ -38,6 +44,7 @@ import { UButton } from '#components';
         product_statement_descriptor: Date;
         product_price: number;
         product_plan_cycle: string;
+        price_id: string;
     };
     }>();
 
