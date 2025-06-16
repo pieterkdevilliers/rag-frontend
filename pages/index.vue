@@ -1,31 +1,31 @@
 <template>
-    <div class="flex justify-center items-center">
-        <HomeHeroSection />
-    </div>
-    <div class="flex justify-center items-center">
-        <HomeProblemSection />
-    </div>
-    <div class="flex justify-center items-center">
-        <HomeSolutionSection />
-    </div>
-    <div class="flex justify-center items-center">
-        <HomeBenefitSection />
-    </div>
-    <div class="flex justify-center items-center">
-        <HomeHowItWorksSection />
-    </div>
-    <div class="flex justify-center items-center">
-          <HomeUseCasesSection />
-    </div>
-    <div class="flex justify-center items-center">
-        <HomeWhyYourDocsAISection />
-    </div>
-    <div class="flex justify-center items-center">
-        <HomeTestimonialsSection />
-    </div>
-    <div class="flex justify-center items-center">
-      <HomeCallToActionSection />
-    </div>
+	<div class="flex justify-center items-center">
+		<HomeHeroSection />
+	</div>
+	<div class="flex justify-center items-center">
+		<HomeProblemSection />
+	</div>
+	<div class="flex justify-center items-center">
+		<HomeSolutionSection />
+	</div>
+	<div class="flex justify-center items-center">
+		<HomeBenefitSection />
+	</div>
+	<div class="flex justify-center items-center">
+		<HomeHowItWorksSection />
+	</div>
+	<div class="flex justify-center items-center">
+		<HomeUseCasesSection />
+	</div>
+	<div class="flex justify-center items-center">
+		<HomeWhyYourDocsAISection />
+	</div>
+	<div class="flex justify-center items-center">
+		<HomeTestimonialsSection />
+	</div>
+	<div class="flex justify-center items-center">
+		<HomeCallToActionSection />
+	</div>
 </template>
 
 <script setup lang="ts">
@@ -41,5 +41,4 @@ import HomeHowItWorksSection from '~/components/HomeHowItWorksSection.vue';
 import HomeUseCasesSection from '~/components/HomeUseCasesSection.vue';
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>
