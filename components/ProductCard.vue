@@ -1,15 +1,11 @@
 <template>
     <UCard>
         <template #header>
-            <h1 class="font-bold text-gray-500">Product: {{ product.product_title }}</h1>
+            <h1 class="font-bold text-gray-500">{{ product.product_title }}</h1>
         </template>
             <div>
-                <p>Product ID: {{ product.product_id }}</p>
                 <p>Description: {{ product.product_description }}</p>
-                <p>Statement Descriptor: {{ product.product_statement_descriptor }}</p>
-                <p>Price: ${{ product.product_price.toFixed(2) }}</p>
-                <p>Plan Cycle: {{ product.product_plan_cycle }}</p>
-                <p>Price ID: {{ product.price_id }}</p>
+                <p>${{ product.product_price.toFixed(2) }} - Billed {{ planCycle }}</p>
             </div>
 
         <template #footer>
@@ -27,7 +23,7 @@
 
 <script setup lang="ts">
 
-    import { defineProps } from 'vue';
+    import { defineProps, computed } from 'vue';
     import { format, parseISO } from 'date-fns';
     import { UButton } from '#components';
     import { useAuthStore } from '~/stores/auth';
@@ -47,6 +43,17 @@
         price_id: string;
     };
     }>();
+
+    const planCycle = computed(() => {
+    if (product.product_plan_cycle === 'month') {
+        return 'Monthly';
+    }
+    if (product.product_plan_cycle === 'year') {
+        return 'Yearly';
+    }
+    // Fallback for any other unexpected values
+    return props.subscription.type;
+    });
 
     // Create a helper function for reusability
     function formatDateTime(isoString: string | null | undefined): string {
