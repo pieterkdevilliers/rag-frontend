@@ -2,7 +2,7 @@
 	<!-- This outer div is the single root element -->
 	<div class="container mx-auto px-4 py-8">
 		<div class="text-center">
-			<h1 class="text-4xl font-bold mb-6">
+			<h1 class="text-4xl mb-6">
 				Answer Customer Questions 24/7, Instantly & Accurately – Right
 				From Your Website!
 			</h1>

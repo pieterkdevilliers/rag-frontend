@@ -2,7 +2,11 @@
 export default {
 	content: [],
 	theme: {
-		extend: {},
+		extend: {
+			colors: {
+				accent: '#DB2777',
+			},
+		},
 	},
 	plugins: [],
 };
