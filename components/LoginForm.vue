@@ -73,7 +73,7 @@ const handleLogin = async () => {
 
 
     // Redirect to a secure route
-    router.push('/users');
+    router.push('/chats');
   } catch (error) {
     console.error('Error:', error);
     errorMessage.value = 'Login failed. Please check your credentials.';
