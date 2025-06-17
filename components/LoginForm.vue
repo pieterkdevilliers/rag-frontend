@@ -3,12 +3,12 @@
         <form @submit.prevent="handleLogin">
         <h2 class="text-2xl font-bold mb-4">Login</h2>
         <div class="mb-4">
-            <label class="block text-sm font-medium text-gray-700" for="username">Username</label>
+            <label class="block text-sm font-medium text-gray-700" for="username">Email Address</label>
             <UInput
             v-model="username"
             id="username"
             type="text"
-            placeholder="Enter your username"
+            placeholder="Enter your email address"
             autocomplete="off"
             />
         </div>
