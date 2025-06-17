@@ -8,8 +8,7 @@
     </div>
     </section>
     <section>
-        <h1 class="font-bold text-gray-500 m-4">Subscribe to a Plan</h1>
-        <p class="mb-4">To subscribe to a plan, please click the button below.</p>
+        <p class="m-4">To subscribe to a plan, please click the button below.</p>
         <UButton
             label="Subscribe Now"
             icon="i-heroicons:plus-circle-16-solid"
@@ -17,7 +16,8 @@
             @click="openSubscriptionModal"
             class="m-4"
         />
-        <p>This will display the SUBSCRIBE button if no active subscription exists</p>
+        <h1>********NOTE: The subscribe button will only display when the account does not have an active subscription</h1>
+        <h1>This is not active right now, to reduce the hassle in styling the subscription modal.********</h1>
     </section>
 
     <SubscriptionModal
