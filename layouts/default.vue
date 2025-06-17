@@ -64,30 +64,31 @@ const account_organisation = ref('');
 
 // Watch for changes in `account_unique_id` and fetch details
 watchEffect(async () => {
-  if (account_unique_id.value) {
-    try {
-      const apiAuthorizationToken = authStore.access_token;
-      const { data: account, error } = await useFetch(
-        `https://fastapi-rag-2705cfd4c41a.herokuapp.com/api/v1/accounts/${account_unique_id.value}`, 
-        {
-          method: 'GET',
-          headers: {
-            accept: 'application/json',
-            Authorization: `Bearer ${apiAuthorizationToken}`,
-          },
-        }
-      );
-      if (account.value?.account) {
-        account_organisation.value = account.value.account.account_organisation;
-      } else {
-        console.error('Failed to fetch account details:', error.value);
-      }
-    } catch (error) {
-      console.error('Error fetching account details:', error);
-    }
-  } else {
-    account_organisation.value = '';
-  }
+	if (account_unique_id.value) {
+		try {
+			const apiAuthorizationToken = authStore.access_token;
+			const { data: account, error } = await useFetch(
+				`https://fastapi-rag-2705cfd4c41a.herokuapp.com/api/v1/accounts/${account_unique_id.value}`,
+				{
+					method: 'GET',
+					headers: {
+						accept: 'application/json',
+						Authorization: `Bearer ${apiAuthorizationToken}`,
+					},
+				}
+			);
+			if (account.value?.account) {
+				account_organisation.value =
+					account.value.account.account_organisation;
+			} else {
+				console.error('Failed to fetch account details:', error.value);
+			}
+		} catch (error) {
+			console.error('Error fetching account details:', error);
+		}
+	} else {
+		account_organisation.value = '';
+	}
 });
 </script>
 

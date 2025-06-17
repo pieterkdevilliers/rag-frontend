@@ -46,30 +46,33 @@ const password = ref('');
 const errorMessage = ref('');
 
 const handleLogin = async () => {
-  try {
-    const formData = new URLSearchParams();
-    formData.append('username', username.value);
-    formData.append('password', password.value);
+	try {
+		const formData = new URLSearchParams();
+		formData.append('username', username.value);
+		formData.append('password', password.value);
 
-    const response = await fetch('https://fastapi-rag-2705cfd4c41a.herokuapp.com/token', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        accept: 'application/json',
-      },
-      body: formData.toString(),
-    });
+		const response = await fetch(
+			'https://fastapi-rag-2705cfd4c41a.herokuapp.com/token',
+			{
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/x-www-form-urlencoded',
+					accept: 'application/json',
+				},
+				body: formData.toString(),
+			}
+		);
 
-    if (!response.ok) {
-      throw new Error('Invalid credentials');
-    }
+		if (!response.ok) {
+			throw new Error('Invalid credentials');
+		}
 
-    const data = await response.json();
-    console.log('Response:', data);
-    const uniqueAccountId = data.account_unique_id;
-    const access_token = data.access_token;
-    authStore.setUniqueAccountId(uniqueAccountId);
-    authStore.setAuthToken(access_token);
+		const data = await response.json();
+		console.log('Response:', data);
+		const uniqueAccountId = data.account_unique_id;
+		const access_token = data.access_token;
+		authStore.setUniqueAccountId(uniqueAccountId);
+		authStore.setAuthToken(access_token);
 
 
     // Redirect to a secure route
@@ -78,6 +81,7 @@ const handleLogin = async () => {
     console.error('Error:', error);
     errorMessage.value = 'Login failed. Please check your credentials.';
   }
+
 };
 </script>
 
