@@ -62,6 +62,7 @@ interface Subscription {
     trial_end: Date | null;
     subscription_start: Date | null;
     stripe_account_url: string | null;
+    related_product_title: string | null;
 }
 
   const { data: subscriptions, error, refresh } = await useFetch(`https://fastapi-rag-2705cfd4c41a.herokuapp.com/api/v1/stripe-subscriptions/${uniqueAccountId}`, {

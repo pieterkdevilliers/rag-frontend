@@ -3,7 +3,7 @@
     <UCard>
         <template #header>
             <!-- Use props.subscription instead of just subscription -->
-            <h1 class="font-bold text-gray-500">Subscription: {{ props.subscription.id }}</h1>
+            <h1 class="font-bold text-gray-500">{{ props.subscription.related_product_title }}</h1>
         </template>
         <div class="flex flex-col space-y-2">
             <!-- Update all references to use props.subscription -->
@@ -44,6 +44,7 @@
             trial_end: Date | null;
             subscription_start: Date | null;
             stripe_account_url: string | null;
+            related_product_title: string | null;
         };
     }>();
 
