@@ -44,7 +44,7 @@
 								>
 							</div>
 						</div>
-						<h3 class="ml-4 text-lg font-semibold leading-6">
+						<h3 class="card__title ms-4 text-lg leading-6">
 							{{ benefit.title }}
 						</h3>
 					</div>

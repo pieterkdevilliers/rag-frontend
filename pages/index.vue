@@ -1,30 +1,32 @@
 <template>
-	<div class="flex justify-center items-center">
-		<HomeHeroSection />
-	</div>
-	<div class="flex justify-center items-center">
-		<HomeProblemSection />
-	</div>
-	<div class="flex justify-center items-center">
-		<HomeSolutionSection />
-	</div>
-	<div class="flex justify-center items-center">
-		<HomeBenefitSection />
-	</div>
-	<div class="flex justify-center items-center">
-		<HomeHowItWorksSection />
-	</div>
-	<div class="flex justify-center items-center">
-		<HomeUseCasesSection />
-	</div>
-	<div class="flex justify-center items-center">
-		<HomeWhyYourDocsAISection />
-	</div>
-	<div class="flex justify-center items-center">
-		<HomeTestimonialsSection />
-	</div>
-	<div class="flex justify-center items-center">
-		<HomeCallToActionSection />
+	<div class="page--landing">
+		<section>
+			<HomeHeroSection />
+		</section>
+		<section>
+			<HomeProblemSection />
+		</section>
+		<section>
+			<HomeSolutionSection />
+		</section>
+		<section>
+			<HomeBenefitSection />
+		</section>
+		<section>
+			<HomeHowItWorksSection />
+		</section>
+		<section style="display: none">
+			<HomeUseCasesSection />
+		</section>
+		<section>
+			<HomeWhyYourDocsAISection />
+		</section>
+		<section>
+			<HomeTestimonialsSection />
+		</section>
+		<section>
+			<HomeCallToActionSection />
+		</section>
 	</div>
 </template>
 
