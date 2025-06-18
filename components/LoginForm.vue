@@ -28,6 +28,12 @@
             label="Login"
         >
         </UButton>
+        <UButton
+            to="/forgot-password"
+            icon="i-heroicons:arrow-path"
+            label="Reset Password"
+        >
+        </UButton>
         </form>
         <p v-if="errorMessage" class="text-red-600 mt-4">{{ errorMessage }}</p>
     </div>
