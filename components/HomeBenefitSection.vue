@@ -8,17 +8,6 @@
 			</div>
 
 			<div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-				<!--
-          Responsive Grid:
-          - grid-cols-1: Single column on small screens (default).
-          - md:grid-cols-2: Two columns on medium screens and up.
-          - lg:grid-cols-3: Three columns on large screens and up.
-                           With 5 items, the last row will have 2 items, which is often acceptable.
-                           Alternatively, you could keep it at md:grid-cols-2 for a more consistent 2-column layout throughout.
-                           If you have 5 items and want the last one centered in a 2-column grid:
-                           The last item could have a class like `md:col-start-1 md:col-span-2 lg:col-start-auto lg:col-span-1`
-                           or target it with :last-child if the parent is flex. With grid, it's simpler to let it flow.
-        -->
 				<div
 					v-for="(benefit, index) in benefits"
 					:key="index"
@@ -57,6 +46,15 @@
 
 <script setup lang="ts">
 import { ref, shallowRef, type Component } from 'vue';
+import {
+	ClockIcon,
+	ArrowPathIcon,
+	CursorArrowRippleIcon,
+	CursorArrowRaysIcon,
+	CheckCircleIcon,
+	SparklesIcon,
+	TicketIcon,
+} from '@heroicons/vue/24/outline';
 
 interface Benefit {
 	icon?: Component; // Make icon optional or provide a default
@@ -66,36 +64,36 @@ interface Benefit {
 
 const benefits = ref<Benefit[]>([
 	{
-		// icon: shallowRef(ClockIcon), // Use shallowRef for components
+		icon: shallowRef(ClockIcon),
 		title: 'Instant Customer Support, 24/7',
 		description:
 			'Answer visitor questions immediately, day or night, directly on your website.',
 	},
 	{
-		// icon: shallowRef(ChatBubbleLeftEllipsisIcon),
-		title: 'Reduce Repetitive Inquiries',
+		icon: shallowRef(ArrowPathIcon),
+		title: 'Reduce Repetitive Enquiries',
 		description:
 			'Let your AI chat handle common questions, freeing up your team for complex issues.',
 	},
 	{
-		// icon: shallowRef(ArrowTrendingUpIcon),
+		icon: shallowRef(CursorArrowRaysIcon),
 		title: 'Increase Website Engagement & Conversions',
 		description:
 			'Help visitors find what they need quickly, guiding them towards a purchase or inquiry.',
 	},
 	{
-		// icon: shallowRef(ShieldCheckIcon),
+		icon: shallowRef(CheckCircleIcon),
 		title: 'Answers You Can Trust',
 		description:
 			'YourDocsAI uses <strong><em>only your approved business information</em></strong>, ensuring accurate and consistent responses.',
 	},
 	{
-		// icon: shallowRef(BoltIcon),
+		icon: shallowRef(SparklesIcon),
 		title: 'Easy Setup',
 		description: 'Upload your docs, embed the widget – no coding needed!',
 	},
 	{
-		// icon: shallowRef(BoltIcon),
+		icon: shallowRef(TicketIcon),
 		title: 'Enhanced Information',
 		description:
 			"Review the visitor's question context for better answers.",
