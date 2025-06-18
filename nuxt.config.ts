@@ -7,9 +7,16 @@ export default defineNuxtConfig({
 		'pinia-plugin-persistedstate/nuxt',
 		'@nuxt/ui',
 		'@nuxtjs/color-mode',
+		'@nuxtjs/google-fonts',
 	],
 	colorMode: {
 		preference: 'light', // default value of $colorMode.preference
+	},
+	googleFonts: {
+		families: {
+			Roboto: [100, 300, 400, 500, 700, 900],
+			'Roboto+Condensed': [300, 400, 500, 700],
+		},
 	},
 	app: {
 		head: {

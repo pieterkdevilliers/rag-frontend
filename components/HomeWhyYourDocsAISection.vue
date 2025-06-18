@@ -23,28 +23,30 @@
 					:key="index"
 					class="reason-item p-6 rounded-lg bg-slate-50 dark:bg-slate-800 shadow-md hover:shadow-lg transition-shadow duration-300"
 				>
-					<div class="flex items-start">
-						<div class="flex-shrink-0">
-							<!-- Placeholder for an icon - using a checkmark for simplicity -->
-							<svg
-								class="h-7 w-7 text-green-500 dark:text-green-400"
-								xmlns="http://www.w3.org/2000/svg"
-								fill="none"
-								viewBox="0 0 24 24"
-								stroke-width="2"
-								stroke="currentColor"
-							>
-								<path
-									stroke-linecap="round"
-									stroke-linejoin="round"
-									d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-								/>
-							</svg>
-						</div>
-						<div class="ml-4">
-							<h3 class="text-lg font-semibold leading-6">
+					<div>
+						<div class="card__header--has-icon">
+							<div class="flex-shrink-0">
+								<!-- Placeholder for an icon - using a checkmark for simplicity -->
+								<svg
+									class="h-7 w-7 text-green-500 dark:text-green-400"
+									xmlns="http://www.w3.org/2000/svg"
+									fill="none"
+									viewBox="0 0 24 24"
+									stroke-width="2"
+									stroke="currentColor"
+								>
+									<path
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+									/>
+								</svg>
+							</div>
+							<h3 class="text-lg leading-6">
 								{{ reason.title }}
 							</h3>
+						</div>
+						<div>
 							<p
 								class="mt-2 text-base"
 								v-html="reason.description"

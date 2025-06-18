@@ -6,6 +6,17 @@ export default {
 			colors: {
 				accent: '#DB2777',
 			},
+			fontFamily: {
+				sans: [
+					'Roboto',
+					...require('tailwindcss/defaultTheme').fontFamily.sans,
+				],
+				'roboto-condensed': [
+					'Roboto Condensed',
+					...require('tailwindcss/defaultTheme').fontFamily.sans,
+				],
+				// Add more font families if needed
+			},
 		},
 	},
 	plugins: [],
