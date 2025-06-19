@@ -1,19 +1,26 @@
 <template>
 	<!-- This outer div is the single root element -->
-	<div class="container mx-auto px-4 py-8">
-		<div class="text-center">
-			<h1 class="text-4xl mb-6">
-				Answer Customer Questions 24/7, Instantly & Accurately – Right
-				From Your Website!
-			</h1>
-		</div>
-		<div class="text-center max-w-2xl mx-auto">
-			<p class="text-lg text-gray-600 mb-8">
-				Add an AI chat widget to your site that learns *only* from your
-				business documents (FAQs, product info, policies). Provide
-				instant, reliable answers to visitor questions, with links back
-				to your source info.
-			</p>
+	<div class="container mx-auto">
+		<div class="container__inner">
+			<div class="text-block--center text-block--wide">
+				<h1 class="heading heading-h1 text-4xl mb-6">
+					<span class="heading__span--block"
+						>Answer Customer Questions 24/7</span
+					>
+					<span class="heading__span--block"
+						>Instantly & Accurately –</span
+					>
+					<span class="heading__span--block"
+						><strong>From Your Website!</strong></span
+					>
+				</h1>
+				<p class="text-lg text-gray-600 mb-8">
+					Add an AI chat widget to your site that learns *only* from
+					your business documents (FAQs, product info, policies).
+					Provide instant, reliable answers to visitor questions, with
+					links back to your source info.
+				</p>
+			</div>
 		</div>
 		<div class="flex justify-center">
 			<SignupForm />
