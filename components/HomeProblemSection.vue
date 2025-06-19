@@ -8,15 +8,13 @@
 				<span class="heading__span--block">Are You Losing Time?</span>
 			</h2>
 		</div>
-		<div class="flex flex-wrap justify-center gap-6">
+		<div class="grid sm:grid-cols-2 lg:grid-cols-4 justify-center gap-6">
 			<div
 				v-for="(problem, index) in problems"
 				:key="index"
-				class="problem-box bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg p-6 shadow-md w-full sm:w-auto sm:min-w-[280px] sm:max-w-xs md:flex-1 md:max-w-none"
+				class="problem-box rounded-lg p-6 w-full"
 			>
-				<p
-					class="text-gray-700 dark:text-gray-300 text-center sm:text-left"
-				>
+				<p>
 					{{ problem }}
 				</p>
 			</div>
