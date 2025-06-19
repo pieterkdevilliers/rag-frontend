@@ -53,7 +53,7 @@
 						label="Create Account"
 						variant="solid"
 						icon="i-heroicons:user-plus"
-						class="form__button rounded-md"
+						class="form__button"
 					>
 					</UButton>
 				</div>
@@ -69,7 +69,7 @@
 import { ref } from 'vue';
 import { useAuthStore } from '~/stores/auth';
 import { useRouter } from 'vue-router';
-import { getWelcomeEmailHtml } from '~/utils/email-templates'; 
+import { getWelcomeEmailHtml } from '~/utils/email-templates';
 const authStore = useAuthStore();
 const router = useRouter();
 
@@ -90,7 +90,9 @@ const handleSignup = async () => {
 			`https://fastapi-rag-2705cfd4c41a.herokuapp.com/api/v1/accounts/${account_organisation.value}`,
 			{
 				method: 'POST',
-				headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+				headers: {
+					'Content-Type': 'application/x-www-form-urlencoded',
+				},
 				body: formData.toString(),
 			}
 		);
@@ -126,13 +128,13 @@ const handleSignup = async () => {
 
 		// Call the function to get the HTML string.
 		const emailHtmlContent = getWelcomeEmailHtml({
-			organisationName: account_organisation.value
+			organisationName: account_organisation.value,
 		});
 
 		const emailPayload = {
 			to_email: email_address.value,
 			subject: 'Welcome to YourDocsAI',
-			message: emailHtmlContent, 
+			message: emailHtmlContent,
 			account_unique_id: authStore.uniqueAccountId,
 		};
 
@@ -148,18 +150,19 @@ const handleSignup = async () => {
 		// Decide how to handle email failure. This is a good pattern:
 		// The user is still signed up, so we just log the error and continue.
 		if (!emailResponse.ok) {
-			console.error("Welcome email failed to send, but signup was successful.");
+			console.error(
+				'Welcome email failed to send, but signup was successful.'
+			);
 		} else {
-			console.log("Welcome email sent successfully.");
+			console.log('Welcome email sent successfully.');
 		}
-
 
 		// --- 4. FINALLY, REDIRECT THE USER ---
 		router.push('/login');
-
 	} catch (error: any) {
 		console.error('Error during signup process:', error);
-		errorMessage.value = error.message || 'Signup failed. Please try again.';
+		errorMessage.value =
+			error.message || 'Signup failed. Please try again.';
 	}
 };
 </script>
