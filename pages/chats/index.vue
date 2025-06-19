@@ -61,6 +61,7 @@ function formatDateTime(isoString: string | null | undefined): string {
 }
 
   definePageMeta({
+    middleware: 'auth',
     layout: 'user-access',
   });
 

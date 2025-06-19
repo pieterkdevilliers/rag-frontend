@@ -5,6 +5,12 @@ export const useAuthStore = defineStore('auth', {
     uniqueAccountId: null as string | null,
     access_token: null as string | null,
   }),
+  getters: {
+    // This getter will return true if there's a token, false otherwise.
+    isLoggedIn(state): boolean {
+      return !!state.access_token;
+    },
+  },
   actions: {
     setUniqueAccountId(id: string) {
       this.uniqueAccountId = id;
