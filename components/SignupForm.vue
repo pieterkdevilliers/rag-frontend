@@ -75,6 +75,10 @@
 		<p v-if="errorMessage" class="text-red-600 mt-4 text-center">
 			{{ errorMessage }}
 		</p>
+    <WelcomeEmailTemplate 
+      ref="emailTemplateRef" 
+      :organisation-name="account_organisation" 
+    />
 	</div>
 </template>
 
@@ -91,6 +95,7 @@ const email_address = ref('');
 const password = ref('');
 const account_organisation = ref('');
 const errorMessage = ref('');
+const emailTemplateRef = ref(null);
 
 const handleSignup = async () => {
 	try {
@@ -156,10 +161,14 @@ const handleSignup = async () => {
 		errorMessage.value = 'Login failed. Please check your credentials.';
 	}
 
+		const emailHtmlContent = emailTemplateRef.value.$el.outerHTML;
+
+  		console.log("Generated HTML to be sent:", emailHtmlContent);	
+
 	const emailPayload = {
 		to_email: email_address.value,
-		subject: 'Welcome to Our Service',
-		message: `Hello ${account_organisation.value},\n\nThank you for creating an account with us! We're excited to have you on board.\n\nBest regards,\nThe Team`,
+		subject: 'Welcome to YourDocsAI',
+		message: emailHtmlContent,
 		account_unique_id: authStore.uniqueAccountId,
 	};
 
