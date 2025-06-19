@@ -1,7 +1,7 @@
 export default defineAppConfig({
 	ui: {
 		button: {
-			rounded: 'rounded-full',
+			rounded: 'rounded-md',
 		},
 		accent: 'pink',
 		primary: 'pink',

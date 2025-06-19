@@ -1,6 +1,6 @@
 <template>
 	<!-- This outer div is the single root element -->
-	<div class="container mx-auto">
+	<div class="container">
 		<div class="container__inner">
 			<div class="text-block--center text-block--wide">
 				<h1 class="heading heading-h1 text-4xl mb-6">
