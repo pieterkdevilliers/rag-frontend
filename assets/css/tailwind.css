@@ -34,6 +34,24 @@
 	.page--landing .card__header--has-icon {
 		@apply flex items-center gap-2;
 	}
+
+	/* Structure */
+	.container {
+		@apply p-0 md:px-4 md:py-8;
+	}
+	/*  Container Inner - max-width: 72rem - 1152px */
+	.container__inner {
+		@apply xl:max-w-6xl mx-auto;
+	}
+	.heading__span--block {
+		@apply block;
+	}
+	.text-block--center {
+		@apply text-center;
+	}
+	.text-block--wide {
+		@apply xl:max-w-2xl mx-auto;
+	}
 }
 
 @layer components {
