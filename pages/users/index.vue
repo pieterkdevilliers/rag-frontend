@@ -45,6 +45,7 @@
   import AddUserForm from '~/components/AddUserForm.vue'; // Import modal component
 
   definePageMeta({
+    middleware: 'auth',
     layout: 'user-access',
   });
 

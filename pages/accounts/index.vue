@@ -34,6 +34,11 @@ import SubscriptionModal from '~/components/SubscriptionModal.vue';
 import { ref } from 'vue';
 import { useAuthStore } from '~/stores/auth';
 
+definePageMeta({
+    middleware: 'auth',
+    layout: 'user-access',
+});
+
 const authStore = useAuthStore();
 const toast = useToast(); // For notifications
 

@@ -50,7 +50,8 @@
     import { useFetch } from '#app'; // Ensure you have this import for useFetch
 
     definePageMeta({
-    layout: 'user-access',
+      middleware: 'auth',
+      layout: 'user-access',
     });
 
     interface Widget {

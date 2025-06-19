@@ -46,6 +46,7 @@ import { useRouter } from 'vue-router';
 
 const authStore = useAuthStore();
 const router = useRouter();
+const route = useRoute();
 
 const username = ref('');
 const password = ref('');
@@ -81,14 +82,22 @@ const handleLogin = async () => {
 		authStore.setAuthToken(access_token);
 
 
-    // Redirect to a secure route
-    router.push('/chats');
-  } catch (error) {
-    console.error('Error:', error);
-    errorMessage.value = 'Login failed. Please check your credentials.';
-  }
+    if (response.ok) {
 
-};
+      // CHECK for a redirect path in the URL query
+      const redirectPath = route.query.redirect as string | undefined;
+
+      // If a redirect path exists, go there. Otherwise, go to a default page.
+      if (redirectPath) {
+        router.push(redirectPath);
+      }} else {
+        router.push('/chats');
+        }} catch (error) {
+          console.error('Error:', error);
+          errorMessage.value = 'Login failed. Please check your credentials.';
+        }
+      }
+
 </script>
 
 <style scoped>
