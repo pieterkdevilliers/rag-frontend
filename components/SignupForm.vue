@@ -82,8 +82,7 @@
 import { ref } from 'vue';
 import { useAuthStore } from '~/stores/auth';
 import { useRouter } from 'vue-router';
-import { error } from 'zod/v4/locales/ar.js';
-
+import { getWelcomeEmailHtml } from '~/utils/email-templates'; 
 const authStore = useAuthStore();
 const router = useRouter();
 
@@ -94,6 +93,7 @@ const errorMessage = ref('');
 
 const handleSignup = async () => {
 	try {
+		// --- 1. CREATE ACCOUNT ---
 		const formData = new URLSearchParams();
 		formData.append('email_address', email_address.value);
 		formData.append('password', password.value);
@@ -103,80 +103,76 @@ const handleSignup = async () => {
 			`https://fastapi-rag-2705cfd4c41a.herokuapp.com/api/v1/accounts/${account_organisation.value}`,
 			{
 				method: 'POST',
-				headers: {
-					'Content-Type': 'application/x-www-form-urlencoded',
-					accept: 'application/json',
-				},
+				headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
 				body: formData.toString(),
 			}
 		);
-		console.log('Account creation response:', account);
 
 		if (!account.ok) {
-			throw new Error('Unable to create account');
+			const errorData = await account.json();
+			throw new Error(errorData.detail || 'Unable to create account');
 		}
 
 		const data = await account.json();
-		console.log('Response:', data);
 		const uniqueAccountId = data.account_unique_id;
-		console.log('Unique Account ID:', uniqueAccountId);
-
 		authStore.setUniqueAccountId(uniqueAccountId);
 
+		// --- 2. CREATE FIRST USER ---
 		const userPayload = {
 			user_email: email_address.value,
 			user_password: password.value,
 		};
 
-		console.log('User payload being sent:', JSON.stringify(userPayload));
-
 		const user = await fetch(
 			`https://fastapi-rag-2705cfd4c41a.herokuapp.com/api/v1/first-user/${uniqueAccountId}`,
 			{
 				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-					accept: 'application/json',
-				},
+				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify(userPayload),
 			}
 		);
-		console.log('User creation response:', user);
 
 		if (!user.ok) {
 			const errorData = await user.json();
-			console.error('User creation error:', errorData);
 			throw new Error(errorData.detail || 'Failed to create user');
 		}
 
-		// Redirect to a secure route
-		router.push('/login');
-	} catch (error) {
-		console.error('Error:', error);
-		errorMessage.value = 'Login failed. Please check your credentials.';
-	}
+		// Call the function to get the HTML string.
+		const emailHtmlContent = getWelcomeEmailHtml({
+			organisationName: account_organisation.value
+		});
 
-	const emailPayload = {
-		to_email: email_address.value,
-		subject: 'Welcome to Our Service',
-		message: `Hello ${account_organisation.value},\n\nThank you for creating an account with us! We're excited to have you on board.\n\nBest regards,\nThe Team`,
-		account_unique_id: authStore.uniqueAccountId,
-	};
+		const emailPayload = {
+			to_email: email_address.value,
+			subject: 'Welcome to YourDocsAI',
+			message: emailHtmlContent, 
+			account_unique_id: authStore.uniqueAccountId,
+		};
 
-	const send_welcome_email = await fetch(
-		`https://fastapi-rag-2705cfd4c41a.herokuapp.com/api/v1/send-email`,
-		{
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-				accept: 'application/json',
-			},
-			body: JSON.stringify(emailPayload),
+		const emailResponse = await fetch(
+			`https://fastapi-rag-2705cfd4c41a.herokuapp.com/api/v1/send-email`,
+			{
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify(emailPayload),
+			}
+		);
+
+		// Decide how to handle email failure. This is a good pattern:
+		// The user is still signed up, so we just log the error and continue.
+		if (!emailResponse.ok) {
+			console.error("Welcome email failed to send, but signup was successful.");
+		} else {
+			console.log("Welcome email sent successfully.");
 		}
-	);
+
+
+		// --- 4. FINALLY, REDIRECT THE USER ---
+		router.push('/login');
+
+	} catch (error: any) {
+		console.error('Error during signup process:', error);
+		errorMessage.value = error.message || 'Signup failed. Please try again.';
+	}
 };
 </script>
-
-<style scoped>
-/* Add Tailwind CSS or custom styles here */
-</style>
