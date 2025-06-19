@@ -83,20 +83,22 @@ const handleLogin = async () => {
 
 
     if (response.ok) {
-
       // CHECK for a redirect path in the URL query
       const redirectPath = route.query.redirect as string | undefined;
 
       // If a redirect path exists, go there. Otherwise, go to a default page.
       if (redirectPath) {
         router.push(redirectPath);
-      }} else {
+      } else {
+
         router.push('/chats');
-        }} catch (error) {
-          console.error('Error:', error);
-          errorMessage.value = 'Login failed. Please check your credentials.';
         }
       }
+    } catch (error) {
+      console.error('Error:', error);
+      errorMessage.value = 'Login failed. Please check your credentials.';
+    }
+  }
 
 </script>
 
