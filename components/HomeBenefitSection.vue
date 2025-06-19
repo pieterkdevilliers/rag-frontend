@@ -119,4 +119,3 @@ const benefits = ref<Benefit[]>([
 	background-color: #3730a3; /* Example: Indigo 900 */
 }
 </style>
-<!-- New Comment -->
