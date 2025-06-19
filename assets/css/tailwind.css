@@ -52,6 +52,27 @@
 	.text-block--wide {
 		@apply xl:max-w-2xl mx-auto;
 	}
+
+	/* Forms */
+	.form__label-field {
+		@apply flex flex-col justify-start items-start;
+	}
+	.form__label-field .form__label {
+		@apply text-base font-normal;
+	}
+	.form__label-field input[type='text'],
+	.form__label-field input[type='email'],
+	.form__label-field input[type='tel'],
+	.form__label-field input[type='url'],
+	.form__label-field input[type='password'],
+	.form__label-field input[type='number'],
+	.form__label-field select,
+	.form__label-field textarea {
+		@apply border border-slate-300 rounded-lg w-full ring-0 focus:ring-2 focus:ring-accent focus:border-transparent placeholder:text-slate-300;
+	}
+	.form__button {
+		@apply w-full;
+	}
 }
 
 @layer components {

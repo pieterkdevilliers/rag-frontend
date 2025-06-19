@@ -21,9 +21,9 @@
 					links back to your source info.
 				</p>
 			</div>
-		</div>
-		<div class="flex justify-center">
-			<SignupForm />
+			<div class="flex justify-center">
+				<SignupForm />
+			</div>
 		</div>
 	</div>
 </template>
