@@ -15,9 +15,9 @@
 		<section>
 			<HomeHowItWorksSection />
 		</section>
-		<section style="display: none">
+		<!-- <section>
 			<HomeUseCasesSection />
-		</section>
+		</section> -->
 		<section>
 			<HomeWhyYourDocsAISection />
 		</section>
