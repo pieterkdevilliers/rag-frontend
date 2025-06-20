@@ -4,6 +4,7 @@
 FROM node:18-alpine AS builder
 WORKDIR /app
 
+ARG CACHE_BUSTER
 # Install pnpm globally within the container
 RUN npm install -g pnpm
 
@@ -22,6 +23,7 @@ COPY . .
 ENV NUXT_HOST=0.0.0.0
 ENV NUXT_PORT=3000
 
+ENV CACHE_BUSTER=${CACHE_BUSTER}
 # Build the Nuxt application
 RUN pnpm run build
 
