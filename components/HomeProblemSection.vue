@@ -18,7 +18,7 @@
 					<component
 						:is="problem.icon"
 						v-if="problem.icon"
-						class="icon--purple size--8"
+						class="icon--purple size--10"
 						aria-hidden="true"
 					/>
 					<p class="problem-box__description">
