@@ -14,10 +14,10 @@ export function getWelcomeEmailHtml(data: WelcomeEmailData): string {
   return `
     <div style="font-family: Arial, sans-serif; padding: 20px; border: 1px solid #ddd; max-width: 600px; margin: auto;">
       <h1 style="color: #333;">Welcome to YourDocsAI for ${data.organisationName}!</h1>
-      <p style="font-size: 16px;">
+      <p style="font-size: 16px; color: black">
         Thank you for creating an account with us. We're excited to have you on board.
       </p>
-      <p style="font-size: 16px;">
+      <p style="font-size: 16px; color: black">
         You can now start uploading your documents and interacting with your AI assistant.
         Then simply add the web-widget to your website in order to prove support to your visitors.
       </p>
@@ -28,15 +28,15 @@ export function getWelcomeEmailHtml(data: WelcomeEmailData): string {
         Your Account Login
       </a>
       <br><br>
-      <p style="font-size: 16px;">If you have any question, please reply to this email and I'll get back to you.</p>
+      <p style="font-size: 16px; color: black">If you have any question, please reply to this email and I'll get back to you.</p>
       <br><br>
       <td align="left" width="560" class="esd-container-frame es-m-p15b">
-          <table cellpadding="0" cellspacing="0" width="100%" class="es-table-not-adapt">
+          <table cellpadding="3" cellspacing="0" width="100%" class="es-table-not-adapt">
             <tbody>
               <tr>
                 <td width="86" align="left" valign="top" class="esd-block-image" style="font-size: 0px">
                   <a target="_blank" href="">
-                    <img src="https://fhnmxll.stripocdn.email/content/guids/CABINET_ecb2fc1ec3aa034901845355d46beb103cd1806a2f07a7ba42abde73f2678e10/images/profile.jpg" width="75" alt="" class="adapt-img">
+                    <img src="https://d31env5c5sjhq3.cloudfront.net/static/profile.jpg" width="100" alt="" class="adapt-img">
                   </a>
                 </td>
                 <td align="left">
@@ -44,14 +44,10 @@ export function getWelcomeEmailHtml(data: WelcomeEmailData): string {
                     <tbody>
                       <tr>
                         <td align="left" class="esd-block-text es-text-5114">
-                          <h3 class="es-text-mobile-size-20 es-override-size">
+                          <h2 class="es-text-mobile-size-20 es-override-size" style="color: black;">
                             Pieter K de Villiers
-                          </h3>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td align="left" class="esd-block-text es-p5t">
-                          <p>
+                          </h2>
+                          <p style="font-size: 16px; color: black">
                             Creator of YourDocsAI
                           </p>
                         </td>
