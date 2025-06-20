@@ -158,7 +158,7 @@ const handleSignup = async () => {
 		}
 
 		// --- 4. FINALLY, REDIRECT THE USER ---
-		router.push('/login');
+		router.push('/folders');
 	} catch (error: any) {
 		console.error('Error during signup process:', error);
 		errorMessage.value =
