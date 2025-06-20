@@ -41,6 +41,14 @@
 
 <script setup lang="ts">
 const config = useRuntimeConfig();
+const myApiUrl = config.public.apiBaseURL;
+
+// This will log on the server (in your terminal/docker logs) AND on the client (browser console)
+console.log('RUNTIME CONFIG - apiBaseURL IS:', myApiUrl);
+onMounted(() => {
+  // This will log ONLY on the client (in your browser console)
+  console.log('CLIENT MOUNTED - apiBaseURL IS:', config.public.apiBaseURL);
+});
 import { ref } from 'vue';
 import { useAuthStore } from '~/stores/auth';
 import { useRouter } from 'vue-router';
