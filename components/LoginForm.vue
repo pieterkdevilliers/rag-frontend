@@ -78,8 +78,10 @@ const handleLogin = async () => {
 		console.log('Response:', data);
 		const uniqueAccountId = data.account_unique_id;
 		const access_token = data.access_token;
+    const accountOrganisation = data.account_organisation
 		authStore.setUniqueAccountId(uniqueAccountId);
 		authStore.setAuthToken(access_token);
+    authStore.setAccountOrganisation(accountOrganisation)
 
 
     if (response.ok) {
