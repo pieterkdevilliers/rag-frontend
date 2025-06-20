@@ -10,7 +10,7 @@
 			<div
 				v-for="(benefit, index) in benefits"
 				:key="index"
-				class="benefit-item bg-slate-50 dark:bg-slate-800 p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 ease-in-out"
+				class="benefit-item border-box border-box--purple"
 			>
 				<div class="flex items-center mb-3">
 					<!-- Optional: Icon placeholder -->
