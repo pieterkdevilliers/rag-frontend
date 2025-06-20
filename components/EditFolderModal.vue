@@ -29,6 +29,7 @@
 </template>
 
 <script setup lang="ts">
+const config = useRuntimeConfig();
 import { ref, watch, reactive } from 'vue';
 import { z } from 'zod';
 import type { FormSubmitEvent } from '#ui/types';
@@ -83,7 +84,7 @@ const submitForm = async (event: FormSubmitEvent<Schema>) => {
   try {
     // API call to update the folder
     // Assuming PUT request to /api/v1/folder/{folder_id}
-    const updatedFolderData = await $fetch(`https://fastapi-rag-2705cfd4c41a.herokuapp.com/api/v1/folders/${account_unique_id}/${props.folder.id}`, {
+    const updatedFolderData = await $fetch(`${config.public.apiBase}/folders/${account_unique_id}/${props.folder.id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json', // Usually for PUT with JSON body

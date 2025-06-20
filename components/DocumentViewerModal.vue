@@ -62,6 +62,7 @@
 </template>
 
 <script setup lang="ts">
+const config = useRuntimeConfig();
 import { ref, watch, computed } from 'vue';
 
 const props = defineProps<{
@@ -97,7 +98,7 @@ watch(() => props.isOpen, async (newVal) => { // Make the watch callback async
     pdfUrl.value = null; // Reset pdfUrl
 
     // Construct the URL to your backend proxy endpoint
-    const constructedPdfUrl = `https://fastapi-rag-2705cfd4c41a.herokuapp.com/api/v1/files/view/${props.accountUniqueId}/${encodeURIComponent(props.fileIdentifier)}`;
+    const constructedPdfUrl = `${config.public.apiBase}/files/view/${props.accountUniqueId}/${encodeURIComponent(props.fileIdentifier)}`;
     console.log('Constructed PDF URL for iframe/fetch:', constructedPdfUrl);
 
 

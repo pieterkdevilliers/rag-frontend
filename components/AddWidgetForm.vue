@@ -51,6 +51,7 @@
 </template>
 
 <script setup lang="ts">
+const config = useRuntimeConfig();
 import { ref, defineEmits } from 'vue';
 import { useAuthStore } from '~/stores/auth';
 import { useRouter } from 'vue-router';
@@ -99,7 +100,7 @@ const handleAddWidget = async () => {
 
 		// --- Make sure your API URL is correct for development/production ---
 		// Consider using an environment variable for the base URL
-		const apiUrl = `https://fastapi-rag-2705cfd4c41a.herokuapp.com/api/v1/create-api-key/${uniqueAccountId}`;
+		const apiUrl = `${config.public.apiBase}/create-api-key/${uniqueAccountId}`;
 
 		const response = await fetch(apiUrl, {
 			method: 'POST',

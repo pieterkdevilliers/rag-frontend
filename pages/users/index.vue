@@ -40,6 +40,7 @@
 </template>
 
 <script setup lang="ts">
+  const config = useRuntimeConfig();
   import { ref } from 'vue';
   import { useAuthStore } from '~/stores/auth';
   import AddUserForm from '~/components/AddUserForm.vue'; // Import modal component
@@ -59,7 +60,7 @@
   const authStore = useAuthStore();
   const apiAuthorizationToken = authStore.access_token;
 
-  const { data: users, error, refresh } = await useFetch('https://fastapi-rag-2705cfd4c41a.herokuapp.com/api/v1/users', {
+  const { data: users, error, refresh } = await useFetch(`${config.public.apiBase}/users`, {
     method: 'GET',
     headers: {
       accept: 'application/json',

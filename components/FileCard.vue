@@ -26,6 +26,7 @@
 </template>
 
 <script setup lang="ts">
+const config = useRuntimeConfig();
 const { file } = defineProps<{
 	file: {
 		id: number;
@@ -58,7 +59,7 @@ const handleDeleteFile = async () => {
 
 	try {
 		await $fetch(
-			`https://fastapi-rag-2705cfd4c41a.herokuapp.com/api/v1/files/${uniqueAccountId}/${file.id}`,
+			`${config.public.apiBase}/files/${uniqueAccountId}/${file.id}`,
 			{
 				method: 'DELETE',
 				headers: {

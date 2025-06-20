@@ -44,6 +44,7 @@
 </template>
 
 <script setup lang="ts">
+  const config = useRuntimeConfig();
   import { useAuthStore } from '~/stores/auth';
   import { computed, ref } from 'vue';
 
@@ -90,7 +91,7 @@ function formatDateTime(isoString: string | null | undefined): string {
   
   // We use `transform` to pluck the `chat_sessions` array from the response object.
   const { data: chatSessions, error } = await useFetch(
-    `https://fastapi-rag-2705cfd4c41a.herokuapp.com/api/v1/chat-sessions/${account_unique_id}`, {
+    `${config.public.apiBase}/chat-sessions/${account_unique_id}`, {
       method: 'GET',
       headers: {
           'accept': 'application/json',

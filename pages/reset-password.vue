@@ -42,7 +42,8 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
+const config = useRuntimeConfig();
 import { ref, onMounted } from 'vue';
 
 const route = useRoute();
@@ -74,7 +75,7 @@ onMounted(async () => {
   
   // Validate the token on page load
   try {
-    const response = await fetch('https://fastapi-rag-2705cfd4c41a.herokuapp.com/api/v1/validate-token', {
+    const response = await fetch(`${config.public.apiBase}/validate-token`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -112,7 +113,7 @@ async function handleResetPassword() {
   isSubmitting.value = true;
 
   try {
-    const response = await fetch('https://fastapi-rag-2705cfd4c41a.herokuapp.com/api/v1/reset-password', {
+    const response = await fetch(`${config.public.apiBase}/reset-password`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

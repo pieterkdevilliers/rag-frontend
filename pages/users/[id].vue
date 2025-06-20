@@ -7,6 +7,7 @@
 </template>
 
 <script setup lang="ts">
+const config = useRuntimeConfig();
 import { useAuthStore } from '~/stores/auth';
 
 const authStore = useAuthStore();
@@ -15,7 +16,7 @@ const { id } = useRoute().params;
 
 const apiAuthorizationToken = authStore.access_token;
     // Fetch users data with headers
-const { data: user, error } = await useFetch(`https://fastapi-rag-2705cfd4c41a.herokuapp.com/api/v1/users/${account_unique_id}/${id}`, {
+const { data: user, error } = await useFetch(`${config.public.apiBase}/users/${account_unique_id}/${id}`, {
   method: 'GET',
   headers: {
     'accept': 'application/json',

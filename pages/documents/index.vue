@@ -9,14 +9,14 @@
 </template>
 
 <script setup lang="ts">
-
+const config = useRuntimeConfig();
 import { useAuthStore } from '~/stores/auth';
 const authStore = useAuthStore();
 
 const account_unique_id = authStore.uniqueAccountId
 const apiAuthorizationToken = useRuntimeConfig().public.apiAuthorizationToken;
     // Fetch folders data with headers
-const { data: folders, error } = await useFetch(`https://fastapi-rag-2705cfd4c41a.herokuapp.com/api/v1/folders/${account_unique_id}`, {
+const { data: folders, error } = await useFetch(`${config.public.apiBase}/folders/${account_unique_id}`, {
   method: 'GET',
   headers: {
     'accept': 'application/json',

@@ -42,6 +42,7 @@
 </template>
 
 <script setup lang="ts">
+const config = useRuntimeConfig();
 import { ref, defineEmits } from 'vue';
 import { useAuthStore } from '~/stores/auth';
 import { useRouter } from 'vue-router';
@@ -66,7 +67,7 @@ const handleAddUser = async () => {
 	console.log('User Payload:', currentUserPayload);
 	try {
 		const response = await fetch(
-			`https://fastapi-rag-2705cfd4c41a.herokuapp.com/api/v1/users/${uniqueAccountId}`,
+			`${config.public.apiBase}/users/${uniqueAccountId}`,
 			{
 				method: 'POST',
 				headers: {
@@ -106,7 +107,7 @@ const handleAddUser = async () => {
 		};
 
 		const emailResponse = await fetch(
-			`https://fastapi-rag-2705cfd4c41a.herokuapp.com/api/v1/send-email`,
+			`${config.public.apiBase}/send-email`,
 			{
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },

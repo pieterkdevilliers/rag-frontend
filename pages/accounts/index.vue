@@ -28,7 +28,7 @@
 </template>
 
 <script setup lang="ts">
-
+const config = useRuntimeConfig();
 import SubscriptionCard from '~/components/SubscriptionCard.vue';
 import SubscriptionModal from '~/components/SubscriptionModal.vue';
 import { ref } from 'vue';
@@ -70,7 +70,7 @@ interface Subscription {
     related_product_title: string | null;
 }
 
-  const { data: subscriptions, error, refresh } = await useFetch(`https://fastapi-rag-2705cfd4c41a.herokuapp.com/api/v1/stripe-subscriptions/${uniqueAccountId}`, {
+  const { data: subscriptions, error, refresh } = await useFetch(`${config.public.apiBase}/stripe-subscriptions/${uniqueAccountId}`, {
     method: 'GET',
     headers: {
       accept: 'application/json',

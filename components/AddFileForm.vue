@@ -61,6 +61,7 @@
 </template>
 
 <script setup lang="ts">
+const config = useRuntimeConfig();
 import { ref, reactive } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useAuthStore } from '~/stores/auth';
@@ -136,7 +137,7 @@ const handleAddFiles = async () => {
 			response: string;
 			uploaded_files: any[];
 		}>(
-			`https://fastapi-rag-2705cfd4c41a.herokuapp.com/api/v1/files/${uniqueAccountId}/${folder_id}`,
+			`${config.public.apiBase}/files/${uniqueAccountId}/${folder_id}`,
 			{
 				method: 'POST',
 				headers: {

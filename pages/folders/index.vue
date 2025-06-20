@@ -59,7 +59,7 @@
 </template>
 
 <script setup lang="ts">
-
+  const config = useRuntimeConfig();
   definePageMeta({
     middleware: 'auth',
     layout: 'user-access',
@@ -78,7 +78,7 @@
   const apiAuthorizationToken = authStore.access_token;
 
     // Fetch folders data with headers
-  const { data: folders, error, refresh } = await useFetch(`https://fastapi-rag-2705cfd4c41a.herokuapp.com/api/v1/folders/${account_unique_id}`, {
+  const { data: folders, error, refresh } = await useFetch(`${config.public.apiBase}/folders/${account_unique_id}`, {
   method: 'GET',
   headers: {
     'accept': 'application/json',
@@ -176,7 +176,7 @@
     console.log('Replace value received from modal:', replace); // For debugging
 
     try {
-      const response = await $fetch(`https://fastapi-rag-2705cfd4c41a.herokuapp.com/api/v1/generate-chroma-db/${account_unique_id}?replace=${replace}`, {
+      const response = await $fetch(`${config.public.apiBase}/generate-chroma-db/${account_unique_id}?replace=${replace}`, {
         method: 'GET',
         headers: {
           'accept': 'application/json',

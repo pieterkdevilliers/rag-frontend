@@ -41,6 +41,7 @@
 </template>
 
 <script setup lang="ts">
+    const config = useRuntimeConfig();
     import { ref } from 'vue';
     import { useAuthStore } from '~/stores/auth';
     import AddWidgetForm from '~/components/AddWidgetForm.vue'; // Import modal component
@@ -66,7 +67,7 @@
     const apiAuthorizationToken = authStore.access_token;
     const uniqueAccountId = authStore.uniqueAccountId;
 
-    const { data: widgets, error, refresh } = await useFetch(`https://fastapi-rag-2705cfd4c41a.herokuapp.com/api/v1/list-api-keys/${uniqueAccountId}`, {
+    const { data: widgets, error, refresh } = await useFetch(`${config.public.apiBase}/list-api-keys/${uniqueAccountId}`, {
     method: 'GET',
     headers: {
         accept: 'application/json',
