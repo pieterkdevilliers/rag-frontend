@@ -33,7 +33,7 @@ export default defineNuxtConfig({
 	},
 	runtimeConfig: {
 		public: {
-			 apiBase: process.env.NUXT_PUBLIC_API_BASE_URL || 'https://api.default.com',
+			 apiBase: process.env.NUXT_PUBLIC_API_BASE_URL || 'https://fastapi-rag-2705cfd4c41a.herokuapp.com/api/v1',
 		},
 	},
 	hooks: {
