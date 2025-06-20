@@ -1,30 +1,33 @@
 <template>
-	<section
-		class="solution-section bg-slate-50 dark:bg-slate-800 py-12 md:py-16"
-	>
-		<div class="container mx-auto px-4 sm:px-6 lg:px-8">
-			<div class="max-w-3xl mx-auto text-center">
-				<h2 class="text-3xl tracking-tight sm:text-4xl">
-					Introducing YourDocsAI:
-					<span class="block sm:inline mt-2 sm:mt-0"
-						>Your Website's Smart, Document-Powered Helper</span
-					>
-				</h2>
-				<p class="mt-6 text-lg leading-relaxed">
+	<div class="solution-section container">
+		<div class="container__inner">
+			<h2 class="heading">
+				<span class="heading__span--block"
+					>Introducing YourDocsAI:</span
+				>
+				<span class="heading__span--block"
+					>Your Website's Smart, Document-Powered Helper</span
+				>
+			</h2>
+			<div class="text-block text-block--wide text-block--center">
+				<p>
 					<strong>YourDocsAI</strong>
 					empowers your website with an intelligent chat widget.
+				</p>
+				<p>
 					Simply upload your business documents – FAQs, product specs,
 					pricing, return policies, how-to guides. YourDocsAI learns
-					<em>exclusively</em>
-					from this content. Visitors ask questions, and your AI chat
-					provides instant answers, drawn
-					<em>only</em>
-					from your information, even linking them to the relevant
-					page or document on your site for more detail.
+					<em>exclusively</em>&nbsp; from this content.
+				</p>
+				<p>
+					Visitors ask questions, and your AI chat provides instant
+					answers, extracted <em>only</em>&nbsp; from your
+					information, even linking them to the relevant page or
+					document on your site for more detail.
 				</p>
 			</div>
 		</div>
-	</section>
+	</div>
 </template>
 
 <script setup lang="ts">
