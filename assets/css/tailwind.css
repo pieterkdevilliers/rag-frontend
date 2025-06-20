@@ -74,6 +74,17 @@
 		@apply text-xl mb-3;
 	}
 
+	/* Why YourDocsAI Section */
+	.why-sourceproof-section .reason-grid {
+		@apply lg:grid grid-cols-1 gap-x-8 gap-y-10 md:grid-cols-2 lg:grid-cols-12;
+	}
+	.why-sourceproof-section .reason-item {
+		@apply lg:min-h-40 lg:col-span-4;
+	}
+	.why-sourceproof-section .reason-item:nth-child(4) {
+		@apply col-start-3;
+	}
+
 	/* Structure */
 	.container {
 		@apply p-0 md:px-4 md:py-8 mx-auto;
