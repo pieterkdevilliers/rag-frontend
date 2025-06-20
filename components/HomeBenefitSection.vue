@@ -1,7 +1,7 @@
 <template>
 	<div class="benefits-section container mx-auto px-4 sm:px-6 lg:px-8">
 		<div class="text-center mb-10 md:mb-12">
-			<h2 class="text-3xl tracking-tight sm:text-4xl">
+			<h2 class="heading heading-h2">
 				Delight Customers & Free Up Your Time
 			</h2>
 		</div>
