@@ -130,6 +130,12 @@
 	.icon--purple {
 		@apply text-purple-500;
 	}
+	.icon__number {
+		@apply rounded-full text-white flex items-center justify-center text-2xl shadow-md mb-6 mx-auto;
+	}
+	.icon__number--purple {
+		@apply bg-purple-500;
+	}
 	.size--8 {
 		@apply w-8 h-8;
 	}
@@ -138,5 +144,11 @@
 	}
 	.size--12 {
 		@apply w-12 h-12;
+	}
+	.size--14 {
+		@apply w-14 h-14;
+	}
+	.size--16 {
+		@apply w-16 h-16;
 	}
 }
