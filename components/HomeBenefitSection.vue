@@ -1,47 +1,45 @@
 <template>
-	<section class="benefits-section py-12 md:py-16 bg-white dark:bg-gray-900">
-		<div class="container mx-auto px-4 sm:px-6 lg:px-8">
-			<div class="text-center mb-10 md:mb-12">
-				<h2 class="text-3xl tracking-tight sm:text-4xl">
-					Delight Customers & Free Up Your Time
-				</h2>
-			</div>
+	<div class="benefits-section container mx-auto px-4 sm:px-6 lg:px-8">
+		<div class="text-center mb-10 md:mb-12">
+			<h2 class="text-3xl tracking-tight sm:text-4xl">
+				Delight Customers & Free Up Your Time
+			</h2>
+		</div>
 
-			<div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-				<div
-					v-for="(benefit, index) in benefits"
-					:key="index"
-					class="benefit-item bg-slate-50 dark:bg-slate-800 p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 ease-in-out"
-				>
-					<div class="flex items-center mb-3">
-						<!-- Optional: Icon placeholder -->
-						<div class="flex-shrink-0">
-							<component
-								:is="benefit.icon"
-								v-if="benefit.icon"
-								class="icon--purple size--8"
-								aria-hidden="true"
-							/>
-							<div
-								v-else
-								class="h-8 w-8 bg-primary-100 dark:bg-primary-900 rounded-full flex items-center justify-center"
+		<div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+			<div
+				v-for="(benefit, index) in benefits"
+				:key="index"
+				class="benefit-item bg-slate-50 dark:bg-slate-800 p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 ease-in-out"
+			>
+				<div class="flex items-center mb-3">
+					<!-- Optional: Icon placeholder -->
+					<div class="flex-shrink-0">
+						<component
+							:is="benefit.icon"
+							v-if="benefit.icon"
+							class="icon--purple size--8"
+							aria-hidden="true"
+						/>
+						<div
+							v-else
+							class="h-8 w-8 bg-primary-100 dark:bg-primary-900 rounded-full flex items-center justify-center"
+						>
+							<!-- Fallback visual if no specific icon -->
+							<span
+								class="text-primary-600 dark:text-primary-400 text-lg"
+								>✓</span
 							>
-								<!-- Fallback visual if no specific icon -->
-								<span
-									class="text-primary-600 dark:text-primary-400 text-lg"
-									>✓</span
-								>
-							</div>
 						</div>
-						<h3 class="card__title ms-4 text-lg leading-6">
-							{{ benefit.title }}
-						</h3>
 					</div>
-					<p class="text-base" v-html="benefit.description"></p>
+					<h3 class="card__title ms-4 text-lg leading-6">
+						{{ benefit.title }}
+					</h3>
 				</div>
+				<p class="text-base" v-html="benefit.description"></p>
 			</div>
 		</div>
-	</section>
+	</div>
 </template>
 
 <script setup lang="ts">
