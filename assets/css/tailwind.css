@@ -37,10 +37,16 @@
 		@apply max-w-3xl mx-auto text-center;
 	}
 	.page--landing :is(section) {
+		@apply bg-purple-50;
+	}
+	.page--landing :is(section) {
 		@apply flex justify-center items-center;
 	}
 	.page--landing section:nth-child(even) {
 		@apply bg-white;
+	}
+	.page--landing section p {
+		@apply mt-6;
 	}
 	.page--landing .card__header--has-icon {
 		@apply flex items-center gap-2;
