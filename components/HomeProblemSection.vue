@@ -12,24 +12,53 @@
 			<div
 				v-for="(problem, index) in problems"
 				:key="index"
-				class="problem-box rounded-lg p-6 w-full"
+				class="problem-box"
 			>
-				<p>
-					{{ problem }}
-				</p>
+				<div class="flex flex-col items-center">
+					<component
+						:is="problem.icon"
+						v-if="problem.icon"
+						class="icon--purple size--8"
+						aria-hidden="true"
+					/>
+					<p class="problem-box__description">
+						{{ problem.description }}
+					</p>
+				</div>
 			</div>
 		</div>
 	</div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, shallowRef, type Component } from 'vue';
+import { QuestionMarkCircleIcon } from '@heroicons/vue/24/outline';
 
-const problems = ref<string[]>([
-	"Visitors can't find answers on your site and leave frustrated?",
-	'Spending too much time answering the same customer questions over and over?',
-	"Losing potential sales because prospects can't get immediate information when they need it?",
-	'Want to provide 24/7 support without hiring more staff?',
+interface Problem {
+	icon?: Component; // Make icon optional or provide a default
+	description: string;
+}
+
+const problems = ref<Problem[]>([
+	{
+		icon: shallowRef(QuestionMarkCircleIcon),
+		description:
+			"Visitors can't find answers on your site and leave frustrated?",
+	},
+	{
+		icon: shallowRef(QuestionMarkCircleIcon),
+		description:
+			'Spending too much time answering the same customer questions over and over?',
+	},
+	{
+		icon: shallowRef(QuestionMarkCircleIcon),
+		description:
+			"Losing potential sales because prospects can't get immediate information when they need it?",
+	},
+	{
+		icon: shallowRef(QuestionMarkCircleIcon),
+		description: 'Want to provide 24/7 support without hiring more staff?',
+	},
 ]);
 </script>
 

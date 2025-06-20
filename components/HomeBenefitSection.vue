@@ -19,7 +19,7 @@
 							<component
 								:is="benefit.icon"
 								v-if="benefit.icon"
-								class="h-8 w-8 text-primary-600 dark:text-primary-400"
+								class="icon--purple size--8"
 								aria-hidden="true"
 							/>
 							<div
