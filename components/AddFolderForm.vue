@@ -28,6 +28,7 @@
 </template>
 
 <script setup lang="ts">
+const config = useRuntimeConfig();
 import { ref, defineEmits } from 'vue';
 import { useAuthStore } from '~/stores/auth';
 import { useRouter } from 'vue-router';
@@ -44,7 +45,7 @@ const apiAuthorizationToken = authStore.access_token;
 const handleAddFolder = async () => {
 	try {
 		const response = await fetch(
-			`https://fastapi-rag-2705cfd4c41a.herokuapp.com/api/v1/folders/${uniqueAccountId}/${folder_name.value}`,
+			`${config.public.apiBase}/folders/${uniqueAccountId}/${folder_name.value}`,
 			{
 				method: 'POST',
 				headers: {

@@ -52,6 +52,7 @@
 </template>
 
 <script setup lang="ts">
+const config = useRuntimeConfig();
 const { widget } = defineProps<{
 	widget: {
 		id: number;
@@ -92,7 +93,7 @@ const handleDeleteWidget = async () => {
 
 	try {
 		await $fetch(
-			`https://fastapi-rag-2705cfd4c41a.herokuapp.com/api/v1/delete-api-key/${uniqueAccountId}/${widget.id}`,
+			`${config.public.apiBase}/delete-api-key/${uniqueAccountId}/${widget.id}`,
 			{
 				method: 'DELETE',
 				headers: {

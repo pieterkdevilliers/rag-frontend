@@ -45,6 +45,7 @@
 </template>
 
 <script setup lang="ts">
+const config = useRuntimeConfig();
 const { user } = defineProps<{
 	user: {
 		id: number;
@@ -87,7 +88,7 @@ const handleToggleReceiveNotifications = async (newValue: boolean) => {
 
 	try {
 		const updatedUserData = await $fetch(
-			`https://fastapi-rag-2705cfd4c41a.herokuapp.com/api/v1/users/${uniqueAccountId}/${user.id}`,
+			`${config.public.apiBase}/users/${uniqueAccountId}/${user.id}`,
 			{
 				method: 'PUT',
 				headers: {
@@ -129,7 +130,7 @@ const handleDeleteUser = async () => {
 
 	try {
 		await $fetch(
-			`https://fastapi-rag-2705cfd4c41a.herokuapp.com/api/v1/users/${uniqueAccountId}/${user.id}`,
+			`${config.public.apiBase}/users/${uniqueAccountId}/${user.id}`,
 			{
 				method: 'DELETE',
 				headers: {

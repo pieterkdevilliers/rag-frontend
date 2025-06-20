@@ -93,6 +93,7 @@
 </template>
 
 <script setup lang="ts">
+const config = useRuntimeConfig();
 interface ChatMessage {
 	message_id: string;
 	sender_type: 'user' | 'bot';
@@ -117,7 +118,7 @@ const account_unique_id = authStore.uniqueAccountId;
 const apiAuthorizationToken = authStore.access_token;
 
 const { data, status, error } = await useFetch(
-	`https://fastapi-rag-2705cfd4c41a.herokuapp.com/api/v1/chat-messages/${account_unique_id}/${props.sessionId}`,
+	`${config.public.apiBase}/chat-messages/${account_unique_id}/${props.sessionId}`,
 	{
 		method: 'GET',
 		headers: {

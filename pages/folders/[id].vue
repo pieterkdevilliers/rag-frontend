@@ -83,7 +83,7 @@
 </template>
 
 <script setup lang="ts">
-
+  const config = useRuntimeConfig();
   function toTitleCase(str) {
     if (!str) return "";
     return str.split(' ').map(word => {
@@ -118,7 +118,7 @@
     const isDeletingInProgress = ref(false);
 
         // Fetch folders data with headers
-    const { data: filesResponse, error, refresh: doFetchRefresh } = await useFetch(`https://fastapi-rag-2705cfd4c41a.herokuapp.com/api/v1/files/${account_unique_id}/${id}`, {
+    const { data: filesResponse, error, refresh: doFetchRefresh } = await useFetch(`${config.public.apiBase}/files/${account_unique_id}/${id}`, {
     method: 'GET',
     headers: {
         'accept': 'application/json',
@@ -258,7 +258,7 @@
     closeConfirmDeleteModal(); 
 
     try {
-      await $fetch(`https://fastapi-rag-2705cfd4c41a.herokuapp.com/api/v1/files/${account_unique_id}/${fileBeingDeleted.id}`, {
+      await $fetch(`${config.public.apiBase}/files/${account_unique_id}/${fileBeingDeleted.id}`, {
       method: 'DELETE',
       headers: {
           // 'Content-Type': 'application/x-www-form-urlencoded', // DELETE often doesn't need Content-Type for body

@@ -86,6 +86,7 @@
 </template>
 
 <script setup lang="ts">
+const config = useRuntimeConfig();
 import { ref, computed } from 'vue';
 import { useAuthStore } from '~/stores/auth';
 
@@ -154,7 +155,7 @@ const handleQuery = async () => {
 
 	try {
 		const response = await fetch(
-			`https://fastapi-rag-2705cfd4c41a.herokuapp.com/api/v1/query-data/${account_unique_id}?query=${encodeURIComponent(
+			`${config.public.apiBase}/query-data/${account_unique_id}?query=${encodeURIComponent(
 				question.value
 			)}`,
 			{

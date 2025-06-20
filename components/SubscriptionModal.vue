@@ -24,6 +24,7 @@
 </template>
 
 <script setup lang="ts">
+const config = useRuntimeConfig();
     import { computed, ref } from 'vue';
     import ProductCard from './ProductCard.vue';
     import { useAuthStore } from '~/stores/auth';
@@ -50,7 +51,7 @@
       width: 'w-full sm:max-w-4xl'
     }
 
-    const { data: products, error } = await useFetch('https://fastapi-rag-2705cfd4c41a.herokuapp.com/api/v1/products', {
+    const { data: products, error } = await useFetch(`${config.public.apiBase}/products`, {
         headers: {
             Authorization: `Bearer ${useAuthStore().access_token}`,
         },

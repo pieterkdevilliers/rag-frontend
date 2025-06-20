@@ -29,6 +29,7 @@
 </template>
 
 <script setup lang="ts">
+const config = useRuntimeConfig();
 import { ref, watch, reactive } from 'vue';
 import { z } from 'zod';
 import type { FormSubmitEvent } from '#ui/types';
@@ -84,7 +85,7 @@ const submitForm = async (event: FormSubmitEvent<Schema>) => {
   isLoading.value = true;
   try {
 
-    const updatedUserData = await $fetch(`https://fastapi-rag-2705cfd4c41a.herokuapp.com/api/v1/users/${account_unique_id}/${props.user.id}`, {
+    const updatedUserData = await $fetch(`${config.public.apiBase}/users/${account_unique_id}/${props.user.id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json', // Usually for PUT with JSON body

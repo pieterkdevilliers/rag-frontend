@@ -36,6 +36,7 @@
 </template>
 
 <script setup lang="ts">
+const config = useRuntimeConfig();
 import { ref } from 'vue';
 // Assuming ConfirmDeleteModal is in components/ConfirmDeleteModal.vue
 // Nuxt 3 auto-imports components from the `components` directory.
@@ -72,7 +73,7 @@ const handleDeleteFolder = async () => {
 
 	try {
 		await $fetch(
-			`https://fastapi-rag-2705cfd4c41a.herokuapp.com/api/v1/folder/${props.folder.id}`,
+			`${config.public.apiBase}/folder/${props.folder.id}`,
 			{
 				method: 'DELETE',
 				headers: {

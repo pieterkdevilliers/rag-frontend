@@ -27,7 +27,8 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
+const config = useRuntimeConfig();
 import { ref } from 'vue';
 
 const email = ref('');
@@ -37,7 +38,7 @@ async function handleForgotPassword() {
   message.value = ''; // Reset message on new submission
 
   try {
-    const response = await fetch('https://fastapi-rag-2705cfd4c41a.herokuapp.com/api/v1/forgot-password', {
+    const response = await fetch(`${config.public.apiBase}/forgot-password`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

@@ -66,6 +66,7 @@
 </template>
 
 <script setup lang="ts">
+const config = useRuntimeConfig();
 import { ref } from 'vue';
 import { useAuthStore } from '~/stores/auth';
 import { useRouter } from 'vue-router';
@@ -87,7 +88,7 @@ const handleSignup = async () => {
 		formData.append('account_organisation', account_organisation.value);
 
 		const account = await fetch(
-			`https://fastapi-rag-2705cfd4c41a.herokuapp.com/api/v1/accounts/${account_organisation.value}`,
+			`${config.public.apiBase}/accounts/${account_organisation.value}`,
 			{
 				method: 'POST',
 				headers: {
@@ -113,7 +114,7 @@ const handleSignup = async () => {
 		};
 
 		const user = await fetch(
-			`https://fastapi-rag-2705cfd4c41a.herokuapp.com/api/v1/first-user/${uniqueAccountId}`,
+			`${config.public.apiBase}/first-user/${uniqueAccountId}`,
 			{
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
@@ -139,7 +140,7 @@ const handleSignup = async () => {
 		};
 
 		const emailResponse = await fetch(
-			`https://fastapi-rag-2705cfd4c41a.herokuapp.com/api/v1/send-email`,
+			`${config.public.apiBase}/send-email`,
 			{
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },

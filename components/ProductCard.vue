@@ -13,7 +13,7 @@
                 <UButton
                     icon="i-heroicons:shopping-cart"
                     label="Subscribe"
-                    :to="'https://fastapi-rag-2705cfd4c41a.herokuapp.com/api/v1/checkout/' + product.price_id + '/' + uniqueAccountId"
+                    :to="`${config.public.apiBase}/checkout/` + product.price_id + '/' + uniqueAccountId"
                     />
             </div>
 
@@ -22,6 +22,7 @@
 </template>
 
 <script setup lang="ts">
+    const config = useRuntimeConfig();
 
     import { defineProps, computed } from 'vue';
     import { format, parseISO } from 'date-fns';

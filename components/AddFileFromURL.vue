@@ -28,6 +28,7 @@
 </template>
 
 <script setup lang="ts">
+const config = useRuntimeConfig();
 import { ref, defineEmits } from 'vue';
 import { useAuthStore } from '~/stores/auth';
 import { useRouter } from 'vue-router';
@@ -84,7 +85,7 @@ const handleAddFileFromURL = async () => {
 		}
 
 		const responseData = await $fetch<SuccessResponse>( // Type hint for the expected success data
-			`https://fastapi-rag-2705cfd4c41a.herokuapp.com/api/v1/get-text-from-url/${uniqueAccountId}/${folder_id}`,
+			`${config.public.apiBase}/get-text-from-url/${uniqueAccountId}/${folder_id}`,
 			{
 				method: 'POST',
 				headers: {

@@ -75,6 +75,7 @@
 </template>
 
 <script setup lang="ts">
+const config = useRuntimeConfig();
 import { ref, computed, watchEffect } from 'vue';
 import { useAuthStore } from '~/stores/auth';
 
@@ -90,7 +91,7 @@ watchEffect(async () => {
 		try {
 			const apiAuthorizationToken = authStore.access_token;
 			const { data: account, error } = await useFetch(
-				`https://fastapi-rag-2705cfd4c41a.herokuapp.com/api/v1/accounts/${account_unique_id.value}`,
+				`${config.public.apiBase}/accounts/${account_unique_id.value}`,
 				{
 					method: 'GET',
 					headers: {
