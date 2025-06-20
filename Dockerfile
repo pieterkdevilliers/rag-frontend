@@ -43,4 +43,6 @@ COPY --from=builder /app/package.json ./package.json
 EXPOSE 3000
 
 # The command that will be run to start the server
-CMD ["node", ".output/server/index.mjs"]
+# CMD ["node", ".output/server/index.mjs"]
+# Use a shell to first print all environment variables, then execute the app.
+CMD ["sh", "-c", "echo '--- PRINTING ALL ENV VARS ---' && printenv && echo '--- STARTING NUXT APP ---' && node .output/server/index.mjs"]
