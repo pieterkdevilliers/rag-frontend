@@ -45,6 +45,7 @@
 import { ref, defineEmits } from 'vue';
 import { useAuthStore } from '~/stores/auth';
 import { useRouter } from 'vue-router';
+import { getUserWelcomeEmailHtml } from '~/utils/email-templates';
 
 const emit = defineEmits(['close', 'userAdded']);
 const authStore = useAuthStore();
@@ -55,6 +56,7 @@ const password = ref('');
 const errorMessage = ref('');
 const uniqueAccountId = authStore.uniqueAccountId;
 const apiAuthorizationToken = authStore.access_token;
+const accountOrganisation = authStore.account_organisation
 
 const handleAddUser = async () => {
 	const currentUserPayload = {
@@ -91,24 +93,36 @@ const handleAddUser = async () => {
 			'Unable to add User. Please check your credentials.';
 	}
 
-	const emailPayload = {
-		to_email: username.value,
-		subject: 'Welcome to Our Service',
-		message: `Hello ${username.value},\n\nYou've been added as a user.\n\nBest regards,\nThe Team`,
-		account_unique_id: authStore.uniqueAccountId,
-	};
+		// Call the function to get the HTML string.
+		const emailHtmlContent = getUserWelcomeEmailHtml({
+			organisationName: accountOrganisation,
+		});
 
-	const send_welcome_email = await fetch(
-		`https://fastapi-rag-2705cfd4c41a.herokuapp.com/api/v1/send-email`,
-		{
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-				accept: 'application/json',
-			},
-			body: JSON.stringify(emailPayload),
+		const emailPayload = {
+			to_email: username.value,
+			subject: 'Welcome to YourDocsAI',
+			message: emailHtmlContent,
+			account_unique_id: authStore.uniqueAccountId,
+		};
+
+		const emailResponse = await fetch(
+			`https://fastapi-rag-2705cfd4c41a.herokuapp.com/api/v1/send-email`,
+			{
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify(emailPayload),
+			}
+		);
+
+		// Decide how to handle email failure. This is a good pattern:
+		// The user is still signed up, so we just log the error and continue.
+		if (!emailResponse.ok) {
+			console.error(
+				'Welcome email failed to send, but signup was successful.'
+			);
+		} else {
+			console.log('Welcome email sent successfully.');
 		}
-	);
 };
 </script>
 

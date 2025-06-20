@@ -4,6 +4,7 @@ export const useAuthStore = defineStore('auth', {
   state: () => ({
     uniqueAccountId: null as string | null,
     access_token: null as string | null,
+    account_organisation: null as string | null,
   }),
   getters: {
     // This getter will return true if there's a token, false otherwise.
@@ -26,6 +27,14 @@ export const useAuthStore = defineStore('auth', {
 
     clearAuthToken() {
       this.access_token = null;
+    },
+
+    setAccountOrganisation(account_organisation: string) {
+      this.account_organisation = account_organisation;
+    },
+
+    clearAccountOrganisation() {
+      this.account_organisation = null;
     },
   },
   persist: true,
