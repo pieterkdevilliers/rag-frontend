@@ -33,7 +33,7 @@ export default defineNuxtConfig({
 	},
 	runtimeConfig: {
 		public: {
-			apiAuthorizationToken: process.env.API_AUTHORIZATION_TOKEN,
+			 apiBase: process.env.API_BASE_URL || 'https://api.default.com',
 		},
 	},
 	hooks: {
