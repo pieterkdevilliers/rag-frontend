@@ -37,10 +37,7 @@
 		@apply max-w-3xl mx-auto text-center;
 	}
 	.page--landing :is(section) {
-		@apply bg-purple-50;
-	}
-	.page--landing :is(section) {
-		@apply flex justify-center items-center;
+		@apply flex justify-center items-center bg-purple-50;
 	}
 	.page--landing section:nth-child(even) {
 		@apply bg-white;
@@ -51,6 +48,12 @@
 	.page--landing .card__header--has-icon {
 		@apply flex items-center gap-2;
 	}
+	.page--landing .text-block p {
+		@apply text-lg mt-2;
+	}
+	.page--landing .text-block p:first-child {
+		@apply mt-6;
+	}
 
 	/* Problem Section */
 	.problem-box {
@@ -58,6 +61,11 @@
 	}
 	.problem-box__description {
 		@apply mt-3;
+	}
+
+	/* Solution Section */
+	.solution-section .text-block p:first-child {
+		@apply text-xl mb-3;
 	}
 
 	/* Structure */
