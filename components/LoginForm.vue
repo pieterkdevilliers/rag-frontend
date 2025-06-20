@@ -40,6 +40,7 @@
 </template>
 
 <script setup lang="ts">
+const config = useRuntimeConfig();
 import { ref } from 'vue';
 import { useAuthStore } from '~/stores/auth';
 import { useRouter } from 'vue-router';
@@ -59,7 +60,7 @@ const handleLogin = async () => {
 		formData.append('password', password.value);
 
 		const response = await fetch(
-			'https://fastapi-rag-2705cfd4c41a.herokuapp.com/token',
+			`${config.public.apiBase}/token`,
 			{
 				method: 'POST',
 				headers: {
