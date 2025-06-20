@@ -44,5 +44,6 @@ EXPOSE 3000
 
 # The command that will be run to start the server
 # CMD ["node", ".output/server/index.mjs"]
-# Use a shell to first print all environment variables, then execute the app.
-CMD ["sh", "-c", "echo '--- PRINTING ALL ENV VARS ---' && printenv && echo '--- STARTING NUXT APP ---' && node .output/server/index.mjs"]
+# This is the final command. It creates a .env file from the container's
+# environment variable, and then starts the Nuxt server.
+CMD ["sh", "-c", "echo NUXT_PUBLIC_API_BASE_URL=$NUXT_PUBLIC_API_BASE_URL > .env && echo '.env file created, starting Nuxt...' && node .output/server/index.mjs"]
