@@ -33,6 +33,9 @@
 	}
 
 	/* Landing Page */
+	.page--landing {
+		@apply mb-20;
+	}
 	.page--landing :is(h1, h2) {
 		@apply max-w-3xl mx-auto text-center;
 	}
@@ -118,6 +121,9 @@
 	}
 
 	/* Home CTA Section */
+	.home-cta-section .signup-form {
+		@apply bg-slate-50;
+	}
 
 	/* Structure */
 	.container {
@@ -198,5 +204,8 @@
 	}
 	.size--16 {
 		@apply w-16 h-16;
+	}
+	.signup-form {
+		@apply bg-white shadow-md rounded-lg p-6;
 	}
 }
