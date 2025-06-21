@@ -1,65 +1,54 @@
 <template>
 	<div class="social-proof-section container mx-auto px-4 sm:px-6 lg:px-8">
 		<div class="text-center mb-10 md:mb-12">
-			<h2 class="text-3xl tracking-tight sm:text-4xl">
-				What Our Users Say
-			</h2>
+			<h2 class="heading heading--2">What Our Users Say</h2>
 		</div>
 
 		<div
-			class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:max-w-4xl lg:mx-auto"
+			class="grid grid-cols-1 gap-8 md:grid-cols-12 lg:max-w-4xl lg:mx-auto"
 		>
-			<!--
-		Grid Layout:
-		- 1 column on small screens.
-		- 2 columns on medium screens and up.
-		- lg:max-w-4xl lg:mx-auto: On large screens, constrain the width of the 2-column grid and center it
-		if you only have a few testimonials, to prevent them from stretching too wide.
-		Remove this if you expect many testimonials or want them to fill more horizontal space.
-	-->
 			<div
 				v-for="(testimonial, index) in testimonials"
 				:key="index"
-				class="testimonial-card bg-white dark:bg-gray-700 p-6 rounded-xl shadow-lg flex flex-col"
+				class="testimonial-card border-box border-box--purple md:col-span-6"
 			>
-				<div class="flex-shrink-0 mb-4">
+				<!-- <h3>{{ testimonials.length }}</h3> -->
+				<div>
 					<!-- Quotation Mark Icon -->
 					<svg
-						class="h-10 w-10 text-primary-500 dark:text-primary-400"
+						class="quote-icon"
 						xmlns="http://www.w3.org/2000/svg"
 						fill="currentColor"
-						viewBox="0 0 32 32"
+						viewBox="0 0 448 512"
 					>
 						<path
-							d="M6.59375 4C3.527344 4 1 6.527344 1 9.59375V22.40625C1 25.472656 3.527344 28 6.59375 28H15.40625C16.035156 28 16.59375 27.441406 16.59375 26.8125V18.90625C16.59375 18.277344 16.035156 17.71875 15.40625 17.71875H9.8125V11.59375C9.8125 10.410156 10.753906 9.53125 11.875 9.53125H12.96875C13.597656 9.53125 14.15625 8.972656 14.15625 8.34375V5.1875C14.15625 4.558594 13.597656 4 12.96875 4H6.59375ZM21.59375 4C18.527344 4 16 6.527344 16 9.59375V22.40625C16 25.472656 18.527344 28 21.59375 28H30.40625C31.035156 28 31.59375 27.441406 31.59375 26.8125V18.90625C31.59375 18.277344 31.035156 17.71875 30.40625 17.71875H24.8125V11.59375C24.8125 10.410156 25.753906 9.53125 26.875 9.53125H27.96875C28.597656 9.53125 29.15625 8.972656 29.15625 8.34375V5.1875C29.15625 4.558594 28.597656 4 27.96875 4H21.59375Z"
-						></path>
+							d="M0 216C0 149.7 53.7 96 120 96l8 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-8 0c-30.9 0-56 25.1-56 56l0 8 64 0c35.3 0 64 28.7 64 64l0 64c0 35.3-28.7 64-64 64l-64 0c-35.3 0-64-28.7-64-64l0-32 0-32 0-72zm256 0c0-66.3 53.7-120 120-120l8 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-8 0c-30.9 0-56 25.1-56 56l0 8 64 0c35.3 0 64 28.7 64 64l0 64c0 35.3-28.7 64-64 64l-64 0c-35.3 0-64-28.7-64-64l0-32 0-32 0-72z"
+						/>
 					</svg>
 				</div>
-				<blockquote class="flex-grow">
-					<p class="text-lg leading-relaxed">
-						"{{ testimonial.quote }}"
-					</p>
-				</blockquote>
-				<footer
-					class="mt-6 pt-4 border-t border-gray-200 dark:border-gray-600"
-				>
-					<p class="testimonial--author">
-						{{ testimonial.name }}
-					</p>
-					<p
-						v-if="testimonial.title_or_business"
-						class="text-sm text-gray-500 dark:text-gray-400"
-					>
-						{{ testimonial.title_or_business }}
-					</p>
-				</footer>
+				<div class="card__content">
+					<blockquote class="testimonial__quote">
+						<p>"{{ testimonial.quote }}"</p>
+					</blockquote>
+					<footer class="">
+						<p class="testimonial__author">
+							<strong>{{ testimonial.name }}</strong>
+						</p>
+						<p
+							v-if="testimonial.title_or_business"
+							class="testimonial__business"
+						>
+							{{ testimonial.title_or_business }}
+						</p>
+					</footer>
+				</div>
 			</div>
 		</div>
 	</div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 
 interface Testimonial {
 	quote: string;
@@ -68,6 +57,11 @@ interface Testimonial {
 }
 
 const testimonials = ref<Testimonial[]>([
+	{
+		quote: 'Test quote for checking text content layout and behaviour. Test quote for checking text content layout and behaviour. Test quote for checking text content layout and behaviour.',
+		name: 'Jean de Villiers', // Replace with actual name
+		title_or_business: 'Owner of PhantomPWR', // Replace
+	},
 	{
 		quote: 'Our website chat now handles 70% of common questions! Game changer.',
 		name: '[Your Name]', // Replace with actual name
@@ -78,13 +72,19 @@ const testimonials = ref<Testimonial[]>([
 		name: '[Another Business Owner]', // Replace
 		title_or_business: '[Their Business Name/Type]', // Replace (optional)
 	},
-	// Add more testimonials here if needed
-	// {
-	//   quote: "Setting up SourceProof AI was incredibly simple and it started helping our visitors right away.",
-	//   name: "Jane Doe",
-	//   title_or_business: "Support Lead, Tech Solutions Inc."
-	// }
 ]);
+
+onMounted(() => {
+	const testimonialsCount = ref(testimonials.value.length);
+	const testimonialsCountOdd = ref(testimonialsCount.value % 2 === 1);
+	const testimonialCard = document.querySelectorAll('.testimonial-card');
+
+	if (testimonialsCountOdd.value) {
+		testimonialCard.forEach((card) => {
+			card.classList.add('count--odd');
+		});
+	}
+});
 </script>
 
 <style scoped>

@@ -85,6 +85,38 @@
 		@apply col-start-3;
 	}
 
+	/* Testimonials Section */
+	.social-proof-section .count--odd:last-child {
+		@apply md:col-start-4;
+	}
+	.social-proof-section .testimonial-card {
+		@apply relative;
+	}
+	.social-proof-section .card__content {
+		@apply h-full flex flex-col justify-between;
+	}
+	.social-proof-section .quote-icon {
+		@apply text-purple-500 opacity-10 w-full h-full absolute inset-0 flex items-center justify-center;
+	}
+	.social-proof-section .testimonial-card :is(blockquote, footer) {
+		@apply relative z-10;
+	}
+	.social-proof-section .card__content footer {
+		@apply flex flex-col justify-end border-t border-slate-200 mt-auto pt-2;
+	}
+	.card__content blockquote {
+		@apply flex flex-col justify-center items-start flex-grow py-2 md:min-h-28;
+	}
+	.card__content blockquote p {
+		@apply m-0;
+	}
+	.card__content footer p {
+		@apply text-xs text-gray-500 p-0 m-0;
+	}
+	.testimonial__author {
+		@apply text-lg font-semibold;
+	}
+
 	/* Structure */
 	.container {
 		@apply p-0 md:px-4 md:py-8 mx-auto;
