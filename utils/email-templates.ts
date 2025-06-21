@@ -40,7 +40,7 @@ export function getWelcomeEmailHtml(data: WelcomeEmailData): string {
               <tr>
                 <td width="86" align="left" valign="top" class="esd-block-image" style="font-size: 0px">
                   <a target="_blank" href="">
-                    <img src="https://d31env5c5sjhq3.cloudfront.net/static/profile.jpg" width="100" alt="" class="adapt-img">
+                    <img src="https://d31env5c5sjhq3.cloudfront.net/static/pkdv-profile.jpg" width="100" alt="" class="adapt-img">
                   </a>
                 </td>
                 <td align="left">
@@ -110,7 +110,7 @@ export function getUserWelcomeEmailHtml(data: UserWelcomeEmailData): string {
               <tr>
                 <td width="86" align="left" valign="top" class="esd-block-image" style="font-size: 0px">
                   <a target="_blank" href="">
-                    <img src="https://d31env5c5sjhq3.cloudfront.net/static/profile.jpg" width="100" alt="" class="adapt-img">
+                    <img src="https://d31env5c5sjhq3.cloudfront.net/static/pkdv-profile.jpg" width="100" alt="" class="adapt-img">
                   </a>
                 </td>
                 <td align="left">
