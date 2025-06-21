@@ -3,7 +3,7 @@
 	<div class="container">
 		<div class="container__inner">
 			<div class="text-block text-block--center text-block--wide">
-				<h1 class="heading heading-h1 mb-6">
+				<h1 class="heading heading__h1 mb-6">
 					<span class="heading__span--block"
 						>Answer Customer Questions 24/7</span
 					>

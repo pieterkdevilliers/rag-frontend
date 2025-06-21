@@ -117,6 +117,8 @@
 		@apply text-lg font-semibold;
 	}
 
+	/* Home CTA Section */
+
 	/* Structure */
 	.container {
 		@apply p-0 md:px-4 md:py-8 mx-auto;
@@ -130,6 +132,9 @@
 	}
 	.heading__span--block {
 		@apply block;
+	}
+	.heading__span--block:last-child {
+		@apply mt-2 text-accent;
 	}
 	.text-block--center {
 		@apply text-center;

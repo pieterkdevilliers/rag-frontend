@@ -1,10 +1,15 @@
 <template>
 	<!-- This outer div is the single root element -->
-	<div class="container mx-auto px-4 py-8">
+	<div class="home-cta-section container mx-auto px-4 py-8">
 		<div class="text-center">
-			<h2 class="text-4xl mb-6">
-				Give Your Website Visitors the Answers They Need, Instantly.
-				Start Your Free Trial Today!
+			<h2 class="heading heading__h2 mb-6">
+				<span class="heading__span--block"
+					>Give Your Website Visitors the Answers They Need,
+					Instantly.</span
+				>
+				<span class="heading__span--block"
+					><strong>Start Your Free Trial Today!</strong></span
+				>
 			</h2>
 		</div>
 		<div class="flex justify-center">
