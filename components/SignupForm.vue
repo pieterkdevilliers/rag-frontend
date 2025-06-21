@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div class="signup-form">
 		<h2 class="text-2xl mb-6 text-center">Create your account</h2>
 		<form @submit.prevent="handleSignup">
 			<div class="flex flex-col md:flex-row md:items-end md:gap-4">

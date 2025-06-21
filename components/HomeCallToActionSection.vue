@@ -1,6 +1,6 @@
 <template>
 	<!-- This outer div is the single root element -->
-	<div class="home-cta-section container mx-auto px-4 py-8">
+	<div class="home-cta-section container">
 		<div class="text-center">
 			<h2 class="heading heading__h2 mb-6">
 				<span class="heading__span--block"
