@@ -1,8 +1,8 @@
 <template>
 	<div class="signup-form">
-		<h2 class="text-2xl mb-6 text-center">Create your account</h2>
+		<h3>Create your account</h3>
 		<form @submit.prevent="handleSignup">
-			<div class="flex flex-col md:flex-row md:items-end md:gap-4">
+			<div class="form__label-fields">
 				<!-- Email Field Group -->
 				<div class="form__label-field">
 					<label class="form__label" for="email_address"

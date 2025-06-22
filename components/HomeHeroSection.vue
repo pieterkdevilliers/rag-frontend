@@ -21,7 +21,7 @@
 					links back to your source info.
 				</p>
 			</div>
-			<div class="flex justify-center">
+			<div class="form-container">
 				<SignupForm />
 			</div>
 		</div>

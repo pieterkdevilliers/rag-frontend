@@ -24,6 +24,10 @@
 		@apply text-3xl;
 	}
 
+	h3 {
+		@apply text-2xl;
+	}
+
 	strong,
 	em {
 		@apply text-accent;
@@ -40,7 +44,7 @@
 		@apply max-w-3xl mx-auto text-center;
 	}
 	.page--landing :is(section) {
-		@apply flex justify-center items-center bg-slate-50;
+		@apply flex justify-center items-center bg-slate-50 px-5 xl:px-0;
 	}
 	.page--landing section:nth-child(even) {
 		@apply bg-white;
@@ -134,7 +138,7 @@
 	}
 	/*  Container Inner - max-width: 72rem - 1152px */
 	.container__inner {
-		@apply xl:max-w-6xl mx-auto;
+		@apply 2xl:max-w-6xl mx-auto;
 	}
 	.heading__span--block {
 		@apply block;
@@ -168,6 +172,22 @@
 	}
 	.form__button {
 		@apply w-full;
+	}
+	.page--landing .form-container {
+		@apply text-center w-full;
+	}
+	.page--landing .signup-form {
+		@apply md:max-w-3xl mx-auto;
+	}
+	.page--landing .signup-form h3 {
+		@apply text-center;
+	}
+	.page--landing .signup-form .form__label-fields {
+		@apply md:flex items-center flex-col md:gap-3 gap-x-0 xl:gap-6 md:flex-row md:justify-center md:items-end mx-auto mt-3 md:mt-6;
+	}
+	.page--landing .signup-form .form__label-field .form__label-field__input,
+	.page--landing .signup-form .form__label-field .form__button {
+		@apply w-full min-w-full max-w-full;
 	}
 }
 
