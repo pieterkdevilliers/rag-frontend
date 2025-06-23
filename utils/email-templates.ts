@@ -68,6 +68,65 @@ export function getWelcomeEmailHtml(data: WelcomeEmailData): string {
 }
 
 
+////////////////////////////////////////////////////////
+// New Account Welcome Email
+////////////////////////////////////////////////////////
+
+// Define an interface for the data our template needs
+interface NewAccountNotificationEmailData {
+  organisationName: string;
+  newAccountEmail: string;
+}
+
+/**
+ * Generates the HTML content for the welcome email.
+ * @param data - The data to inject into the template.
+ * @returns The full HTML string for the email body.
+ */
+export function getNewAccountNotificationEmailHtml(data: NewAccountNotificationEmailData): string {
+  // Use a template literal to build the HTML string.
+  // All styles MUST be inline for email client compatibility.
+  return `
+    <div style="font-family: Arial, sans-serif; padding: 20px; border: 1px solid #ddd; max-width: 600px; margin: auto;">
+      <h1 style="color: #333;">New account created for ${data.organisationName}!</h1>
+      <p style="font-size: 16px; color: black">
+        New account created for ${data.organisationName} on ${data.newAccountEmail}
+      </p>
+      <br><br>
+      <td align="left" width="560" class="esd-container-frame es-m-p15b">
+          <table cellpadding="3" cellspacing="0" width="100%" class="es-table-not-adapt">
+            <tbody>
+              <tr>
+                <td width="86" align="left" valign="top" class="esd-block-image" style="font-size: 0px">
+                  <a target="_blank" href="">
+                    <img src="https://d31env5c5sjhq3.cloudfront.net/static/pkdv-profile.jpg" width="100" alt="" class="adapt-img">
+                  </a>
+                </td>
+                <td align="left">
+                  <table cellpadding="0" cellspacing="0" width="100%">
+                    <tbody>
+                      <tr>
+                        <td align="left" class="esd-block-text es-text-5114">
+                          <h2 class="es-text-mobile-size-20 es-override-size" style="color: black;">
+                            Pieter K de Villiers
+                          </h2>
+                          <p style="font-size: 16px; color: black">
+                            Creator of YourDocsAI
+                          </p>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </td>
+    </div>
+  `;
+}
+
+
 
 ////////////////////////////////////////////////////////
 // New User Welcome Email
