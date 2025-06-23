@@ -1,14 +1,15 @@
 <template>
-	<div class="why-sourceproof-section container mx-auto px-4 sm:px-6 lg:px-8">
+	<div class="why-sourceproof-section container mx-auto">
 		<div class="text-center mb-10 md:mb-12">
 			<h2 class="heading heading--2">Why YourDocsAI Chat?</h2>
 		</div>
 
+		<!-- <h3>{{ reasons.length }}</h3> -->
 		<div class="reason-grid">
 			<div
 				v-for="(reason, index) in reasons"
 				:key="index"
-				class="reason-item border-box border-box--purple min-h-40"
+				class="reason-item reason-card border-box border-box--purple min-h-40"
 			>
 				<div>
 					<div class="card__header--has-icon">
@@ -79,6 +80,19 @@ const reasons = ref<Reason[]>([
 		description: 'Provide professional, instant support.',
 	},
 ]);
+
+// Handle odd number of cards
+onMounted(() => {
+	const reasonsCount = ref(reasons.value.length);
+	const reasonsCountOdd = ref(reasonsCount.value % 2 === 1);
+	const reasonCard = document.querySelectorAll('.reason-card');
+
+	if (reasonsCountOdd.value) {
+		reasonCard.forEach((card) => {
+			card.classList.add('count--odd');
+		});
+	}
+});
 </script>
 
 <style scoped></style>

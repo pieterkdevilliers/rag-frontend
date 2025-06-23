@@ -17,13 +17,14 @@
 				<p>
 					Simply upload your business documents – FAQs, product specs,
 					pricing, return policies, how-to guides. YourDocsAI learns
-					<em>exclusively</em>&nbsp; from this content.
+					<strong><em>exclusively</em></strong
+					>&nbsp; from this content.
 				</p>
 				<p>
 					Visitors ask questions, and your AI chat provides instant
-					answers, extracted <em>only</em>&nbsp; from your
-					information, even linking them to the relevant page or
-					document on your site for more detail.
+					answers, extracted <strong><em>only</em></strong
+					>&nbsp; from your information, even linking them to the
+					relevant page or document on your site for more detail.
 				</p>
 			</div>
 		</div>

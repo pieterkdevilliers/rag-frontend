@@ -1,24 +1,16 @@
 <template>
-	<div class="how-it-works-section container mx-auto px-4 sm:px-6 lg:px-8">
+	<div class="how-it-works-section container mx-auto">
 		<div class="text-center mb-10 md:mb-12">
 			<h2 class="heading heading--2">How It Works</h2>
 		</div>
-		<div class="grid md:grid-cols-3 gap-8">
-			<!--
-		Adjusted grid:
-		- md:grid-cols-1 and lg:grid-cols-3 ensure that on medium screens,
-		if you prefer stacking before going to 3 columns, it will do so.
-		If you want 2 columns on medium, use md:grid-cols-2.
-		- space-y-8 for stacking on small screens.
-		- md:gap-8 for medium screens (if 2 cols) or lg:gap-x-8 for 3 cols.
-	-->
+		<div class="grid md:grid-cols-3 gap-6 lg:gap-8">
 			<div
 				v-for="(step, index) in steps"
 				:key="index"
 				class="step-item border-box border-box--center border-box--purple"
 			>
 				<!-- Number Bubble - its styling remains distinct -->
-				<div class="icon__number icon__number--purple size--16">
+				<div class="icon__number">
 					{{ step.number }}
 				</div>
 				<!-- Text Content -->
