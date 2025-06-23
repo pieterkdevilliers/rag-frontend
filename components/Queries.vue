@@ -2,7 +2,7 @@
 	<div class="mx-auto p-4">
 		<div class="max-w-xl mx-auto p-4">
 			<form @submit.prevent="handleQuery">
-				<h2 class="text-2xl mb-4">Ask me anything</h2>
+				<h2 class="text-2xl mb-4">Run a test query on your processed documents</h2>
 				<div class="mb-4">
 					<label
 						class="block text-sm font-medium text-gray-700"
@@ -13,7 +13,7 @@
 						v-model="question"
 						id="question"
 						type="text"
-						placeholder="Ask me anything..."
+						placeholder="Run a test query..."
 						autocomplete="off"
 					/>
 				</div>
