@@ -78,6 +78,8 @@ interface Subscription {
     },
   });
 
+  authStore.setSubsStatus(subscriptions.value.active_subscription)
+  
   if (error.value) {
     console.error('Error fetching subscriptions:', error.value);
   } else {

@@ -151,10 +151,7 @@ const handleAddFiles = async () => {
 			}
 		);
 
-		console.log('Upload successful:', responseData);
-		console.log("Pre upload docs_count: ", authStore.docs_count)
 		authStore.setDocsCount(responseData.new_docs_count)
-		console.log("Post upload docs_count: ", authStore.docs_count)
 		successMessage.value = `${responseData.uploaded_files.length} file(s) uploaded successfully!`;
 
 		// Clear selected files and reset file input
