@@ -15,10 +15,10 @@
 					>
 				</h1>
 				<p>
-					Add an AI chat widget to your site that learns *only* from
-					your business documents (FAQs, product info, policies).
-					Provide instant, reliable answers to visitor questions, with
-					links back to your source info.
+					Add an AI chat widget to your site that learns
+					<strong>only</strong> from your business documents (FAQs,
+					product info, policies). Provide instant, reliable answers
+					to visitor questions, with links back to your source info.
 				</p>
 			</div>
 			<div class="form-container">
