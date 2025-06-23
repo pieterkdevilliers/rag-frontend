@@ -6,6 +6,7 @@ export const useAuthStore = defineStore('auth', {
     access_token: null as string | null,
     account_organisation: null as string | null,
     docs_count: null as number | null,
+    subs_status: null as boolean | null,
   }),
   getters: {
     // This getter will return true if there's a token, false otherwise.
@@ -44,6 +45,14 @@ export const useAuthStore = defineStore('auth', {
 
     clearDocsCount() {
       this.docs_count = null;
+    },
+
+    setSubsStatus(subs_status: boolean) {
+      this.subs_status = subs_status;
+    },
+
+    clearSubsStatus() {
+      this.subs_status = null;
     },
   },
   persist: true,

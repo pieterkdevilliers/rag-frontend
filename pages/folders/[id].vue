@@ -39,7 +39,7 @@
         </UDropdown>
       </template>
        <template #empty-state>
-        <div class="flex flex-col items-center justify-center py-6 gap-3">
+        <div v-if="canAddMoreDocs" class="flex flex-col items-center justify-center py-6 gap-3">
           <span class="italic text-sm">No files found!</span>
           <!-- <UButton
             label="Add file from URL"
@@ -119,7 +119,8 @@
 
     const account_unique_id = authStore.uniqueAccountId
     const apiAuthorizationToken = authStore.access_token;
-    const canAddMoreDocs = computed(() => authStore.docs_count < 10);
+    const canAddMoreDocs = computed(() => authStore.docs_count < 10 || authStore.subs_status);
+    console.log("Can add files: ", canAddMoreDocs)
 
     const isConfirmDeleteModalOpen = ref(false);
     const fileToDelete = ref<FileType | null>(null);
