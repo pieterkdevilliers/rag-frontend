@@ -1,5 +1,5 @@
 <template>
-	<div class="problem-section container mx-auto px-4 py-8">
+	<div class="problem-section">
 		<div class="container__inner">
 			<h2 class="mb-8">
 				<span class="heading__span--block"

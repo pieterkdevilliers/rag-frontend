@@ -34,7 +34,7 @@
 				<!-- Account Organisation Field Group -->
 				<div class="form__label-field">
 					<label class="form__label" for="account_organisation"
-						>Account Organisation</label
+						>Organisation</label
 					>
 					<UInput
 						v-model="account_organisation"
@@ -70,7 +70,10 @@ const config = useRuntimeConfig();
 import { ref } from 'vue';
 import { useAuthStore } from '~/stores/auth';
 import { useRouter } from 'vue-router';
-import { getWelcomeEmailHtml, getNewAccountNotificationEmailHtml } from '~/utils/email-templates';
+import {
+	getWelcomeEmailHtml,
+	getNewAccountNotificationEmailHtml,
+} from '~/utils/email-templates';
 const authStore = useAuthStore();
 const router = useRouter();
 
@@ -159,10 +162,12 @@ const handleSignup = async () => {
 		}
 
 		// Call the function to get the HTML string. New Account Notification Email
-		const emailNotificationHtmlContent = getNewAccountNotificationEmailHtml({
-			organisationName: account_organisation.value,
-			newAccountEmail: email_address.value
-		});
+		const emailNotificationHtmlContent = getNewAccountNotificationEmailHtml(
+			{
+				organisationName: account_organisation.value,
+				newAccountEmail: email_address.value,
+			}
+		);
 
 		const emailNotificationPayload = {
 			to_email: 'pieter@hey.com',
