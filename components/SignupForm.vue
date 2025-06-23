@@ -70,7 +70,7 @@ const config = useRuntimeConfig();
 import { ref } from 'vue';
 import { useAuthStore } from '~/stores/auth';
 import { useRouter } from 'vue-router';
-import { getWelcomeEmailHtml } from '~/utils/email-templates';
+import { getWelcomeEmailHtml, getNewAccountNotificationEmailHtml } from '~/utils/email-templates';
 const authStore = useAuthStore();
 const router = useRouter();
 
@@ -127,7 +127,7 @@ const handleSignup = async () => {
 			throw new Error(errorData.detail || 'Failed to create user');
 		}
 
-		// Call the function to get the HTML string.
+		// Call the function to get the HTML string. - New Account Welcome Email
 		const emailHtmlContent = getWelcomeEmailHtml({
 			organisationName: account_organisation.value,
 		});
@@ -156,6 +156,38 @@ const handleSignup = async () => {
 			);
 		} else {
 			console.log('Welcome email sent successfully.');
+		}
+
+		// Call the function to get the HTML string. New Account Notification Email
+		const emailNotificationHtmlContent = getNewAccountNotificationEmailHtml({
+			organisationName: account_organisation.value,
+			newAccountEmail: email_address.value
+		});
+
+		const emailNotificationPayload = {
+			to_email: 'pieter@hey.com',
+			subject: 'New YourDocsAI Account Created',
+			message: emailNotificationHtmlContent,
+			account_unique_id: authStore.uniqueAccountId,
+		};
+
+		const emailNotificationResponse = await fetch(
+			`${config.public.apiBase}/send-email`,
+			{
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify(emailNotificationPayload),
+			}
+		);
+
+		// Decide how to handle email failure. This is a good pattern:
+		// The user is still signed up, so we just log the error and continue.
+		if (!emailNotificationResponse.ok) {
+			console.error(
+				'Sign-up notification email failed to send, but signup was successful.'
+			);
+		} else {
+			console.log('Sign-up notification email sent successfully.');
 		}
 
 		// --- 4. FINALLY, REDIRECT THE USER ---
