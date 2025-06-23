@@ -5,6 +5,7 @@ export const useAuthStore = defineStore('auth', {
     uniqueAccountId: null as string | null,
     access_token: null as string | null,
     account_organisation: null as string | null,
+    docs_count: null as number | null,
   }),
   getters: {
     // This getter will return true if there's a token, false otherwise.
@@ -35,6 +36,14 @@ export const useAuthStore = defineStore('auth', {
 
     clearAccountOrganisation() {
       this.account_organisation = null;
+    },
+
+    setDocsCount(docs_count: number) {
+      this.docs_count = docs_count;
+    },
+
+    clearDocsCount() {
+      this.docs_count = null;
     },
   },
   persist: true,
