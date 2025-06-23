@@ -266,7 +266,7 @@
     closeConfirmDeleteModal(); 
 
     try {
-      await $fetch(`${config.public.apiBase}/files/${account_unique_id}/${fileBeingDeleted.id}`, {
+      const response = await $fetch(`${config.public.apiBase}/files/${account_unique_id}/${fileBeingDeleted.id}`, {
       method: 'DELETE',
       headers: {
           // 'Content-Type': 'application/x-www-form-urlencoded', // DELETE often doesn't need Content-Type for body
@@ -276,6 +276,7 @@
       });
 
       toast.add({ title: 'File Deleted', description: `File "${fileBeingDeleted.file_name}" has been deleted.`, color: 'green' });
+      authStore.setDocsCount(response.new_docs_count)
       await refreshFiles(); // Refresh the list from the server
     } catch (err: any) {
         console.error('Error deleting file:', err);
