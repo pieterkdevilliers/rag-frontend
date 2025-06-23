@@ -4,7 +4,7 @@
 
 @layer base {
 	body {
-		@apply bg-gray-50 text-slate-600 font-sans;
+		@apply bg-gray-50 text-slate-700 font-sans font-light text-lg;
 	}
 
 	h1,
@@ -17,11 +17,11 @@
 	}
 
 	h1 {
-		@apply text-4xl;
+		@apply text-3xl md:text-4xl;
 	}
 
 	h2 {
-		@apply text-3xl;
+		@apply text-2xl md:text-3xl;
 	}
 
 	h3 {
@@ -41,10 +41,10 @@
 		@apply mb-20;
 	}
 	.page--landing :is(h1, h2) {
-		@apply max-w-3xl mx-auto text-center;
+		@apply max-w-3xl mx-auto text-center my-6;
 	}
 	.page--landing :is(section) {
-		@apply flex justify-center items-center bg-slate-50 px-5 xl:px-0;
+		@apply flex justify-center items-center bg-slate-50 px-5 xl:px-0 pb-6;
 	}
 	.page--landing section:nth-child(even) {
 		@apply bg-white;
@@ -62,7 +62,7 @@
 		@apply mt-6;
 	}
 	.border-box {
-		@apply bg-white border-2 rounded-lg p-6 w-full;
+		@apply bg-white border-2 rounded-lg p-4 md:p-6 w-full;
 	}
 	.border-box--center {
 		@apply text-center;
@@ -71,9 +71,14 @@
 		@apply border-purple-200;
 	}
 
+	/* Hero Section */
+	.page--landing .container__hero-section p {
+		@apply text-xl md:text-2xl;
+	}
+
 	/* Problem Section */
 	.problem-box__description {
-		@apply mt-3;
+		@apply mt-3 text-base;
 	}
 
 	/* Solution Section */
@@ -83,16 +88,30 @@
 
 	/* Why YourDocsAI Section */
 	.why-sourceproof-section .reason-grid {
-		@apply lg:grid grid-cols-1 gap-x-8 gap-y-10 md:grid-cols-2 lg:grid-cols-12;
+		@apply sm:grid sm:gap-6 lg:gap-x-8 lg:gap-y-10 sm:grid-cols-12 lg:grid-cols-12;
 	}
 	.why-sourceproof-section .reason-item {
-		@apply lg:min-h-40 lg:col-span-4;
+		@apply lg:max-w-4xl lg:min-h-40 lg:mx-auto sm:col-span-6 lg:col-span-4;
 	}
-	.why-sourceproof-section .reason-item:nth-child(4) {
-		@apply col-start-3;
+	.why-sourceproof-section .reason-item:not(:first-child) {
+		@apply mt-6 sm:mt-0;
+	}
+	.why-sourceproof-section .count--odd:nth-child(4) {
+		@apply lg:col-start-3;
+	}
+	.why-sourceproof-section .count--odd:nth-child(5) {
+		@apply sm:col-start-4 lg:col-start-7;
+	}
+
+	/* How It Works Section */
+	.how-it-works-section .icon__number {
+		@apply icon__number--purple size--12 sm:size--14 lg:size--16;
 	}
 
 	/* Testimonials Section */
+	.social-proof-section {
+		@apply container mx-auto px-0 sm:px-6 lg:px-8;
+	}
 	.social-proof-section .count--odd:last-child {
 		@apply md:col-start-4;
 	}
@@ -103,7 +122,7 @@
 		@apply h-full flex flex-col justify-between;
 	}
 	.social-proof-section .quote-icon {
-		@apply text-purple-500 opacity-10 w-full h-full absolute inset-0 flex items-center justify-center;
+		@apply text-purple-500 opacity-[7%] w-full h-full absolute inset-0 flex items-center justify-center;
 	}
 	.social-proof-section .testimonial-card :is(blockquote, footer) {
 		@apply relative z-10;
@@ -118,7 +137,7 @@
 		@apply m-0;
 	}
 	.card__content footer p {
-		@apply text-xs text-gray-500 p-0 m-0;
+		@apply text-sm text-slate-500 p-0 m-0;
 	}
 	.testimonial__author {
 		@apply text-lg font-semibold;
@@ -150,7 +169,7 @@
 		@apply text-center;
 	}
 	.text-block--wide {
-		@apply xl:max-w-2xl mx-auto;
+		@apply xl:max-w-3xl mx-auto;
 	}
 
 	/* Forms */
@@ -174,7 +193,7 @@
 		@apply w-full;
 	}
 	.page--landing .form-container {
-		@apply text-center w-full;
+		@apply text-center w-full mt-8;
 	}
 	.page--landing .signup-form {
 		@apply md:max-w-3xl mx-auto;

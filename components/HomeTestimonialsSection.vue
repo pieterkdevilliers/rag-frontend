@@ -1,11 +1,11 @@
 <template>
-	<div class="social-proof-section container mx-auto px-4 sm:px-6 lg:px-8">
+	<div class="social-proof-section">
 		<div class="text-center mb-10 md:mb-12">
 			<h2 class="heading heading--2">What Our Users Say</h2>
 		</div>
 
 		<div
-			class="grid grid-cols-1 gap-8 md:grid-cols-12 lg:max-w-4xl lg:mx-auto"
+			class="grid grid-cols-1 gap-6 lg:gap-8 md:grid-cols-12 lg:max-w-4xl lg:mx-auto"
 		>
 			<div
 				v-for="(testimonial, index) in testimonials"
@@ -74,6 +74,7 @@ const testimonials = ref<Testimonial[]>([
 	},
 ]);
 
+// Handle odd number of cards
 onMounted(() => {
 	const testimonialsCount = ref(testimonials.value.length);
 	const testimonialsCountOdd = ref(testimonialsCount.value % 2 === 1);
