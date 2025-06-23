@@ -88,14 +88,17 @@ const handleLogin = async () => {
 		const uniqueAccountId = data.account_unique_id;
 		const access_token = data.access_token;
     const accountOrganisation = data.account_organisation
+    const docsCount = data.docs_count
 		authStore.setUniqueAccountId(uniqueAccountId);
 		authStore.setAuthToken(access_token);
-    authStore.setAccountOrganisation(accountOrganisation)
+    authStore.setAccountOrganisation(accountOrganisation);
+    authStore.setDocsCount(docsCount);
 
 
     if (response.ok) {
       // CHECK for a redirect path in the URL query
       const redirectPath = route.query.redirect as string | undefined;
+      console.log("Docs Count in AuthStore: ", docsCount)
 
       // If a redirect path exists, go there. Otherwise, go to a default page.
       if (redirectPath) {

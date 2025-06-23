@@ -9,11 +9,18 @@
       @click="openAddFileFromURLModal"
       />
   </div> -->
-  <div class="flex justify-end mb-4">
+  <div v-if="canAddMoreDocs" class="flex justify-end mb-4">
     <UButton
       icon="i-heroicons:plus-circle-16-solid"
       label="Upload file"
       @click="openAddFileModal"
+    />
+  </div>
+  <div v-if="!canAddMoreDocs" class="flex justify-end mb-4">
+    <UButton
+      icon="i-heroicons:plus-circle-16-solid"
+      label="File limit reached - subscribe to add more"
+      to="/accounts"
     />
   </div>
   <div>
@@ -112,6 +119,7 @@
 
     const account_unique_id = authStore.uniqueAccountId
     const apiAuthorizationToken = authStore.access_token;
+    const canAddMoreDocs = computed(() => authStore.docs_count < 10);
 
     const isConfirmDeleteModalOpen = ref(false);
     const fileToDelete = ref<FileType | null>(null);
