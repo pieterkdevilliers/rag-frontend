@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="canAddWidgets">
     <h1 class="text-xl text-primary">Web Widgets</h1>
     
     <div class="flex justify-end mb-4">
@@ -38,11 +38,20 @@
 
     <UNotifications />
   </div>
+  <div v-if="!canAddWidgets">
+      <div class="flex justify-center mb-4 mt-12">
+    <UButton
+      icon="i-heroicons:plus-circle-16-solid"
+      label="Widgets not available - subscribe to create web widgets"
+      to="/accounts"
+    />
+  </div>
+  </div>
 </template>
 
 <script setup lang="ts">
     const config = useRuntimeConfig();
-    import { ref } from 'vue';
+    import { ref, computed } from 'vue';
     import { useAuthStore } from '~/stores/auth';
     import AddWidgetForm from '~/components/AddWidgetForm.vue'; // Import modal component
     import type { list } from 'postcss';
@@ -66,6 +75,7 @@
     const authStore = useAuthStore();
     const apiAuthorizationToken = authStore.access_token;
     const uniqueAccountId = authStore.uniqueAccountId;
+    const canAddWidgets = computed(() => authStore.subs_status);
 
     const { data: widgets, error, refresh } = await useFetch(`${config.public.apiBase}/list-api-keys/${uniqueAccountId}`, {
     method: 'GET',
