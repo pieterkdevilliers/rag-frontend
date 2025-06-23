@@ -115,12 +115,11 @@
     import { ref, computed } from 'vue';
     import AddFileForm from '~/components/AddFileForm.vue';
     import AddFileFromURL from '~/components/AddFileFromURL.vue';
+    
     const authStore = useAuthStore();
-
     const account_unique_id = authStore.uniqueAccountId
     const apiAuthorizationToken = authStore.access_token;
     const canAddMoreDocs = computed(() => authStore.docs_count < 10 || authStore.subs_status);
-    console.log("Can add files: ", canAddMoreDocs)
 
     const isConfirmDeleteModalOpen = ref(false);
     const fileToDelete = ref<FileType | null>(null);
