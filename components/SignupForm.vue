@@ -1,5 +1,5 @@
 <template>
-	<div class="signup-form">
+	<div class="form-component signup-form">
 		<h3>Create your account</h3>
 		<form @submit.prevent="handleSignup">
 			<div class="form__label-fields">
@@ -47,7 +47,7 @@
 				</div>
 
 				<!-- Submit Button -->
-				<div class="form__button-container mt-4 md:mt-0">
+				<div class="form__button-container single-button mt-4 md:mt-0">
 					<UButton
 						type="submit"
 						label="Create Account"
