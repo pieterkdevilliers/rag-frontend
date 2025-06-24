@@ -56,7 +56,7 @@
         right: 20px;
         width: 60px;
         height: 60px;
-        background-color: ${config.themeColor || '#007bff'};
+        background-color: ${config.themeColor || '#DB2777'};
         color: white; /* This color is used by "fill: currentColor" in the SVG */
         border-radius: 50%;
         display: flex;
@@ -100,7 +100,7 @@
         transition: transform 0.3s ease-out, opacity 0.3s ease-out, visibility 0s linear 0s;
       }
       .ai-chat-header {
-        background-color: ${config.themeColor || '#007bff'};
+        background-color: ${config.themeColor || '#DB2777'};
         color: white;
         padding: 10px 15px;
         font-weight: bold;
@@ -134,7 +134,7 @@
         line-height: 1.4;
       }
       .ai-chat-message.user {
-        background-color: ${config.themeColor || '#007bff'};
+        background-color: ${config.themeColor || '#DB2777'};
         color: white;
         align-self: flex-end;
         border-bottom-right-radius: 4px;
@@ -191,7 +191,7 @@
       }
       .ai-chat-input-area button {
         padding: 10px 15px;
-        background-color: ${config.themeColor || '#007bff'};
+        background-color: ${config.themeColor || '#DB2777'};
         color: white;
         border: none;
         border-radius: 20px;
@@ -260,26 +260,39 @@
 
       /* --- STYLES for Email Form --- */
       .ai-chat-footer {
-        padding: 10px;
+        flex-direction: column;
         text-align: center;
         border-top: 1px solid #eee;
         background-color: #f9f9f9;
         display: flex;
         justify-content: center;
+        gap: 8px;
       }
       .ai-chat-show-email-form-button {
         padding: 8px 15px;
         background-color: transparent;
-        color: ${config.themeColor || '#007bff'};
-        border: 1px solid ${config.themeColor || '#007bff'};
+        color: ${config.themeColor || '#DB2777'};
+        border: 1px solid ${config.themeColor || '#DB2777'};
         border-radius: 20px;
         cursor: pointer;
         font-size: 13px;
         transition: background-color 0.2s, color 0.2s;
+        align-self: center;
       }
       .ai-chat-show-email-form-button:hover {
-        background-color: ${config.themeColor || '#007bff'};
+        background-color: ${config.themeColor || '#DB2777'};
         color: white;
+      }
+      .ai-chat-footer .ai-chat-footer-branding {
+        align-self: flex-start; 
+        font-size: 0.75rem; 
+        color: #888;
+        text-decoration: none;
+        cursor: pointer;
+        padding: 4px;
+      }
+      .ai-chat-footer .ai-chat-footer-branding:hover {
+        text-decoration: underline;
       }
 
       .ai-chat-email-form-container {
@@ -324,7 +337,7 @@
         font-weight: bold;
       }
       .ai-chat-email-form-actions .send {
-        background-color: ${config.themeColor || '#007bff'};
+        background-color: ${config.themeColor || '#DB2777'};
         color: white;
       }
       .ai-chat-email-form-actions .cancel {
@@ -376,7 +389,7 @@
     const header = document.createElement('div');
     header.className = 'ai-chat-header';
     chatHeaderTitle = document.createElement('span');
-    chatHeaderTitle.textContent = config.widgetTitle || 'Chat with Us';
+    chatHeaderTitle.textContent = config.widgetTitle || 'How can we help?';
     const closeButton = document.createElement('button');
     closeButton.className = 'ai-chat-close-button';
     closeButton.innerHTML = '×';
@@ -408,6 +421,12 @@
     inputArea.appendChild(sendButton);
     chatWindow.appendChild(inputArea);
 
+    const poweredByLink = document.createElement('a');
+    poweredByLink.href = 'https://yourdocsai.app';
+    poweredByLink.target = '_blank';
+    poweredByLink.rel = 'noopener noreferrer';
+    poweredByLink.className = 'ai-chat-footer-branding';
+    poweredByLink.textContent = 'Powered By YourDocsAI';
     chatFooter = document.createElement('div');
     chatFooter.className = 'ai-chat-footer';
     showEmailFormButton = document.createElement('button');
@@ -415,6 +434,7 @@
     showEmailFormButton.textContent = config.openEmailFormButtonText || 'Send Us An Email';
     showEmailFormButton.onclick = switchToEmailFormView;
     chatFooter.appendChild(showEmailFormButton);
+    chatFooter.appendChild(poweredByLink);
     chatWindow.appendChild(chatFooter);
 
     createEmailForm();
@@ -640,7 +660,7 @@
         const link = document.createElement('a');
         link.href = '#';
         link.textContent = source.displayName;
-        link.style.color = config.themeColor || '#007bff';
+        link.style.color = config.themeColor || '#DB2777';
         link.style.textDecoration = 'underline';
         link.style.cursor = 'pointer';
         link.onclick = (e) => {
