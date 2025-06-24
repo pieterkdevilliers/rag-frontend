@@ -211,10 +211,10 @@
 		@apply text-center;
 	}
 	.page--landing .signup-form .form__label-fields {
-		@apply md:flex items-center flex-col md:gap-3 gap-x-0 xl:gap-6 md:flex-row md:justify-center md:items-end mx-auto mt-3 md:mt-6;
+		@apply md:flex items-center flex-col md:gap-3 gap-x-0 2xl:gap-6 md:flex-row md:justify-center md:items-end mx-auto mt-3 md:mt-6;
 	}
 	.page--landing .signup-form .form__label-field {
-		@apply max-w-full sm:max-w-[150px] lg:max-w-full;
+		@apply w-full max-w-full md:max-w-[150px] lg:max-w-[180px] 2xl:max-w-full;
 	}
 	.page--landing .signup-form .form__label-field > div {
 		@apply w-full;
