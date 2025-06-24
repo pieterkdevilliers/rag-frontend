@@ -182,6 +182,9 @@
 	.access-page {
 		@apply px-6 lg:px-8;
 	}
+	.access-page .text-block p {
+		@apply mt-6;
+	}
 
 	/* Forms */
 	.form__label-fields {
@@ -230,11 +233,11 @@
 		@apply md:flex items-center flex-col md:gap-3 gap-x-0 2xl:gap-6 md:flex-row md:justify-center md:items-end mx-auto mt-3 md:mt-6;
 	}
 	.signup-form .form__label-field,
-	.login-form .form__label-field {
+	.login-form .form__label-field,
+	.password-reset-form .form__label-field {
 		@apply w-full max-w-full md:max-w-[150px] lg:max-w-[180px] 2xl:max-w-full;
 	}
-	.signup-form .form__label-field > div,
-	.login-form .form__label-field > div {
+	.form__label-field > div {
 		@apply w-full max-w-full;
 	}
 	.access-page .form__button-container {
@@ -242,6 +245,20 @@
 	}
 	form .form__button-container {
 		@apply flex;
+	}
+
+	/* Password Reset */
+	.password-reset-form {
+		@apply mt-6;
+	}
+	.password-reset-form .form-container {
+		@apply pt-0;
+	}
+	.password-reset-form .form-container .form__label-field {
+		@apply flex-1 max-w-full;
+	}
+	.password-reset-form .form__button-container button {
+		@apply mx-auto;
 	}
 }
 

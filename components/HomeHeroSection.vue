@@ -3,7 +3,7 @@
 	<div class="container container__hero-section">
 		<div class="container__inner">
 			<div class="text-block text-block--center text-block--wide">
-				<h1 class="heading heading__h1">
+				<h1 class="heading heading--h1">
 					<span class="heading__span--block"
 						>Answer Customer Questions 24/7</span
 					>
