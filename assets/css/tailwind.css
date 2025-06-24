@@ -75,6 +75,9 @@
 	.page--landing .container__hero-section p {
 		@apply text-xl md:text-2xl;
 	}
+	.page--landing .container__hero-section .form-container {
+		@apply mt-6;
+	}
 
 	/* Problem Section */
 	.problem-section {
@@ -183,7 +186,7 @@
 		@apply flex flex-col justify-start items-start gap-1 mt-3;
 	}
 	.form__label-field .form__label {
-		@apply text-base font-normal;
+		@apply text-base font-normal font-roboto-condensed;
 	}
 	.form__label-field input[type='text'],
 	.form__label-field input[type='email'],
@@ -201,27 +204,47 @@
 	.form__button span {
 		@apply text-left;
 	}
-	.page--landing .form-container {
-		@apply text-center w-full mt-8;
+	.form-container {
+		@apply flex;
 	}
-	.page--landing .signup-form {
+	.form-component {
+		@apply w-full max-w-full;
+	}
+	.access-page .form-container {
+		@apply px-0 mt-6 border-0 md:border-2 rounded-none md:rounded-lg;
+	}
+	.signup-form,
+	.login-form {
 		@apply md:max-w-3xl mx-auto px-3;
 	}
 	.page--landing .signup-form h3 {
 		@apply text-center;
 	}
-	.page--landing .signup-form .form__label-fields {
+	.signup-form .form__label-fields,
+	.access-page .form__label-fields {
 		@apply md:flex items-center flex-col md:gap-3 gap-x-0 2xl:gap-6 md:flex-row md:justify-center md:items-end mx-auto mt-3 md:mt-6;
 	}
-	.page--landing .signup-form .form__label-field {
+	.signup-form .form__label-field,
+	.login-form .form__label-field {
 		@apply w-full max-w-full md:max-w-[150px] lg:max-w-[180px] 2xl:max-w-full;
 	}
-	.page--landing .signup-form .form__label-field > div {
+	.signup-form .form__label-field > div,
+	.login-form .form__label-field > div {
 		@apply w-full max-w-full;
 	}
-	.page--landing .signup-form .form__button-container {
+	.signup-form .form__button-container,
+	.login-form .form__button-container {
 		@apply w-full;
 	}
+	.access-page .form__button-container {
+		@apply mt-6;
+	}
+	form .form__button-container {
+		@apply flex;
+	}
+	/* form .form__button-container:not(.single-button) {
+		@apply justify-between items-center;
+	} */
 }
 
 @layer components {

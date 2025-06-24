@@ -1,5 +1,13 @@
 <template>
-    <LoginForm />
+	<section class="access-page">
+		<div class="container">
+			<div class="container__inner">
+				<div class="form-container border-box border-box--center">
+					<LoginForm />
+				</div>
+			</div>
+		</div>
+	</section>
 </template>
 
 <script setup lang="ts">
@@ -8,18 +16,6 @@ const authStore = useAuthStore();
 
 authStore.clearUniqueAccountId();
 authStore.clearAuthToken();
-
 </script>
 
-<style scoped>
-    h2 {
-        color: blue;
-        margin-bottom: 20px;
-        font-size: 36px;
-    }
-    p {
-        color: green;
-        margin: 20px 0;
-    }
-
-</style>
+<style scoped></style>

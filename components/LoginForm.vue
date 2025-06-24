@@ -1,47 +1,48 @@
 <template>
-	<div class="max-w-md mx-auto p-4">
+	<div class="form-component login-form">
+		<h1 class="heading heading--1">Login</h1>
 		<form @submit.prevent="handleLogin">
-			<h2 class="text-2xl font-bold mb-4">Login</h2>
-			<div class="mb-4">
-				<label
-					class="block text-sm font-medium text-gray-700"
-					for="username"
-					>Email Address</label
-				>
-				<UInput
-					v-model="username"
-					id="username"
-					type="text"
-					placeholder="Enter your email address"
-					autocomplete="off"
-				/>
+			<div class="form__label-fields">
+				<div class="form__label-field">
+					<label class="form__label" for="username"
+						>Email Address</label
+					>
+					<UInput
+						v-model="username"
+						id="username"
+						type="text"
+						placeholder="Enter your email address"
+						autocomplete="off"
+					/>
+				</div>
+				<div class="form__label-field">
+					<label class="form__label" for="password">Password</label>
+					<UInput
+						v-model="password"
+						id="password"
+						type="password"
+						placeholder="Enter your password"
+						autocomplete="off"
+					/>
+				</div>
+				<div class="form__button-container">
+					<UButton
+						type="submit"
+						icon="i-heroicons:arrow-right-end-on-rectangle"
+						label="Login"
+					>
+					</UButton>
+					<UButton
+						to="/forgot-password"
+						icon="i-heroicons:arrow-path"
+						label="Reset Password"
+						size="xs"
+						class="ms-3"
+						variant="link"
+					>
+					</UButton>
+				</div>
 			</div>
-			<div class="mb-4">
-				<label
-					class="block text-sm font-medium text-gray-700"
-					for="password"
-					>Password</label
-				>
-				<UInput
-					v-model="password"
-					id="password"
-					type="password"
-					placeholder="Enter your password"
-					autocomplete="off"
-				/>
-			</div>
-			<UButton
-				type="submit"
-				icon="i-heroicons:arrow-right-end-on-rectangle"
-				label="Login"
-			>
-			</UButton>
-			<UButton
-				to="/forgot-password"
-				icon="i-heroicons:arrow-path"
-				label="Reset Password"
-			>
-			</UButton>
 		</form>
 		<p v-if="errorMessage" class="text-red-600 mt-4">{{ errorMessage }}</p>
 	</div>
