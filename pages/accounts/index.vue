@@ -1,13 +1,5 @@
 <template>
-    <section>
-        <h1 class="font-bold text-gray-500 mb-4">My Subscriptions</h1>
-            <div class="grid grid-cols-4 gap-5">
-      <div v-for="subscription in subscriptions?.subscriptions" :key="subscription.id">
-        <SubscriptionCard :subscription="subscription" />
-      </div>
-    </div>
-    </section>
-    <section>
+      <section v-if="!activeSubscription">
         <p class="m-4">To subscribe to a plan, please click the button below.</p>
         <UButton
             label="Subscribe Now"
@@ -16,8 +8,14 @@
             @click="openSubscriptionModal"
             class="m-4"
         />
-        <h1>********NOTE: The subscribe button will only display when the account does not have an active subscription</h1>
-        <h1>This is not active right now, to reduce the hassle in styling the subscription modal.********</h1>
+    </section>
+    <section>
+        <h1 class="font-bold text-gray-500 mb-4">My Subscriptions</h1>
+            <div class="grid grid-cols-4 gap-5">
+      <div v-for="subscription in subscriptions?.subscriptions" :key="subscription.id">
+        <SubscriptionCard :subscription="subscription" />
+      </div>
+    </div>
     </section>
 
     <SubscriptionModal
@@ -44,6 +42,8 @@ const toast = useToast(); // For notifications
 
 const apiAuthorizationToken = authStore.access_token;
 const uniqueAccountId = authStore.uniqueAccountId;
+const activeSubscription = computed(() => authStore.subs_status);
+console.log("activeSubscription: ", activeSubscription)
 const accountOrganisation = ref('');
 
 const isSubscriptionModalOpen = ref(false);
