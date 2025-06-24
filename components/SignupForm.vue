@@ -47,7 +47,7 @@
 				</div>
 
 				<!-- Submit Button -->
-				<div class="mt-4 md:mt-0">
+				<div class="form__button-container mt-4 md:mt-0">
 					<UButton
 						type="submit"
 						label="Create Account"

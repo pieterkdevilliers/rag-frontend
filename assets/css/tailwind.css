@@ -196,7 +196,7 @@
 		@apply border border-slate-300 rounded-lg w-full ring-0 focus:ring-2 focus:ring-accent focus:border-transparent placeholder:text-slate-300;
 	}
 	.form__button {
-		@apply w-full flex justify-center sm:justify-start lg:justify-center;
+		@apply w-full max-w-full flex justify-center;
 	}
 	.form__button span {
 		@apply text-left;
@@ -217,10 +217,10 @@
 		@apply w-full max-w-full md:max-w-[150px] lg:max-w-[180px] 2xl:max-w-full;
 	}
 	.page--landing .signup-form .form__label-field > div {
-		@apply w-full;
+		@apply w-full max-w-full;
 	}
-	.page--landing .signup-form .form__label-field .form__button {
-		@apply w-full min-w-full max-w-full;
+	.page--landing .signup-form .form__button-container {
+		@apply w-full;
 	}
 }
 
