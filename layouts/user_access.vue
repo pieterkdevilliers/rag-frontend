@@ -13,27 +13,27 @@
                   icon="i-heroicons:arrow-right-end-on-rectangle"
                   label="Login">
                 </UButton></li>
-                <li v-if="account_unique_id"><UButton 
+                <li v-if="account_unique_id" id="chats-button"><UButton 
                   to="/chats"
                   label="Chat Sessions"
                   icon="i-heroicons:chat-bubble-bottom-center-text">
                 </UButton></li>
-                <li v-if="account_unique_id"><UButton 
+                <li v-if="account_unique_id" id="users-button"><UButton 
                   to="/users"
                   label="Users"
                   icon="i-heroicons:users">
                 </UButton></li>
-                <li v-if="account_unique_id"><UButton 
+                <li v-if="account_unique_id" id="documents-button"><UButton 
                   to="/folders"
                   label="Documents"
                   icon="i-heroicons:document-magnifying-glass">
                 </UButton></li>
-                <li v-if="account_unique_id"><UButton 
+                <li v-if="account_unique_id"id="widgets-button"><UButton 
                   to="/web-widgets"
                   label="Web Widgets"
                   icon="i-heroicons:code-bracket">
                 </UButton></li>
-                <li v-if="account_unique_id"><UButton 
+                <li v-if="account_unique_id" id="account-button"><UButton 
                   to="/accounts"
                   label="My Account"
                   icon="i-heroicons:user-circle">
@@ -62,7 +62,7 @@
 
 <script setup lang="ts">
 const config = useRuntimeConfig();
-import { ref, computed, watchEffect } from 'vue';
+import { ref, computed, watchEffect, onMounted } from 'vue';
 import Queries from '~/components/Queries.vue';
 import { useAuthStore } from '~/stores/auth';
 
@@ -71,6 +71,7 @@ const authStore = useAuthStore();
 // Make `account_unique_id` reactive by deriving it from the store
 const account_unique_id = computed(() => authStore.uniqueAccountId || null);
 const account_organisation = ref('');
+const showTour = computed(() => authStore.docs_count === 0);
 
 // Watch for changes in `account_unique_id` and fetch details
 watchEffect(async () => {
@@ -99,6 +100,25 @@ watchEffect(async () => {
 	} else {
 		account_organisation.value = '';
 	}
+});
+
+import { driver } from "driver.js";
+import "driver.js/dist/driver.css";
+
+  onMounted(() => {
+    if (showTour.value){
+    const driverObj = driver({
+      showProgress: true,
+      steps: [
+        { element: '#chats-button', popover: { title: 'Chats', description: 'View chat history including questions and answers.' } },
+        { element: '#users-button', popover: { title: 'Users', description: 'Add or remove users from your account.' } },
+        { element: '#documents-button', popover: { title: 'Documents', description: 'Add folder and documents, and process the files into your AI Database when ready.' } },
+        { element: '#widgets-button', popover: { title: 'Web Widgets', description: 'Generate your API Key and Web-Widget, to add to your website, for your visitors to use.' } },
+        { element: '#account-button', popover: { title: 'Your Account', description: 'View and manage your subscription.' } },
+      ]
+    });
+    driverObj.drive();
+    }
 });
 </script>
 
