@@ -1,6 +1,8 @@
 <template>
 	<div>
-		<h2 class="text-lg">Chat Transcript for Session #{{ sessionId }}</h2>
+		<h3 class="heading heading--h3 text-center">
+			Chat Transcript for Session #{{ sessionId }}
+		</h3>
 
 		<!-- 1. Handle Loading State -->
 		<div
@@ -23,11 +25,14 @@
 		<!-- 3. Display Messages on Success -->
 		<div
 			v-else-if="data && data.length > 0"
-			class="mt-4 space-y-4 max-h-[60vh] overflow-y-auto p-1"
+			class="chat-container mt-4 space-y-4 max-h-[60vh] overflow-y-auto p-1"
 		>
 			<!-- Loop over each message in the 'data' array -->
 			<div v-for="message in data" :key="message.message_id">
-				<div class="flex items-start gap-2.5">
+				<div
+					:class="message.sender_type"
+					class="chat-item flex items-start gap-2.5"
+				>
 					<!-- Differentiate user and bot with an icon -->
 					<UIcon
 						:name="
@@ -35,18 +40,16 @@
 								? 'i-heroicons-user-circle'
 								: 'i-heroicons-cpu-chip'
 						"
-						class="w-6 h-6 text-gray-400"
+						class="chat-item__icon"
 					/>
 					<div
-						class="flex flex-col w-full max-w-[320px] leading-1.5 p-3 border-gray-200 bg-gray-100 dark:bg-gray-700 rounded-e-xl rounded-es-xl"
+						class="chat-item__container flex flex-col w-full max-w-[320px] leading-1.5 p-3 border-gray-200 bg-gray-100 dark:bg-gray-700 rounded-e-xl rounded-es-xl"
 					>
 						<div
 							class="flex items-center space-x-2 rtl:space-x-reverse"
 						>
 							<!-- Capitalize the sender type (e.g., 'user' -> 'User') -->
-							<span
-								class="text-sm font-semibold text-gray-900 dark:text-white"
-							>
+							<span class="chat-item__sender">
 								{{
 									message.sender_type
 										.charAt(0)
@@ -66,9 +69,7 @@
 							</span>
 						</div>
 						<!-- The actual message text -->
-						<p
-							class="text-sm font-normal py-2.5 text-gray-900 dark:text-white"
-						>
+						<p class="chat-item__message">
 							{{ message.message_text }}
 						</p>
 					</div>
