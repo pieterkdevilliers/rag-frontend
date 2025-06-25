@@ -2,6 +2,14 @@
   <div>
     <h1 class="text-xl text-primary">Documents</h1>
   </div>
+    <div class="flex justify-start mb-4">
+    <UButton
+      icon="i-heroicons-arrow-path-20-solid"
+      label="Update AI Database"
+      variant="solid"
+      @click="openRefreshDBModal"
+    />
+  </div>
   <!-- <div class="flex justify-end mb-4">
     <UButton
       icon="i-heroicons:plus-circle-16-solid"
@@ -75,6 +83,15 @@
         />
       </div>
     </UModal>
+
+  <!-- Refresh AI DB Modal -->
+    <RefreshDBModal v-model="isRefreshDBModalOpen"
+      :is-open="isRefreshDBModalOpen"
+      @update:is-open="isRefreshDBModalOpen = $event"
+      @confirm="handleConfirmRefreshDB"
+      @cancel="closeRefreshDBModal"
+      @close="closeRefreshDBModal"
+       />
   
     <UNotifications />
 
@@ -332,6 +349,65 @@
         });
       });
     });
+
+
+  // Refresh AI DB Modal state
+  const isRefreshDBModalOpen = ref(false);
+  const isDbUpdating = ref(false);
+
+  const openRefreshDBModal = () => {
+    isRefreshDBModalOpen.value = true;
+    console.log('Modal opened');
+  };
+
+  const closeRefreshDBModal = () => {
+    isRefreshDBModalOpen.value = false;
+    console.log('Modal closed');
+  };
+
+  const handleConfirmRefreshDB = async ( replace: boolean ) => {
+    isDbUpdating.value = true; // Start loading indicator
+    closeRefreshDBModal();    // Close the modal immediately
+
+    console.log('Replace value received from modal:', replace); // For debugging
+
+    try {
+
+      toast.add({
+        title: 'Database Update Started',
+        description: 'The AI database update process has been initiated. This may take some time.',
+        color: 'green',
+        timeout: 5000 // Keep message for 5 seconds
+      });
+      
+      const response = await $fetch(`${config.public.apiBase}/generate-chroma-db/${account_unique_id}?replace=${replace}`, {
+        method: 'GET',
+        headers: {
+          'accept': 'application/json',
+          'Authorization': `Bearer ${apiAuthorizationToken}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      console.log('AI Database refresh initiated:', response);
+
+      // Optionally, you might want to refresh some data or navigate,
+      // depending on what the API call does and returns.
+      // For example, if it updates some status you display:
+      // await refreshSomeStatusData();
+
+    } catch (err: any) {
+      console.error('Error initiating AI Database refresh:', err);
+      const errorMessage = err.data?.detail || err.message || 'Could not start database update.';
+      toast.add({
+        title: 'Error',
+        description: errorMessage,
+        color: 'red'
+      });
+    } finally {
+      isDbUpdating.value = false; // Stop loading indicator
+    }
+  };
 
 </script>
 
