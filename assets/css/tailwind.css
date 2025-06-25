@@ -283,6 +283,36 @@
 		@apply font-roboto-condensed;
 	}
 
+	/* Chat Sessions */
+	.chat-sessions__table {
+		@apply w-full;
+	}
+	.chat-sessions__table th {
+		@apply font-roboto-condensed;
+	}
+
+	.chat-item {
+		@apply text-sm;
+	}
+	.chat-item.user .chat-item__container {
+		@apply bg-green-50;
+	}
+	.chat-item.bot .chat-item__container {
+		@apply bg-purple-50;
+	}
+	.chat-item__icon {
+		@apply w-6 h-6;
+	}
+	.user .chat-item__icon {
+		@apply text-green-400;
+	}
+	.bot .chat-item__icon {
+		@apply text-purple-400;
+	}
+	.chat-item__sender {
+		@apply font-roboto-condensed font-medium;
+	}
+
 	/* Query Form */
 	.query-form__container .form-container {
 		@apply p-0 max-w-xl mx-auto;
