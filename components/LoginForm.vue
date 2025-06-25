@@ -49,6 +49,11 @@
 </template>
 
 <script setup lang="ts">
+
+import { ref } from 'vue';
+import { useAuthStore } from '~/stores/auth';
+import { useRouter } from 'vue-router';
+
 const config = useRuntimeConfig();
 const myApiUrl = config.public.apiBaseURL;
 
@@ -58,9 +63,7 @@ onMounted(() => {
 	// This will log ONLY on the client (in your browser console)
 	console.log('CLIENT MOUNTED - apiBaseURL IS:', config.public.apiBaseURL);
 });
-import { ref } from 'vue';
-import { useAuthStore } from '~/stores/auth';
-import { useRouter } from 'vue-router';
+
 
 const authStore = useAuthStore();
 const router = useRouter();
