@@ -1,6 +1,6 @@
 <template>
 	<section class="access-page">
-		<div class="container">
+		<div class="container--default">
 			<div class="container__inner">
 				<div class="form-container border-box border-box--center">
 					<LoginForm />

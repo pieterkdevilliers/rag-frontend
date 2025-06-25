@@ -1,5 +1,5 @@
 <template>
-	<div class="solution-section container">
+	<div class="solution-section container--default">
 		<div class="container__inner">
 			<h2 class="heading">
 				<span class="heading__span--block"

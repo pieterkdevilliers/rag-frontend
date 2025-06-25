@@ -1,6 +1,6 @@
 <template>
 	<div class="access-page password-reset-form">
-		<div class="container">
+		<div class="container--default">
 			<div class="container__inner">
 				<div class="text-block text-block--center text-block--wide">
 					<h1 class="heading heading--h1">Forgot Your Password?</h1>

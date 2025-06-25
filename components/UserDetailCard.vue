@@ -1,5 +1,5 @@
 <template>
-	<div class="card text-left">
+	<div class="card-grid__card card text-left">
 		<p class="text-gray-500 m-4">User Email: {{ user.user.user_email }}</p>
 		<p class="text-gray-500 m-4">User ID: {{ user.user.id }}</p>
 	</div>

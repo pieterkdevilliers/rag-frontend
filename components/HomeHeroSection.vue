@@ -1,6 +1,6 @@
 <template>
 	<!-- This outer div is the single root element -->
-	<div class="container container__hero-section">
+	<div class="container--default container__hero-section">
 		<div class="container__inner">
 			<div class="text-block text-block--center text-block--wide">
 				<h1 class="heading heading--h1">
