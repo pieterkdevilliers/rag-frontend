@@ -83,11 +83,14 @@
 </template>
 
 <script setup lang="ts">
-const config = useRuntimeConfig();
+
+import { driver } from "driver.js";
+import "driver.js/dist/driver.css";
 import { ref, computed, watchEffect, onMounted } from 'vue';
 import Queries from '~/components/Queries.vue';
 import { useAuthStore } from '~/stores/auth';
 
+const config = useRuntimeConfig();
 const authStore = useAuthStore();
 
 // Make `account_unique_id` reactive by deriving it from the store
@@ -124,8 +127,10 @@ watchEffect(async () => {
 	}
 });
 
+
 import { driver } from 'driver.js';
 import 'driver.js/dist/driver.css';
+
 
 onMounted(() => {
 	if (showTour.value) {

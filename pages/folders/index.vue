@@ -176,6 +176,14 @@
     console.log('Replace value received from modal:', replace); // For debugging
 
     try {
+
+      toast.add({
+        title: 'Database Update Started',
+        description: 'The AI database update process has been initiated. This may take some time.',
+        color: 'green',
+        timeout: 5000 // Keep message for 5 seconds
+      });
+
       const response = await $fetch(`${config.public.apiBase}/generate-chroma-db/${account_unique_id}?replace=${replace}`, {
         method: 'GET',
         headers: {
@@ -185,19 +193,11 @@
         },
       });
 
-      console.log('AI Database refresh initiated:', response);
-      toast.add({
-        title: 'Database Update Started',
-        description: 'The AI database update process has been initiated. This may take some time.',
-        color: 'green',
-        timeout: 5000 // Keep message for 5 seconds
-      });
-
       // Optionally, you might want to refresh some data or navigate,
       // depending on what the API call does and returns.
       // For example, if it updates some status you display:
       // await refreshSomeStatusData();
-
+      console.log('AI Database refresh initiated:', response);
     } catch (err: any) {
       console.error('Error initiating AI Database refresh:', err);
       const errorMessage = err.data?.detail || err.message || 'Could not start database update.';
