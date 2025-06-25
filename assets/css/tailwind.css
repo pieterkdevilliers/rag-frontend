@@ -260,6 +260,45 @@
 	.password-reset-form .form__button-container button {
 		@apply mx-auto;
 	}
+
+	/* My Account */
+	/* Subscriptions */
+	.subscription-grid {
+		@apply grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3 mt-6;
+	}
+	.subscription-card {
+		@apply text-base h-full flex flex-col;
+	}
+	.subscription-card__details {
+		@apply flex-grow;
+	}
+	.subscription-card__details p:not(:first-child) {
+		@apply mt-2;
+	}
+	.subscription-card__footer {
+		@apply mt-auto;
+	}
+	.subscription-card__details strong,
+	.subscription-card__footer strong {
+		@apply font-roboto-condensed;
+	}
+
+	/* Query Form */
+	.query-form__container .form-container {
+		@apply p-0 max-w-xl mx-auto;
+	}
+	.query-form__container form {
+		@apply w-full;
+	}
+	.query-form__container .form__label-fields {
+		@apply w-full flex flex-col md:flex-row gap-3 md:gap-6 justify-center;
+	}
+	.query-form__container .form__label-field {
+		@apply w-full md:max-w-[66%];
+	}
+	.query-form__container .form__button-container {
+		@apply mt-0 md:self-end;
+	}
 }
 
 @layer components {
