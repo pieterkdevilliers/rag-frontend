@@ -1,5 +1,5 @@
 <template>
-	<div class="how-it-works-section container mx-auto">
+	<div class="how-it-works-section container--default mx-auto">
 		<div class="text-center mb-10 md:mb-12">
 			<h2 class="heading heading--2">How It Works</h2>
 		</div>

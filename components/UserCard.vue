@@ -1,21 +1,21 @@
 <template>
-	<UCard>
-		<p class="text-gray-500 m-4">Email: {{ user.user_email }}</p>
-		<p class="text-gray-500 m-4">User ID: {{ user.id }}</p>
+	<UCard class="card-grid__card">
+		<div class="card__body">
+			<p><strong>Email:</strong> {{ user.user_email }}</p>
+			<p><strong>User ID:</strong> {{ user.id }}</p>
 
-		<!-- New Toggle for Receive Notifications -->
-		<div class="flex items-center justify-between m-4">
-			<label
-				:for="`notifications-toggle-${user.id}`"
-				class="text-gray-500"
-				>Receive Notifications:</label
-			>
-			<UToggle
-				:id="`notifications-toggle-${user.id}`"
-				v-model="localReceiveNotifications"
-				:loading="isUpdatingNotifications"
-				@update:model-value="handleToggleReceiveNotifications"
-			/>
+			<!-- New Toggle for Receive Notifications -->
+			<div class="flex items-center justify-between mt-4">
+				<label :for="`notifications-toggle-${user.id}`"
+					><strong>Receive Notifications:</strong></label
+				>
+				<UToggle
+					:id="`notifications-toggle-${user.id}`"
+					v-model="localReceiveNotifications"
+					:loading="isUpdatingNotifications"
+					@update:model-value="handleToggleReceiveNotifications"
+				/>
+			</div>
 		</div>
 		<template #footer>
 			<div class="flex gap-2">

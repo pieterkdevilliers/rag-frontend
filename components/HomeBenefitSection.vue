@@ -1,5 +1,5 @@
 <template>
-	<div class="benefits-section container mx-auto">
+	<div class="benefits-section container--default mx-auto">
 		<div class="text-center mb-10 md:mb-12">
 			<h2 class="heading heading__h2">
 				Delight Customers & Free Up Your Time

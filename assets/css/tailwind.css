@@ -155,7 +155,7 @@
 	}
 
 	/* Structure */
-	.container {
+	.container--default {
 		@apply p-0 md:px-4 md:py-8 mx-auto;
 	}
 	.container--full {
@@ -246,6 +246,9 @@
 	form .form__button-container {
 		@apply flex;
 	}
+	.form-component .form__button-container {
+		@apply min-w-fit;
+	}
 
 	/* Password Reset */
 	.password-reset-form {
@@ -261,9 +264,30 @@
 		@apply mx-auto;
 	}
 
+	/* General Cards Layout */
+	.card-grid {
+		@apply grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3 mt-6;
+	}
+	.card-grid__card {
+		@apply text-base h-full flex flex-col;
+	}
+	.card-grid__card .card__body {
+		@apply flex-grow text-sm;
+	}
+	.card-grid__card .card__body p:not(:first-child) {
+		@apply mt-2;
+	}
+	.card-grid .card__footer {
+		@apply mt-auto;
+	}
+	.card-grid__card .card__body strong,
+	.card-grid__card .card__footer strong {
+		@apply font-roboto-condensed;
+	}
+
 	/* My Account */
 	/* Subscriptions */
-	.subscription-grid {
+	/* .card-grid {
 		@apply grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3 mt-6;
 	}
 	.subscription-card {
@@ -277,7 +301,7 @@
 	}
 	.subscription-card__footer {
 		@apply mt-auto;
-	}
+	} */
 	.subscription-card__details strong,
 	.subscription-card__footer strong {
 		@apply font-roboto-condensed;
