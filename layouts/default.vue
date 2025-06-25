@@ -4,7 +4,7 @@
 			<h1 class="font-bold text-xl text-primary">
 				{{ account_organisation }}
 			</h1>
-			<ul class="flex gap-4">
+			<ul class="flex gap-4 flex-wrap max-w-full">
 				<li>
 					<UButton
 						v-if="!account_unique_id"

@@ -1,27 +1,35 @@
 <template>
-	<div class="mx-auto p-4">
-		<div class="max-w-xl mx-auto p-4">
+	<div class="query-form__container border-box">
+		<h2 class="heading heading--h2">
+			Run a test query on your processed documents
+		</h2>
+		<div class="form-container">
 			<form @submit.prevent="handleQuery">
-				<h2 class="text-2xl mb-4">Run a test query on your processed documents</h2>
-				<div class="mb-4">
-					<label
-						class="block text-sm font-medium text-gray-700"
-						for="question"
-						>Question</label
+				<div class="form__label-fields">
+					<div class="form__label-field">
+						<label class="form__label" for="question"
+							>Question</label
+						>
+						<UInput
+							v-model="question"
+							id="question"
+							type="text"
+							placeholder="Run a test query..."
+							autocomplete="off"
+							class="form__label-field__input"
+						/>
+					</div>
+					<div
+						class="form__button-container single-button mt-4 md:mt-0"
 					>
-					<UInput
-						v-model="question"
-						id="question"
-						type="text"
-						placeholder="Run a test query..."
-						autocomplete="off"
-					/>
+						<UButton
+							type="submit"
+							icon="i-heroicons:chat-bubble-left-ellipsis"
+							label="Ask Now!"
+							class="form__button"
+						/>
+					</div>
 				</div>
-				<UButton
-					type="submit"
-					icon="i-heroicons:chat-bubble-left-ellipsis"
-					label="Ask Now!"
-				/>
 			</form>
 
 			<!-- Show error message -->
@@ -67,9 +75,7 @@
 							<!-- <span class="text-xs text-gray-400 ml-2"> (Debug: {{ source.fileIdentifier }})</span> -->
 						</li>
 					</ul>
-					<p v-else class="text-sm text-gray-500">
-						No specific sources cited.
-					</p>
+					<p v-else>No specific sources cited.</p>
 				</template>
 			</UCard>
 		</div>
@@ -155,7 +161,9 @@ const handleQuery = async () => {
 
 	try {
 		const response = await fetch(
-			`${config.public.apiBase}/query-data/${account_unique_id}?query=${encodeURIComponent(
+			`${
+				config.public.apiBase
+			}/query-data/${account_unique_id}?query=${encodeURIComponent(
 				question.value
 			)}`,
 			{
