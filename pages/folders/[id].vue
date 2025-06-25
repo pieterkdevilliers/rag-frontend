@@ -90,7 +90,14 @@
 </template>
 
 <script setup lang="ts">
-  const config = useRuntimeConfig();
+
+  import { useAuthStore } from '~/stores/auth';
+  import { ref, computed } from 'vue';
+  import AddFileForm from '~/components/AddFileForm.vue';
+  import AddFileFromURL from '~/components/AddFileFromURL.vue';
+
+
+
   function toTitleCase(str) {
     if (!str) return "";
     return str.split(' ').map(word => {
@@ -109,12 +116,10 @@
         already_processed_to_source_data: boolean | string;
     }
 
+    const config = useRuntimeConfig();
     const { id } = useRoute().params;
     const toast = useToast();
-    import { useAuthStore } from '~/stores/auth';
-    import { ref, computed } from 'vue';
-    import AddFileForm from '~/components/AddFileForm.vue';
-    import AddFileFromURL from '~/components/AddFileFromURL.vue';
+
     
     const authStore = useAuthStore();
     const account_unique_id = authStore.uniqueAccountId
@@ -170,18 +175,20 @@
       }
       // Remove any remaining common file extensions for display
       displayNameInProgress = displayNameInProgress.replace(/\.(pdf|txt|docx|doc|md)$/i, '');
-      // Replace underscores with spaces
+
       displayNameInProgress = displayNameInProgress.replace(/_/g, ' ');
-      // Convert to Title Case
+
       const finalDisplayName = toTitleCase(displayNameInProgress.trim());
-      // --- End logic to create display name ---
+
+      const isProcessed = file.already_processed_to_source_data === true || 
+                          String(file.already_processed_to_source_data).toLowerCase() === 'true';
+
+      const processedStatusDisplay = isProcessed ? 'Yes' : 'No';
 
       return {
-        ...file, // Spread all original file properties
-        display_name: finalDisplayName || originalFileName, // Add the new display_name property
-                                                          // Fallback to original if display name is empty
-        // Keep original file_name if you need it for filtering or other logic
-        // file_name: originalFileName 
+        ...file, 
+        display_name: finalDisplayName || originalFileName, 
+        processed_status_display: processedStatusDisplay
       };
     });
   });
@@ -199,14 +206,13 @@
         // label: 'Included in source data',
         // class: 'text-primary'
         // }, {
-        key: 'already_processed_to_source_data',
+        key: 'processed_status_display',
         label: 'Already processed to source data',
         class: 'text-primary'
         }, {
         key: 'actions',
         class: 'text-primary'
         }];
-
 
     
       // Add File Modal state
@@ -237,7 +243,6 @@
       console.log('Modal closed');
     };
 
-    // closeAddFileFromURLModal(); 
 
     // This method will be called when 'filesAdded' is emitted
     const handleItemAdded = async () => {
@@ -288,15 +293,6 @@
     };
 
     const actionItems = (row: FileType) => [
-    // [{
-    //     label: 'Edit',
-    //     icon: 'i-heroicons-pencil-square-20-solid',
-    //     click: () => console.log('Edit file:', row.id) // Implement edit logic
-    // }, {
-    //     label: 'Process',
-    //     icon: 'i-heroicons-arrow-path-20-solid',
-    //     click: () => console.log('Process file:', row.id) // Implement process logic
-    // }],
     [{
         label: 'Delete',
         icon: 'i-heroicons-trash-20-solid',
