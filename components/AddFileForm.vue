@@ -152,7 +152,7 @@ const handleAddFiles = async () => {
 		);
 
 		authStore.setDocsCount(responseData.new_docs_count)
-		successMessage.value = `${responseData.uploaded_files.length} file(s) uploaded successfully!`;
+		successMessage.value = `${responseData.uploaded_files.length} file(s) accepted for processing!`;
 
 		// Clear selected files and reset file input
 		state.selectedFiles = [];
