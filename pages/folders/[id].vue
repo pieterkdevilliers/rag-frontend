@@ -3,12 +3,14 @@
     <h1 class="text-xl text-primary">Documents</h1>
   </div>
     <div class="flex justify-start mb-4">
-    <UButton
-      icon="i-heroicons-arrow-path-20-solid"
-      label="Update AI Database"
-      variant="solid"
-      @click="openRefreshDBModal"
-    />
+      <UTooltip text="Add new files to AI database">
+        <UButton
+          icon="i-heroicons-arrow-path-20-solid"
+          label="Update AI Database"
+          variant="solid"
+          @click="openRefreshDBModal"
+        />
+      </UTooltip>
   </div>
   <!-- <div class="flex justify-end mb-4">
     <UButton
@@ -21,6 +23,7 @@
     <UButton
       icon="i-heroicons:plus-circle-16-solid"
       label="Upload file"
+      variant="outline"
       @click="openAddFileModal"
     />
   </div>

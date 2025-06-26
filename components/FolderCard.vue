@@ -4,22 +4,28 @@
 		<p class="text-gray-500 m-4">Name: {{ folder.folder_name }}</p>
 		<template #footer>
 			<div class="flex gap-2">
-				<UButton
-					:to="`/folders/${folder.id}`"
-					icon="i-heroicons-clipboard-document-list"
-					aria-label="View folder contents"
-				/>
-				<UButton
-					icon="i-heroicons-pencil-square"
-					aria-label="Edit folder"
-					@click="emitEditFolder"
-				/>
-				<UButton
-					icon="i-heroicons-trash"
-					aria-label="Delete folder"
-					@click="openConfirmDeleteModal"
-					:loading="isDeleting"
-				/>
+				<UTooltip text="View folder contents">
+					<UButton
+						:to="`/folders/${folder.id}`"
+						icon="i-heroicons-clipboard-document-list"
+						aria-label="View folder contents"
+					/>
+				</UTooltip>
+				<UTooltip text="Edit folder details">
+					<UButton
+						icon="i-heroicons-pencil-square"
+						aria-label="Edit folder"
+						@click="emitEditFolder"
+					/>
+				</UTooltip>
+				<UTooltip text="Delete folder">
+					<UButton
+						icon="i-heroicons-trash"
+						aria-label="Delete folder"
+						@click="openConfirmDeleteModal"
+						:loading="isDeleting"
+					/>
+				</UTooltip>
 			</div>
 		</template>
 	</UCard>

@@ -23,12 +23,12 @@
 					</UButton>
 				</li>
 				<li v-if="account_unique_id" id="chats-button">
-					<UButton
-						to="/chats"
-						label="Chat Sessions"
-						icon="i-heroicons:chat-bubble-bottom-center-text"
-					>
-					</UButton>
+						<UButton
+							to="/chats"
+							label="Chat Sessions"
+							icon="i-heroicons:chat-bubble-bottom-center-text"
+						>
+						</UButton>
 				</li>
 				<li v-if="account_unique_id" id="users-button">
 					<UButton to="/users" label="Users" icon="i-heroicons:users">

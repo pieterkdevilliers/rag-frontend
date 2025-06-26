@@ -1,12 +1,16 @@
 <template>
 	<section class="users container--default mx-auto">
-		<h2 class="heading heading--h2">Users</h2>
+		<h2 class="text-xl text-primary">Users</h2>
 
 		<div class="flex justify-end mb-4">
 			<UButton
 				icon="i-heroicons:plus-circle-16-solid"
 				variant="outline"
+<<<<<<< bfa-401-add-tooltips-throughout
+				label="Add New User"
+=======
 				label="Add User"
+>>>>>>> main
 				@click="openModal"
 			/>
 		</div>

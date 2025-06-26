@@ -9,26 +9,31 @@
 				<label :for="`notifications-toggle-${user.id}`"
 					><strong>Receive Notifications:</strong></label
 				>
-				<UToggle
-					:id="`notifications-toggle-${user.id}`"
-					v-model="localReceiveNotifications"
-					:loading="isUpdatingNotifications"
-					@update:model-value="handleToggleReceiveNotifications"
-				/>
+				<UTooltip text="Should this user receive email notifications?">
+					<UToggle
+						:id="`notifications-toggle-${user.id}`"
+						v-model="localReceiveNotifications"
+						:loading="isUpdatingNotifications"
+						@update:model-value="handleToggleReceiveNotifications"
+					/>
+				</UTooltip>
 			</div>
 		</div>
 		<template #footer>
 			<div class="flex gap-2">
-				<UButton
-					icon="i-heroicons:pencil-square"
-					@click="emitEditUser"
-				/>
-
-				<UButton
-					icon="i-heroicons:trash"
-					@click="openConfirmDeleteModal"
-					:loading="isDeleting"
-				/>
+				<UTooltip text="Edit User Password">
+					<UButton
+						icon="i-heroicons:pencil-square"
+						@click="emitEditUser"
+					/>
+				</UTooltip>
+				<UTooltip text="Delete User">
+					<UButton
+						icon="i-heroicons:trash"
+						@click="openConfirmDeleteModal"
+						:loading="isDeleting"
+					/>
+				</UTooltip>
 			</div>
 		</template>
 	</UCard>
