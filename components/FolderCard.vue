@@ -1,7 +1,7 @@
 <template>
 	<UCard>
-		<p class="text-gray-500 m-4">ID: {{ folder.id }}</p>
-		<p class="text-gray-500 m-4">Name: {{ folder.folder_name }}</p>
+		<p><strong>ID:</strong> {{ folder.id }}</p>
+		<p><strong>Name:</strong> {{ folder.folder_name }}</p>
 		<template #footer>
 			<div class="flex gap-2">
 				<UTooltip text="View folder contents">

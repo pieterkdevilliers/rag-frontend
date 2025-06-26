@@ -1,19 +1,19 @@
 <template>
 	<section class="folders container--default mx-auto">
 		<h2 class="heading heading--h2">Folders</h2>
-		<div class="flex justify-end gap-6 mb-4">
+		<div class="flex justify-start sm:justify-end gap-6 my-2">
 			<UTooltip text="Add new files to AI database">
 				<UButton
 					icon="i-heroicons-arrow-path-20-solid"
 					label="Update AI Database"
-					variant="outline"
+					variant="solid"
 					@click="openRefreshDBModal"
 				/>
 			</UTooltip>
 			<UTooltip text="Add a new folder">
 				<UButton
 					icon="i-heroicons:plus-circle-16-solid"
-					variant="solid"
+					variant="outline"
 					label="Add Folder"
 					@click="openModal"
 				/>
@@ -227,5 +227,3 @@ const handleConfirmRefreshDB = async (replace: boolean) => {
 	}
 };
 </script>
-
-<style scoped></style>
