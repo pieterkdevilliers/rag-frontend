@@ -384,4 +384,7 @@
 	.modal h3 {
 		@apply font-medium text-xl;
 	}
+	.modal .heading__span--block:last-child {
+		@apply mt-0;
+	}
 }
