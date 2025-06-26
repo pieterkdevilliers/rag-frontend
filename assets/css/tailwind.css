@@ -266,13 +266,13 @@
 
 	/* General Cards Layout */
 	.card-grid {
-		@apply grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3 mt-6;
+		@apply grid grid-cols-1 gap-8 lg:gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mt-6;
 	}
 	.card-grid__card {
 		@apply text-base h-full flex flex-col;
 	}
 	.card-grid__card .card__body {
-		@apply flex-grow text-sm;
+		@apply flex-grow text-base;
 	}
 	.card-grid__card .card__body p:not(:first-child) {
 		@apply mt-2;
@@ -287,21 +287,6 @@
 
 	/* My Account */
 	/* Subscriptions */
-	/* .card-grid {
-		@apply grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3 mt-6;
-	}
-	.subscription-card {
-		@apply text-base h-full flex flex-col;
-	}
-	.subscription-card__details {
-		@apply flex-grow;
-	}
-	.subscription-card__details p:not(:first-child) {
-		@apply mt-2;
-	}
-	.subscription-card__footer {
-		@apply mt-auto;
-	} */
 	.subscription-card__details strong,
 	.subscription-card__footer strong {
 		@apply font-roboto-condensed;
@@ -391,5 +376,9 @@
 	}
 	.signup-form {
 		@apply bg-white shadow-md rounded-lg p-6;
+	}
+	.important,
+	.important :is(strong, em) {
+		@apply text-accent font-medium;
 	}
 }

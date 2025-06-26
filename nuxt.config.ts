@@ -14,7 +14,7 @@ export default defineNuxtConfig({
 	},
 	googleFonts: {
 		families: {
-			Roboto: [100, 300, 400, 500, 700, 900],
+			Roboto: [300, 400, 500, 700, 900],
 			'Roboto+Condensed': [300, 400, 500, 700],
 		},
 	},
@@ -33,7 +33,9 @@ export default defineNuxtConfig({
 	},
 	runtimeConfig: {
 		public: {
-			 apiBase: process.env.NUXT_PUBLIC_API_BASE_URL || 'https://fastapi-rag-2705cfd4c41a.herokuapp.com/api/v1',
+			apiBase:
+				process.env.NUXT_PUBLIC_API_BASE_URL ||
+				'https://fastapi-rag-2705cfd4c41a.herokuapp.com/api/v1',
 		},
 	},
 	hooks: {

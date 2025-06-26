@@ -17,7 +17,6 @@
 						:widget="widget"
 						@widget-deleted="handleWidgetRemoved"
 						@edit-widget-clicked="openEditWidgetModal"
-						class="card-grid__card"
 					/>
 				</div>
 			</div>
