@@ -13,20 +13,25 @@
 
 		<template #footer>
 			<div class="flex gap-2">
-				<UButton
-					icon="i-heroicons:code-bracket"
-					@click="emitViewSnippet"
-				/>
-				<UButton
-					icon="i-heroicons:pencil-square"
-					@click="emitEditWidget"
-				/>
-
-				<UButton
-					icon="i-heroicons:trash"
-					@click="openConfirmDeleteModal"
-					:loading="isDeleting"
-				/>
+				<UTooltip text="View widget code snippet">
+					<UButton
+						icon="i-heroicons:code-bracket"
+						@click="emitViewSnippet"
+					/>
+				</UTooltip>
+				<UTooltip text="Edit allowed origins">
+					<UButton
+						icon="i-heroicons:pencil-square"
+						@click="emitEditWidget"
+					/>
+				</UTooltip>
+				<UTooltip text="Delete widget">
+					<UButton
+						icon="i-heroicons:trash"
+						@click="openConfirmDeleteModal"
+						:loading="isDeleting"
+					/>
+				</UTooltip>
 			</div>
 		</template>
 	</UCard>
