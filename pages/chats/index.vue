@@ -1,16 +1,26 @@
 <template>
 	<div>
-		<h2 class="heading heading--h2">Chat Sessions</h2>
+		<h2 class="text-xl text-primary">Chat Sessions</h2>
 	</div>
 	<div>
 		<div class="flex px-3 py-3.5">
 			<UInput v-model="q" placeholder="Filter chat sessions..." />
 		</div>
+				<!-- Pagination Controls -->
+		<div
+			class="flex justify-end px-3 py-3.5 border-t border-gray-200 dark:border-gray-700"
+		>
+			<UPagination
+				v-model="page"
+				:page-count="pageCount"
+				:total="filteredRows.length"
+			/>
+		</div>
 
 		<UTable
-			:rows="filteredRows"
+			:rows="paginatedRows" 
 			:columns="columns"
-			:loading="chatSessionsResponse"
+			:loading="!chatSessions"
 			:loading-text="'Loading chat sessions...'"
 			:sticky="true"
 			class="chat-sessions__table"
@@ -35,6 +45,17 @@
 				</UTooltip>
 			</template>
 		</UTable>
+
+		<!-- Pagination Controls -->
+		<div
+			class="flex justify-end px-3 py-3.5 border-t border-gray-200 dark:border-gray-700"
+		>
+			<UPagination
+				v-model="page"
+				:page-count="pageCount"
+				:total="filteredRows.length"
+			/>
+		</div>
 	</div>
 
 	<!-- View Chat Modal -->
@@ -52,18 +73,12 @@
 <script setup lang="ts">
 const config = useRuntimeConfig();
 import { useAuthStore } from '~/stores/auth';
-import { computed, ref } from 'vue';
-
+import { computed, ref, watch } from 'vue'; // [!code ++]
 import { format, parseISO } from 'date-fns';
 
-// Create a helper function for reusability
+// Helper function
 function formatDateTime(isoString: string | null | undefined): string {
-	// Return a placeholder if the date is null or invalid
-	if (!isoString) {
-		return 'N/A';
-	}
-	// parseISO converts the string to a Date object
-	// format then applies your desired output format
+	if (!isoString) return 'N/A';
 	return format(parseISO(isoString), 'd MMMM yyyy - HH:mm');
 }
 
@@ -72,30 +87,23 @@ definePageMeta({
 	layout: 'user-access',
 });
 
-// Interface for a single chat session object
+// Interfaces
 interface ChatSession {
 	id: number;
-	visitor_uuid: string; // The API uses snake_case
+	visitor_uuid: string;
 	start_time: string;
 	end_time: string;
 	account_unique_id: string;
-}
-
-// Interface for the full API response object
-interface ChatSessionApiResponse {
-	response: string;
-	chat_sessions: ChatSession[];
 }
 
 const toast = useToast();
 const authStore = useAuthStore();
 const selectedSessionId = ref<number | null>(null);
 const isViewChatModalOpen = ref(false);
-
 const account_unique_id = authStore.uniqueAccountId;
 const apiAuthorizationToken = authStore.access_token;
 
-// We use `transform` to pluck the `chat_sessions` array from the response object.
+// Data Fetching (unchanged)
 const { data: chatSessions, error } = await useFetch(
 	`${config.public.apiBase}/chat-sessions/${account_unique_id}`,
 	{
@@ -104,15 +112,12 @@ const { data: chatSessions, error } = await useFetch(
 			accept: 'application/json',
 			Authorization: `Bearer ${apiAuthorizationToken}`,
 		},
-		// If the response is valid, return response.chat_sessions.
-		// Otherwise, return an empty array to prevent errors.
-		transform: (response): ChatSession[] => {
+		transform: (response: any): ChatSession[] => {
 			return response?.chat_sessions || [];
 		},
+		default: () => [], // Provide a default empty array
 	}
 );
-
-// `chatSessions.value` is now the clean array, thanks to the transform!
 
 if (error.value) {
 	console.error('Error fetching chat sessions:', error.value);
@@ -125,37 +130,32 @@ if (error.value) {
 	});
 }
 
+// Columns (unchanged)
 const columns = [
-	{
-		key: 'id',
-		label: 'ID',
-	},
-	{
-		key: 'visitor_uuid', // Match the key from your API data
-		label: 'Visitor ID',
-	},
-	{
-		key: 'start_time',
-		label: 'Start Time',
-	},
-	{
-		key: 'end_time',
-		label: 'End Time',
-	},
-	{
-		key: 'view',
-		label: 'View Chat',
-	},
+	{ key: 'id', label: 'ID' },
+	{ key: 'visitor_uuid', label: 'Visitor ID' },
+	{ key: 'start_time', label: 'Start Time' },
+	{ key: 'end_time', label: 'End Time' },
+	{ key: 'view', label: 'View Chat' },
 ];
 
+// --- Pagination and Filtering Logic ---
+
+// [!code-start++]
+// 1. State for pagination
+const page = ref(1);
+const pageCount = 10; // Number of items per page
+// [!code-end++]
+
+// State for filtering
 const q = ref('');
 
+// Filtered rows (unchanged, but now feeds into pagination)
 const filteredRows = computed(() => {
-	// chatSessions.value is now guaranteed to be an array.
+	if (!chatSessions.value) return [];
 	if (!q.value) {
 		return chatSessions.value;
 	}
-
 	return chatSessions.value.filter((session) => {
 		return Object.values(session).some((value) => {
 			return String(value).toLowerCase().includes(q.value.toLowerCase());
@@ -163,7 +163,22 @@ const filteredRows = computed(() => {
 	});
 });
 
-// --- Modal and Actions Logic (unchanged and should now work) ---
+// [!code-start++]
+// 2. Reset page to 1 when filter changes
+watch(q, () => {
+	page.value = 1;
+});
+
+// 3. New computed property to get the rows for the current page
+const paginatedRows = computed(() => {
+	const startIndex = (page.value - 1) * pageCount;
+	const endIndex = startIndex + pageCount;
+	return filteredRows.value.slice(startIndex, endIndex);
+});
+// [!code-end++]
+
+
+// --- Modal and Actions Logic (unchanged) ---
 const openViewChatModal = (row: ChatSession) => {
 	selectedSessionId.value = row.id;
 	isViewChatModalOpen.value = true;

@@ -35,8 +35,17 @@
     <div class="flex px-3 py-3.5">
       <UInput v-model="q" placeholder="Filter documents..." />
     </div>
-
-    <UTable :rows="filteredRows" :columns="columns" :loading="isLoadingFiles">
+				<!-- Pagination Controls -->
+		<div
+			class="flex justify-end px-3 py-3.5 border-t border-gray-200 dark:border-gray-700"
+		>
+			<UPagination
+				v-model="page"
+				:page-count="pageCount"
+				:total="filteredRows.length"
+			/>
+		</div>
+    <UTable :rows="paginatedRows" :columns="columns" :loading="isLoadingFiles">
       <template #file_name-data="{ row }"> 
         <span>{{ row.file_name }}</span>
       </template>
@@ -62,6 +71,17 @@
         </div>
       </template>
     </UTable>
+
+				<!-- Pagination Controls -->
+		<div
+			class="flex justify-end px-3 py-3.5 border-t border-gray-200 dark:border-gray-700"
+		>
+			<UPagination
+				v-model="page"
+				:page-count="pageCount"
+				:total="filteredRows.length"
+			/>
+		</div>
   </div>
 
   <!-- Add File Modal -->
@@ -109,7 +129,7 @@
 <script setup lang="ts">
 
   import { useAuthStore } from '~/stores/auth';
-  import { ref, computed } from 'vue';
+  import { ref, computed, watch } from 'vue';
   import AddFileForm from '~/components/AddFileForm.vue';
   import AddFileFromURL from '~/components/AddFileFromURL.vue';
 
@@ -153,7 +173,8 @@
     headers: {
         'accept': 'application/json',
         'Authorization': `Bearer ${apiAuthorizationToken}`,
-    }
+    },
+    default: () => [],
     });
 
 
@@ -231,7 +252,12 @@
         class: 'text-primary'
         }];
 
-    
+    // --- Pagination and Filtering Logic ---
+
+    // 1. State for pagination
+    const page = ref(1);
+    const pageCount = 10; // Number of items per page
+
       // Add File Modal state
     const isAddFileModalOpen = ref(false);
 
@@ -348,6 +374,18 @@
           return false;
         });
       });
+    });
+
+    // 2. Reset page to 1 when filter changes
+    watch(q, () => {
+      page.value = 1;
+    });
+
+    // 3. New computed property to get the rows for the current page
+    const paginatedRows = computed(() => {
+      const startIndex = (page.value - 1) * pageCount;
+      const endIndex = startIndex + pageCount;
+      return filteredRows.value.slice(startIndex, endIndex);
     });
 
 
