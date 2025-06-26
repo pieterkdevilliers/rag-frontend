@@ -6,7 +6,11 @@
 			<UButton
 				icon="i-heroicons:plus-circle-16-solid"
 				variant="outline"
+<<<<<<< bfa-401-add-tooltips-throughout
 				label="Add New User"
+=======
+				label="Add User"
+>>>>>>> main
 				@click="openModal"
 			/>
 		</div>
