@@ -1,6 +1,6 @@
 <template>
-	<UCard class="card-grid__card">
-		<div class="card__body">
+	<UCard>
+		<div>
 			<p><strong>Email:</strong> {{ user.user_email }}</p>
 			<p><strong>User ID:</strong> {{ user.id }}</p>
 

@@ -1,15 +1,17 @@
 <template>
 	<UCard>
-		<p class="text-gray-500 m-4">Widget Name:</p>
-		<p class="text-gray-500 m-4">{{ widget.name }}</p>
-		<p class="text-gray-500 m-4">Allowed Origins:</p>
-		<p class="text-gray-500 m-4">{{ widget.allowed_origins.join(', ') }}</p>
-		<p class="text-gray-500 m-4">Created At:</p>
-		<p class="text-gray-500 m-4">
-			{{ new Date(widget.created_at).toLocaleDateString() }}
-		</p>
-		<p class="text-gray-500 m-4">Display Prefix:</p>
-		<p class="text-gray-500 m-4">{{ widget.display_prefix }}</p>
+		<div>
+			<p><strong>Widget Name:</strong> {{ widget.name }}</p>
+			<p>
+				<strong>Allowed Origins:</strong>
+				{{ widget.allowed_origins.join(', ') }}
+			</p>
+			<p>
+				<strong>Created At:</strong>
+				{{ new Date(widget.created_at).toLocaleDateString() }}
+			</p>
+			<p><strong>Display Prefix:</strong> {{ widget.display_prefix }}</p>
+		</div>
 
 		<template #footer>
 			<div class="flex gap-2">

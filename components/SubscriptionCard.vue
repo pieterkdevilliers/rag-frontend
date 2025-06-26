@@ -1,13 +1,13 @@
 <!-- components/SubscriptionCard.vue -->
 <template>
-	<UCard class="card-grid__card">
-		<template #header class="card__header">
+	<UCard>
+		<template #header>
 			<!-- Use props.subscription instead of just subscription -->
 			<h3 class="heading heading--h3 text-pretty">
 				{{ props.subscription.related_product_title }}
 			</h3>
 		</template>
-		<div class="subscription-card__details card__body">
+		<div class="subscription-card__details">
 			<!-- Update all references to use props.subscription -->
 			<p><strong>Type:</strong> {{ displayType }}</p>
 			<p>
@@ -41,7 +41,7 @@
 		</div>
 
 		<template #footer>
-			<div class="subscription-card__footer card__footer">
+			<div class="subscription-card__footer">
 				<!-- This will now display the correct status -->
 				<p><strong>Status:</strong> {{ props.subscription.status }}</p>
 			</div>
