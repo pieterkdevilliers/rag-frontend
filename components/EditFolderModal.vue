@@ -1,6 +1,7 @@
 <template>
 	<UModal :model-value="isOpen" @update:model-value="handleClose">
 		<UCard
+			:class="['modal']"
 			:ui="{
 				ring: '',
 				divide: 'divide-y divide-gray-100 dark:divide-gray-800',

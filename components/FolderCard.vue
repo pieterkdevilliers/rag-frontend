@@ -78,17 +78,14 @@ const handleDeleteFolder = async () => {
 	closeConfirmDeleteModal(); // Close modal immediately
 
 	try {
-		await $fetch(
-			`${config.public.apiBase}/folder/${props.folder.id}`,
-			{
-				method: 'DELETE',
-				headers: {
-					'Content-Type': 'application/x-www-form-urlencoded',
-					accept: 'application/json',
-					Authorization: `Bearer ${apiAuthorizationToken}`,
-				},
-			}
-		);
+		await $fetch(`${config.public.apiBase}/folder/${props.folder.id}`, {
+			method: 'DELETE',
+			headers: {
+				'Content-Type': 'application/x-www-form-urlencoded',
+				accept: 'application/json',
+				Authorization: `Bearer ${apiAuthorizationToken}`,
+			},
+		});
 
 		toast.add({
 			title: 'Folder Deleted',
