@@ -7,11 +7,7 @@
 	>
 		<template #header>
 			<div class="flex items-center justify-between">
-				<h3
-					class="text-base font-semibold leading-6 text-gray-900 dark:text-white"
-				>
-					Embed Chat Widget
-				</h3>
+				<h3 class="heading heading--h3">Embed Chat Widget</h3>
 				<UButton
 					color="gray"
 					variant="ghost"
@@ -35,7 +31,7 @@
 
 			<div v-if="generatedSnippet" class="space-y-2">
 				<pre
-					class="bg-gray-100 dark:bg-gray-800 p-3 rounded-md overflow-x-auto"
+					class="mt-3 bg-gray-100 dark:bg-gray-800 p-3 rounded-md overflow-x-auto"
 				><code class="text-sm text-gray-700 dark:text-gray-200">{{ generatedSnippet }}</code></pre>
 				<div class="text-right">
 					<UButton

@@ -381,4 +381,7 @@
 	.important :is(strong, em) {
 		@apply text-accent font-medium;
 	}
+	.modal h3 {
+		@apply font-medium text-xl;
+	}
 }

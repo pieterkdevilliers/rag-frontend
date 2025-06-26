@@ -1,7 +1,8 @@
 <template>
 	<div>
-		<h3 class="heading heading--h3 text-center">
-			Chat Transcript for Session #{{ sessionId }}
+		<h3 class="heading heading--h3">
+			Chat Transcript for Session
+			<span class="text-accent">#{{ sessionId }}</span>
 		</h3>
 
 		<!-- 1. Handle Loading State -->
