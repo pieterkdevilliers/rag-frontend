@@ -16,7 +16,7 @@
     <UButton
       icon="i-heroicons:plus-circle-16-solid"
       variant="outline"
-      label="Add New Folder"
+      label="Add Folder"
       @click="openModal"
     />
   </div>
