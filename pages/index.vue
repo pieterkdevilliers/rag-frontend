@@ -21,9 +21,9 @@
 		<section>
 			<HomeWhyYourDocsAISection />
 		</section>
-		<section>
+		<!-- <section>
 			<HomeTestimonialsSection />
-		</section>
+		</section> -->
 		<section>
 			<HomeCallToActionSection />
 		</section>
