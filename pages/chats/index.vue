@@ -1,29 +1,30 @@
 <template>
-	<div>
-		<h2 class="text-xl text-primary">Chat Sessions</h2>
-	</div>
-	<div>
-		<div class="flex px-3 py-3.5">
-			<UInput v-model="q" placeholder="Filter chat sessions..." />
+	<section class="folders container--default mx-auto">
+		<div class="page-header">
+			<h2 class="heading heading--h2">Chat Sessions</h2>
 		</div>
-				<!-- Pagination Controls -->
-		<div
-			class="flex justify-end px-3 py-3.5 border-t border-gray-200 dark:border-gray-700"
-		>
-			<UPagination
-				v-model="page"
-				:page-count="pageCount"
-				:total="filteredRows.length"
-			/>
+		<div class="search-pagination-container">
+			<!-- Search Input -->
+			<div class="search-input__container">
+				<UInput v-model="q" placeholder="Filter chat sessions..." />
+			</div>
+			<!-- Pagination Controls -->
+			<div class="pagination pagination--top">
+				<UPagination
+					v-model="page"
+					:page-count="pageCount"
+					:total="filteredRows.length"
+				/>
+			</div>
 		</div>
 
 		<UTable
-			:rows="paginatedRows" 
+			:rows="paginatedRows"
 			:columns="columns"
 			:loading="!chatSessions"
 			:loading-text="'Loading chat sessions...'"
 			:sticky="true"
-			class="chat-sessions__table"
+			class="content-table chat-sessions__table"
 		>
 			<template #file_name-data="{ row }">
 				<span>{{ row.file_name }}</span>
@@ -47,16 +48,14 @@
 		</UTable>
 
 		<!-- Pagination Controls -->
-		<div
-			class="flex justify-end px-3 py-3.5 border-t border-gray-200 dark:border-gray-700"
-		>
+		<div class="pagination pagination--bottom">
 			<UPagination
 				v-model="page"
 				:page-count="pageCount"
 				:total="filteredRows.length"
 			/>
 		</div>
-	</div>
+	</section>
 
 	<!-- View Chat Modal -->
 	<UModal v-model="isViewChatModalOpen">
@@ -176,7 +175,6 @@ const paginatedRows = computed(() => {
 	return filteredRows.value.slice(startIndex, endIndex);
 });
 // [!code-end++]
-
 
 // --- Modal and Actions Logic (unchanged) ---
 const openViewChatModal = (row: ChatSession) => {

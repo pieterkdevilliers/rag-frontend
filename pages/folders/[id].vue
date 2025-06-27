@@ -1,58 +1,62 @@
 <template>
 	<section class="folder-content container--default mx-auto">
-		<h2 class="heading heading--h2">Documents</h2>
-		<div class="flex justify-start sm:justify-end gap-6 my-2">
-			<UTooltip text="Add new files to AI database">
-				<UButton
-					icon="i-heroicons-arrow-path-20-solid"
-					label="Update AI Database"
-					variant="solid"
-					@click="openRefreshDBModal"
-				/>
-			</UTooltip>
-			<!-- <div class="flex justify-end mb-4">
-      <UButton
-        icon="i-heroicons:plus-circle-16-solid"
-        label="Add file from URL"
-        @click="openAddFileFromURLModal"
-        />
-    </div> -->
-			<div v-if="canAddMoreDocs">
-				<UTooltip text="Add a new file">
+		<div class="page-header">
+			<h2 class="heading heading--h2">Documents</h2>
+			<div class="flex justify-start sm:justify-end gap-6 my-2">
+				<UTooltip text="Add new files to AI database">
 					<UButton
-						icon="i-heroicons:plus-circle-16-solid"
-						label="Upload file"
-						variant="outline"
-						@click="openAddFileModal"
+						icon="i-heroicons-arrow-path-20-solid"
+						label="Update AI Database"
+						variant="solid"
+						@click="openRefreshDBModal"
 					/>
 				</UTooltip>
-			</div>
-			<div v-if="!canAddMoreDocs" class="flex justify-end mb-4">
-				<UButton
-					icon="i-heroicons:plus-circle-16-solid"
-					label="File limit reached - subscribe to add more"
-					to="/accounts"
-				/>
+				<!-- <div class="flex justify-end mb-4">
+        <UButton
+          icon="i-heroicons:plus-circle-16-solid"
+          label="Add file from URL"
+          @click="openAddFileFromURLModal"
+          />
+      </div> -->
+				<div v-if="canAddMoreDocs">
+					<UTooltip text="Add a new file">
+						<UButton
+							icon="i-heroicons:plus-circle-16-solid"
+							label="Upload file"
+							variant="outline"
+							@click="openAddFileModal"
+						/>
+					</UTooltip>
+				</div>
+				<div v-if="!canAddMoreDocs" class="flex justify-end mb-4">
+					<UButton
+						icon="i-heroicons:plus-circle-16-solid"
+						label="File limit reached - subscribe to add more"
+						to="/accounts"
+					/>
+				</div>
 			</div>
 		</div>
 		<div>
-			<div class="flex py-3.5">
-				<UInput v-model="q" placeholder="Filter documents..." />
-			</div>
-			<!-- Pagination Controls -->
-			<div
-				class="flex justify-end px-3 py-3.5 border-t border-gray-200 dark:border-gray-700"
-			>
-				<UPagination
-					v-model="page"
-					:page-count="pageCount"
-					:total="filteredRows.length"
-				/>
+			<div class="search-pagination-container">
+				<!-- Search Input -->
+				<div class="search-input__container">
+					<UInput v-model="q" placeholder="Filter documents..." />
+				</div>
+				<!-- Pagination Controls -->
+				<div class="pagination pagination--top">
+					<UPagination
+						v-model="page"
+						:page-count="pageCount"
+						:total="filteredRows.length"
+					/>
+				</div>
 			</div>
 			<UTable
 				:rows="paginatedRows"
 				:columns="columns"
 				:loading="isLoadingFiles"
+				class="content-table"
 			>
 				<template #file_name-data="{ row }">
 					<span>{{ row.file_name }}</span>
@@ -88,9 +92,7 @@
 			</UTable>
 
 			<!-- Pagination Controls -->
-			<div
-				class="flex justify-end px-3 py-3.5 border-t border-gray-200 dark:border-gray-700"
-			>
+			<div class="pagination pagination--bottom">
 				<UPagination
 					v-model="page"
 					:page-count="pageCount"
