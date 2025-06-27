@@ -1,55 +1,59 @@
 // widget.js
-(function() {
-  // --- Configuration & Initial Checks ---
-  console.log('widget.js executing');
+(function () {
+	// --- Configuration & Initial Checks ---
+	console.log('widget.js executing');
 
-  const config = window.myAIChatWidgetConfig;
-  console.log('Widget Config received:', config);
+	const config = window.myAIChatWidgetConfig;
+	console.log('Widget Config received:', config);
 
-  if (!config || !config.accountId || !config.apiKey) {
-    console.error('AI Chat Widget: Configuration (accountId or apiKey) is missing or invalid from window.myAIChatWidgetConfig.');
-    return;
-  }
+	if (!config || !config.accountId || !config.apiKey) {
+		console.error(
+			'AI Chat Widget: Configuration (accountId or apiKey) is missing or invalid from window.myAIChatWidgetConfig.'
+		);
+		return;
+	}
 
-  const { accountId, apiKey } = config;
-  const apiBaseUrl = config.apiBaseUrl || 'https://fastapi-rag-2705cfd4c41a.herokuapp.com';
-  const widgetApiEndpoint = `${apiBaseUrl}/api/v1/widget/query`;
-  const contactApiEndpoint = config.contactApiEndpoint || `${apiBaseUrl}/api/v1/widget/contact-us`;
-  const chatMessageApiEndpoint = `${apiBaseUrl}/api/v1/widget/messages`;
-  let sessionId = '';
-  let visitorUuid = '';
+	const { accountId, apiKey } = config;
+	const apiBaseUrl =
+		config.apiBaseUrl || 'https://fastapi-rag-2705cfd4c41a.herokuapp.com';
+	const widgetApiEndpoint = `${apiBaseUrl}/api/v1/widget/query`;
+	const contactApiEndpoint =
+		config.contactApiEndpoint || `${apiBaseUrl}/api/v1/widget/contact-us`;
+	const chatMessageApiEndpoint = `${apiBaseUrl}/api/v1/widget/messages`;
+	let sessionId = '';
+	let visitorUuid = '';
 
-  console.log('sessionId initialized:', sessionId);
-  console.log('visitorUuid initialized:', visitorUuid);
-  sessionId = new Date().getTime();
-  visitorUuid = config.visitorUuid || `visitor-${sessionId}`;
+	console.log('sessionId initialized:', sessionId);
+	console.log('visitorUuid initialized:', visitorUuid);
+	sessionId = new Date().getTime();
+	visitorUuid = config.visitorUuid || `visitor-${sessionId}`;
 
-  // --- DOM Elements ---
-  let chatToggleButton;
-  let chatWindow;
-  let chatHeaderTitle;
-  let messagesContainer;
-  let messageInput;
-  let sendButton;
-  let isChatOpen = false;
+	// --- DOM Elements ---
+	let chatToggleButton;
+	let chatWindow;
+	let chatHeaderTitle;
+	let messagesContainer;
+	let messageInput;
+	let sendButton;
+	let isChatOpen = false;
 
-  // Email Form DOM Elements
-  let chatFooter;
-  let showEmailFormButton;
-  let emailFormContainer;
-  let emailFormNameInput;
-  let emailFormEmailInput;
-  let emailFormMessageInput;
-  let emailFormSendButton;
-  let emailFormCancelButton;
-  let emailFormStatusMessage;
+	// Email Form DOM Elements
+	let chatFooter;
+	let showEmailFormButton;
+	let emailFormContainer;
+	let emailFormNameInput;
+	let emailFormEmailInput;
+	let emailFormMessageInput;
+	let emailFormSendButton;
+	let emailFormCancelButton;
+	let emailFormStatusMessage;
 
-  let isEmailFormVisible = false;
+	let isEmailFormVisible = false;
 
-  // --- Styles ---
-  function injectStyles() {
-    const style = document.createElement('style');
-    style.textContent = `
+	// --- Styles ---
+	function injectStyles() {
+		const style = document.createElement('style');
+		style.textContent = `
       /* --- Base style for the Chat Toggle Button --- */
       .ai-chat-widget-toggle {
         /* Positioning */
@@ -256,7 +260,7 @@
         font-size: 14px;
       }
       .ai-chat-input-area button {
-        padding: 10px 15px;
+        padding: 0 12px;
         background-color: ${config.themeColor || '#DB2777'};
         color: white;
         border: none;
@@ -333,6 +337,7 @@
         display: flex;
         justify-content: center;
         gap: 8px;
+        padding-inline: 8px;
       }
       .ai-chat-show-email-form-button {
         padding: 8px 15px;
@@ -342,6 +347,7 @@
         border-radius: 20px;
         cursor: pointer;
         font-size: 13px;
+        font-weight: normal;
         transition: background-color 0.2s, color 0.2s;
         align-self: center;
         margin-top: 15px;
@@ -430,520 +436,638 @@
         border: 1px solid #ef9a9a;
       }
     `;
-    document.head.appendChild(style);
-    console.log('Widget styles injected.');
-  }
+		document.head.appendChild(style);
+		console.log('Widget styles injected.');
+	}
 
-  // --- UI Creation Functions ---
-  function createChatToggleButton() {
-    chatToggleButton = document.createElement('button');
-    chatToggleButton.className = 'ai-chat-widget-toggle';
+	// --- UI Creation Functions ---
+	function createChatToggleButton() {
+		chatToggleButton = document.createElement('button');
+		chatToggleButton.className = 'ai-chat-widget-toggle';
 
-    const buttonText = 'How can we help?'; 
+		const buttonText = 'How can we help?';
 
-    // The innerHTML remains the same, containing both icon and text
-    chatToggleButton.innerHTML = `
+		// The innerHTML remains the same, containing both icon and text
+		chatToggleButton.innerHTML = `
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="28px" height="28px">
         <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 10H6v-2h12v2zm0-3H6V7h12v2z"/>
       </svg>
       <span>${buttonText}</span>
     `;
 
-    chatToggleButton.setAttribute('aria-label', 'Open Chat');
-    chatToggleButton.onclick = toggleChatWindow;
-    document.body.appendChild(chatToggleButton);
-    console.log('Chat toggle button created.');
+		chatToggleButton.setAttribute('aria-label', 'Open Chat');
+		chatToggleButton.onclick = toggleChatWindow;
+		document.body.appendChild(chatToggleButton);
+		console.log('Chat toggle button created.');
 
-    // --- MODIFICATION START ---
-    // After 10 seconds (10000 milliseconds), add the 'expanded' class to the button.
-    setTimeout(() => {
-      if (chatToggleButton) { // Check if the button still exists
-        chatToggleButton.classList.add('expanded');
-        console.log('Chat toggle button expanded.');
-      }
-    }, 10000); 
-    // --- MODIFICATION END ---
-  }
+		// --- MODIFICATION START ---
+		// After 10 seconds (10000 milliseconds), add the 'expanded' class to the button.
+		setTimeout(() => {
+			if (chatToggleButton) {
+				// Check if the button still exists
+				chatToggleButton.classList.add('expanded');
+				console.log('Chat toggle button expanded.');
+			}
+		}, 10000);
+		// --- MODIFICATION END ---
+	}
 
-  function createChatWindow() {
-    chatWindow = document.createElement('div');
-    chatWindow.className = 'ai-chat-widget-window';
+	function createChatWindow() {
+		chatWindow = document.createElement('div');
+		chatWindow.className = 'ai-chat-widget-window';
 
-    const header = document.createElement('div');
-    header.className = 'ai-chat-header';
-    chatHeaderTitle = document.createElement('span');
-    chatHeaderTitle.textContent = config.widgetTitle || 'How can we help?';
-    const closeButton = document.createElement('button');
-    closeButton.className = 'ai-chat-close-button';
-    closeButton.innerHTML = '×';
-    closeButton.setAttribute('aria-label', 'Close Chat');
-    closeButton.onclick = toggleChatWindow;
-    header.appendChild(chatHeaderTitle);
-    header.appendChild(closeButton);
-    chatWindow.appendChild(header);
+		const header = document.createElement('div');
+		header.className = 'ai-chat-header';
+		chatHeaderTitle = document.createElement('span');
+		chatHeaderTitle.textContent = config.widgetTitle || 'How can we help?';
+		const closeButton = document.createElement('button');
+		closeButton.className = 'ai-chat-close-button';
+		closeButton.innerHTML = '×';
+		closeButton.setAttribute('aria-label', 'Close Chat');
+		closeButton.onclick = toggleChatWindow;
+		header.appendChild(chatHeaderTitle);
+		header.appendChild(closeButton);
+		chatWindow.appendChild(header);
 
-    messagesContainer = document.createElement('div');
-    messagesContainer.className = 'ai-chat-messages-container';
-    chatWindow.appendChild(messagesContainer);
+		messagesContainer = document.createElement('div');
+		messagesContainer.className = 'ai-chat-messages-container';
+		chatWindow.appendChild(messagesContainer);
 
-    const inputArea = document.createElement('div');
-    inputArea.className = 'ai-chat-input-area';
-    messageInput = document.createElement('input');
-    messageInput.type = 'text';
-    messageInput.placeholder = config.inputPlaceholder || 'Type your message...';
-    messageInput.onkeypress = (e) => {
-      if (e.key === 'Enter' && !e.shiftKey) {
-        e.preventDefault();
-        handleSendMessage();
-      }
-    };
-    sendButton = document.createElement('button');
-    sendButton.textContent = config.sendButtonText || 'Send';
-    sendButton.onclick = handleSendMessage;
-    inputArea.appendChild(messageInput);
-    inputArea.appendChild(sendButton);
-    chatWindow.appendChild(inputArea);
+		const inputArea = document.createElement('div');
+		inputArea.className = 'ai-chat-input-area';
+		messageInput = document.createElement('input');
+		messageInput.type = 'text';
+		messageInput.placeholder =
+			config.inputPlaceholder || 'Type your message...';
+		messageInput.onkeypress = (e) => {
+			if (e.key === 'Enter' && !e.shiftKey) {
+				e.preventDefault();
+				handleSendMessage();
+			}
+		};
+		sendButton = document.createElement('button');
+		sendButton.textContent = config.sendButtonText || 'Send';
+		sendButton.onclick = handleSendMessage;
+		inputArea.appendChild(messageInput);
+		inputArea.appendChild(sendButton);
+		chatWindow.appendChild(inputArea);
 
-    const poweredByLink = document.createElement('a');
-    poweredByLink.href = 'https://yourdocsai.app';
-    poweredByLink.target = '_blank';
-    poweredByLink.rel = 'noopener noreferrer';
-    poweredByLink.className = 'ai-chat-footer-branding';
-    poweredByLink.textContent = 'Powered By YourDocsAI';
-    chatFooter = document.createElement('div');
-    chatFooter.className = 'ai-chat-footer';
-    showEmailFormButton = document.createElement('button');
-    showEmailFormButton.className = 'ai-chat-show-email-form-button';
-    showEmailFormButton.textContent = config.openEmailFormButtonText || 'Send Us An Email';
-    showEmailFormButton.onclick = switchToEmailFormView;
-    chatFooter.appendChild(showEmailFormButton);
-    chatFooter.appendChild(poweredByLink);
-    chatWindow.appendChild(chatFooter);
+		const poweredByLink = document.createElement('a');
+		poweredByLink.href = 'https://yourdocsai.app';
+		poweredByLink.target = '_blank';
+		poweredByLink.rel = 'noopener noreferrer';
+		poweredByLink.className = 'ai-chat-footer-branding';
+		poweredByLink.textContent = 'Powered By YourDocsAI';
+		chatFooter = document.createElement('div');
+		chatFooter.className = 'ai-chat-footer';
+		showEmailFormButton = document.createElement('button');
+		showEmailFormButton.className = 'ai-chat-show-email-form-button';
+		showEmailFormButton.textContent =
+			config.openEmailFormButtonText || 'Send Us An Email';
+		showEmailFormButton.onclick = switchToEmailFormView;
+		chatFooter.appendChild(showEmailFormButton);
+		chatFooter.appendChild(poweredByLink);
+		chatWindow.appendChild(chatFooter);
 
-    createEmailForm();
-    chatWindow.appendChild(emailFormContainer);
+		createEmailForm();
+		chatWindow.appendChild(emailFormContainer);
 
-    document.body.appendChild(chatWindow);
-    console.log('Chat window UI created.');
-  }
+		document.body.appendChild(chatWindow);
+		console.log('Chat window UI created.');
+	}
 
-  function createEmailForm() {
-    emailFormContainer = document.createElement('div');
-    emailFormContainer.className = 'ai-chat-email-form-container';
+	function createEmailForm() {
+		emailFormContainer = document.createElement('div');
+		emailFormContainer.className = 'ai-chat-email-form-container';
 
-    const nameLabel = document.createElement('label');
-    nameLabel.setAttribute('for', 'ai-chat-email-name');
-    nameLabel.textContent = config.emailFormNameLabel || 'Your Name:';
-    emailFormNameInput = document.createElement('input');
-    emailFormNameInput.type = 'text';
-    emailFormNameInput.id = 'ai-chat-email-name';
-    emailFormNameInput.placeholder = config.emailFormNamePlaceholder || 'e.g., Jane Doe';
+		const nameLabel = document.createElement('label');
+		nameLabel.setAttribute('for', 'ai-chat-email-name');
+		nameLabel.textContent = config.emailFormNameLabel || 'Your Name:';
+		emailFormNameInput = document.createElement('input');
+		emailFormNameInput.type = 'text';
+		emailFormNameInput.id = 'ai-chat-email-name';
+		emailFormNameInput.placeholder =
+			config.emailFormNamePlaceholder || 'e.g., Jane Doe';
 
-    const emailLabel = document.createElement('label');
-    emailLabel.setAttribute('for', 'ai-chat-user-email');
-    emailLabel.textContent = config.emailFormEmailLabel || 'Your Email:';
-    emailFormEmailInput = document.createElement('input');
-    emailFormEmailInput.type = 'email';
-    emailFormEmailInput.id = 'ai-chat-user-email';
-    emailFormEmailInput.placeholder = config.emailFormEmailPlaceholder || 'e.g., jane.doe@example.com';
+		const emailLabel = document.createElement('label');
+		emailLabel.setAttribute('for', 'ai-chat-user-email');
+		emailLabel.textContent = config.emailFormEmailLabel || 'Your Email:';
+		emailFormEmailInput = document.createElement('input');
+		emailFormEmailInput.type = 'email';
+		emailFormEmailInput.id = 'ai-chat-user-email';
+		emailFormEmailInput.placeholder =
+			config.emailFormEmailPlaceholder || 'e.g., jane.doe@example.com';
 
-    const messageLabel = document.createElement('label');
-    messageLabel.setAttribute('for', 'ai-chat-email-message');
-    messageLabel.textContent = config.emailFormMessageLabel || 'Your Message:';
-    emailFormMessageInput = document.createElement('textarea');
-    emailFormMessageInput.id = 'ai-chat-email-message';
-    emailFormMessageInput.placeholder = config.emailFormMessagePlaceholder || 'How can we help you?';
+		const messageLabel = document.createElement('label');
+		messageLabel.setAttribute('for', 'ai-chat-email-message');
+		messageLabel.textContent =
+			config.emailFormMessageLabel || 'Your Message:';
+		emailFormMessageInput = document.createElement('textarea');
+		emailFormMessageInput.id = 'ai-chat-email-message';
+		emailFormMessageInput.placeholder =
+			config.emailFormMessagePlaceholder || 'How can we help you?';
 
-    emailFormStatusMessage = document.createElement('div');
-    emailFormStatusMessage.className = 'ai-chat-email-form-status';
-    emailFormStatusMessage.style.display = 'none';
+		emailFormStatusMessage = document.createElement('div');
+		emailFormStatusMessage.className = 'ai-chat-email-form-status';
+		emailFormStatusMessage.style.display = 'none';
 
-    const actionsDiv = document.createElement('div');
-    actionsDiv.className = 'ai-chat-email-form-actions';
+		const actionsDiv = document.createElement('div');
+		actionsDiv.className = 'ai-chat-email-form-actions';
 
-    emailFormSendButton = document.createElement('button');
-    emailFormSendButton.className = 'send';
-    emailFormSendButton.textContent = config.emailFormSendButtonText || 'Send Email';
-    emailFormSendButton.onclick = handleSendEmail;
+		emailFormSendButton = document.createElement('button');
+		emailFormSendButton.className = 'send';
+		emailFormSendButton.textContent =
+			config.emailFormSendButtonText || 'Send Email';
+		emailFormSendButton.onclick = handleSendEmail;
 
-    emailFormCancelButton = document.createElement('button');
-    emailFormCancelButton.className = 'cancel';
-    emailFormCancelButton.textContent = config.emailFormCancelButtonText || 'Cancel';
-    emailFormCancelButton.onclick = switchToChatView;
+		emailFormCancelButton = document.createElement('button');
+		emailFormCancelButton.className = 'cancel';
+		emailFormCancelButton.textContent =
+			config.emailFormCancelButtonText || 'Cancel';
+		emailFormCancelButton.onclick = switchToChatView;
 
-    actionsDiv.appendChild(emailFormCancelButton);
-    actionsDiv.appendChild(emailFormSendButton);
+		actionsDiv.appendChild(emailFormCancelButton);
+		actionsDiv.appendChild(emailFormSendButton);
 
-    emailFormContainer.appendChild(nameLabel);
-    emailFormContainer.appendChild(emailFormNameInput);
-    emailFormContainer.appendChild(emailLabel);
-    emailFormContainer.appendChild(emailFormEmailInput);
-    emailFormContainer.appendChild(messageLabel);
-    emailFormContainer.appendChild(emailFormMessageInput);
-    emailFormContainer.appendChild(emailFormStatusMessage);
-    emailFormContainer.appendChild(actionsDiv);
-  }
+		emailFormContainer.appendChild(nameLabel);
+		emailFormContainer.appendChild(emailFormNameInput);
+		emailFormContainer.appendChild(emailLabel);
+		emailFormContainer.appendChild(emailFormEmailInput);
+		emailFormContainer.appendChild(messageLabel);
+		emailFormContainer.appendChild(emailFormMessageInput);
+		emailFormContainer.appendChild(emailFormStatusMessage);
+		emailFormContainer.appendChild(actionsDiv);
+	}
 
-  // --- Event Handlers & UI Logic ---
-  function toggleChatWindow() {
-    isChatOpen = !isChatOpen;
-    if (isChatOpen) {
-      chatWindow.classList.add('open');
-      if (isEmailFormVisible) {
-        emailFormNameInput.focus();
-      } else {
-        messageInput.focus();
-      }
-      // This is the original "close" icon logic
-      chatToggleButton.innerHTML = config.widgetCloseIcon || `
+	// --- Event Handlers & UI Logic ---
+	function toggleChatWindow() {
+		isChatOpen = !isChatOpen;
+		if (isChatOpen) {
+			chatWindow.classList.add('open');
+			if (isEmailFormVisible) {
+				emailFormNameInput.focus();
+			} else {
+				messageInput.focus();
+			}
+			// This is the original "close" icon logic
+			chatToggleButton.innerHTML =
+				config.widgetCloseIcon ||
+				`
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24px" height="24px">
           <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
         </svg>`;
-      chatToggleButton.setAttribute('aria-label', 'Close Chat');
-    } else {
-      chatWindow.classList.remove('open');
-      // This is the original "open" icon logic (when chat is closed)
-      chatToggleButton.innerHTML = config.widgetButtonIcon || `
+			chatToggleButton.setAttribute('aria-label', 'Close Chat');
+		} else {
+			chatWindow.classList.remove('open');
+			// This is the original "open" icon logic (when chat is closed)
+			chatToggleButton.innerHTML =
+				config.widgetButtonIcon ||
+				`
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="28px" height="28px">
         <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 10H6v-2h12v2zm0-3H6V7h12v2z"/>
       </svg>`;
-      chatToggleButton.setAttribute('aria-label', 'Open Chat');
-      if (isEmailFormVisible) {
-        switchToChatView(false);
-      }
-    }
-    console.log('Chat window toggled:', isChatOpen);
-  }
+			chatToggleButton.setAttribute('aria-label', 'Open Chat');
+			if (isEmailFormVisible) {
+				switchToChatView(false);
+			}
+		}
+		console.log('Chat window toggled:', isChatOpen);
+	}
 
-  function switchToEmailFormView() {
-    isEmailFormVisible = true;
-    messagesContainer.style.display = 'none';
-    chatWindow.querySelector('.ai-chat-input-area').style.display = 'none';
-    chatFooter.style.display = 'none';
-    emailFormContainer.style.display = 'flex';
+	function switchToEmailFormView() {
+		isEmailFormVisible = true;
+		messagesContainer.style.display = 'none';
+		chatWindow.querySelector('.ai-chat-input-area').style.display = 'none';
+		chatFooter.style.display = 'none';
+		emailFormContainer.style.display = 'flex';
 
-    chatHeaderTitle.textContent = config.emailFormTitle || 'Contact Us';
-    emailFormNameInput.focus();
-    clearEmailFormStatus();
-    console.log('Switched to email form view.');
-  }
+		chatHeaderTitle.textContent = config.emailFormTitle || 'Contact Us';
+		emailFormNameInput.focus();
+		clearEmailFormStatus();
+		console.log('Switched to email form view.');
+	}
 
-  function switchToChatView(focusChatInput = true) {
-    isEmailFormVisible = false;
-    emailFormContainer.style.display = 'none';
-    messagesContainer.style.display = 'flex';
-    chatWindow.querySelector('.ai-chat-input-area').style.display = 'flex';
-    chatFooter.style.display = 'flex';
+	function switchToChatView(focusChatInput = true) {
+		isEmailFormVisible = false;
+		emailFormContainer.style.display = 'none';
+		messagesContainer.style.display = 'flex';
+		chatWindow.querySelector('.ai-chat-input-area').style.display = 'flex';
+		chatFooter.style.display = 'flex';
 
-    chatHeaderTitle.textContent = config.widgetTitle || 'Any questions we can help with?';
-    clearEmailForm();
-    clearEmailFormStatus();
-    if (focusChatInput && isChatOpen) {
-        messageInput.focus();
-    }
-    console.log('Switched to chat view.');
-  }
+		chatHeaderTitle.textContent =
+			config.widgetTitle || 'Any questions we can help with?';
+		clearEmailForm();
+		clearEmailFormStatus();
+		if (focusChatInput && isChatOpen) {
+			messageInput.focus();
+		}
+		console.log('Switched to chat view.');
+	}
 
-  function clearEmailForm() {
-    emailFormNameInput.value = '';
-    emailFormEmailInput.value = '';
-    emailFormMessageInput.value = '';
-  }
+	function clearEmailForm() {
+		emailFormNameInput.value = '';
+		emailFormEmailInput.value = '';
+		emailFormMessageInput.value = '';
+	}
 
-  function displayEmailFormStatus(message, isSuccess = true) {
-    emailFormStatusMessage.textContent = message;
-    emailFormStatusMessage.className = 'ai-chat-email-form-status ' + (isSuccess ? 'success' : 'error');
-    emailFormStatusMessage.style.display = 'block';
-  }
+	function displayEmailFormStatus(message, isSuccess = true) {
+		emailFormStatusMessage.textContent = message;
+		emailFormStatusMessage.className =
+			'ai-chat-email-form-status ' + (isSuccess ? 'success' : 'error');
+		emailFormStatusMessage.style.display = 'block';
+	}
 
-  function clearEmailFormStatus() {
-    emailFormStatusMessage.style.display = 'none';
-    emailFormStatusMessage.textContent = '';
-  }
+	function clearEmailFormStatus() {
+		emailFormStatusMessage.style.display = 'none';
+		emailFormStatusMessage.textContent = '';
+	}
 
-  function processSourcesForDisplay(rawSourcesArray, accountUniqueIdForSourceLink) {
-    if (!rawSourcesArray || !Array.isArray(rawSourcesArray)) {
-      return [];
-    }
-    return rawSourcesArray.map(sourceString => {
-      let fileIdentifier = sourceString.split('/').pop() || sourceString;
-      const originalFileIdentifier = fileIdentifier;
-      const lastUnderscoreIndex = fileIdentifier.lastIndexOf('_');
-      let displayNameWithoutId = fileIdentifier;
-      if (lastUnderscoreIndex !== -1) {
-        const partAfterUnderscore = fileIdentifier.substring(lastUnderscoreIndex + 1);
-        if (/[a-f0-9]+\.(pdf|txt|docx|md)$/i.test(partAfterUnderscore)) {
-            displayNameWithoutId = fileIdentifier.substring(0, lastUnderscoreIndex);
-        }
-      }
-      displayNameWithoutId = displayNameWithoutId.replace(/\.(pdf|txt|docx|md)$/i, '');
-      let displayName = displayNameWithoutId.replace(/_/g, ' ').replace(/-/g, ' ');
-      const viewUrl = `${apiBaseUrl}/api/v1/files/view/${accountUniqueIdForSourceLink}/${encodeURIComponent(originalFileIdentifier)}`;
-      return {
-        displayName: displayName.trim() || originalFileIdentifier,
-        fileIdentifier: originalFileIdentifier,
-        viewUrl: viewUrl
-      };
-    });
-  }
+	function processSourcesForDisplay(
+		rawSourcesArray,
+		accountUniqueIdForSourceLink
+	) {
+		if (!rawSourcesArray || !Array.isArray(rawSourcesArray)) {
+			return [];
+		}
+		return rawSourcesArray.map((sourceString) => {
+			let fileIdentifier = sourceString.split('/').pop() || sourceString;
+			const originalFileIdentifier = fileIdentifier;
+			const lastUnderscoreIndex = fileIdentifier.lastIndexOf('_');
+			let displayNameWithoutId = fileIdentifier;
+			if (lastUnderscoreIndex !== -1) {
+				const partAfterUnderscore = fileIdentifier.substring(
+					lastUnderscoreIndex + 1
+				);
+				if (
+					/[a-f0-9]+\.(pdf|txt|docx|md)$/i.test(partAfterUnderscore)
+				) {
+					displayNameWithoutId = fileIdentifier.substring(
+						0,
+						lastUnderscoreIndex
+					);
+				}
+			}
+			displayNameWithoutId = displayNameWithoutId.replace(
+				/\.(pdf|txt|docx|md)$/i,
+				''
+			);
+			let displayName = displayNameWithoutId
+				.replace(/_/g, ' ')
+				.replace(/-/g, ' ');
+			const viewUrl = `${apiBaseUrl}/api/v1/files/view/${accountUniqueIdForSourceLink}/${encodeURIComponent(
+				originalFileIdentifier
+			)}`;
+			return {
+				displayName: displayName.trim() || originalFileIdentifier,
+				fileIdentifier: originalFileIdentifier,
+				viewUrl: viewUrl,
+			};
+		});
+	}
 
-  let currentIframeModal = null;
-  function showPdfInIframeModal(sourceName, sourceUrl) {
-    if (currentIframeModal) {
-      document.body.removeChild(currentIframeModal);
-    }
-    const overlay = document.createElement('div');
-    overlay.className = 'ai-chat-iframe-modal-overlay';
-    const modalContent = document.createElement('div');
-    modalContent.className = 'ai-chat-iframe-modal-content';
-    const modalHeader = document.createElement('div');
-    modalHeader.className = 'ai-chat-iframe-modal-header';
-    const title = document.createElement('h3');
-    title.textContent = sourceName;
-    const closeBtn = document.createElement('button');
-    closeBtn.className = 'ai-chat-iframe-modal-close-btn';
-    closeBtn.innerHTML = '×';
-    closeBtn.onclick = () => {
-      document.body.removeChild(overlay);
-      currentIframeModal = null;
-    };
-    modalHeader.appendChild(title);
-    modalHeader.appendChild(closeBtn);
-    const modalBody = document.createElement('div');
-    modalBody.className = 'ai-chat-iframe-modal-body';
-    const iframe = document.createElement('iframe');
-    iframe.src = sourceUrl;
-    iframe.title = `Document: ${sourceName}`;
-    modalBody.appendChild(iframe);
-    modalContent.appendChild(modalHeader);
-    modalContent.appendChild(modalBody);
-    overlay.appendChild(modalContent);
-    document.body.appendChild(overlay);
-    currentIframeModal = overlay;
-    requestAnimationFrame(() => {
-        overlay.classList.add('open');
-    });
-  }
+	let currentIframeModal = null;
+	function showPdfInIframeModal(sourceName, sourceUrl) {
+		if (currentIframeModal) {
+			document.body.removeChild(currentIframeModal);
+		}
+		const overlay = document.createElement('div');
+		overlay.className = 'ai-chat-iframe-modal-overlay';
+		const modalContent = document.createElement('div');
+		modalContent.className = 'ai-chat-iframe-modal-content';
+		const modalHeader = document.createElement('div');
+		modalHeader.className = 'ai-chat-iframe-modal-header';
+		const title = document.createElement('h3');
+		title.textContent = sourceName;
+		const closeBtn = document.createElement('button');
+		closeBtn.className = 'ai-chat-iframe-modal-close-btn';
+		closeBtn.innerHTML = '×';
+		closeBtn.onclick = () => {
+			document.body.removeChild(overlay);
+			currentIframeModal = null;
+		};
+		modalHeader.appendChild(title);
+		modalHeader.appendChild(closeBtn);
+		const modalBody = document.createElement('div');
+		modalBody.className = 'ai-chat-iframe-modal-body';
+		const iframe = document.createElement('iframe');
+		iframe.src = sourceUrl;
+		iframe.title = `Document: ${sourceName}`;
+		modalBody.appendChild(iframe);
+		modalContent.appendChild(modalHeader);
+		modalContent.appendChild(modalBody);
+		overlay.appendChild(modalContent);
+		document.body.appendChild(overlay);
+		currentIframeModal = overlay;
+		requestAnimationFrame(() => {
+			overlay.classList.add('open');
+		});
+	}
 
-  function displayMessage(responseText, processedSourcesArray, type) {
-    const messageElement = document.createElement('div');
-    messageElement.classList.add('ai-chat-message', type);
-    const textElement = document.createElement('p');
-    textElement.textContent = responseText;
-    messageElement.appendChild(textElement);
-    if (type === 'bot' && processedSourcesArray && processedSourcesArray.length > 0) {
-      const sourcesWrapper = document.createElement('div');
-      sourcesWrapper.className = 'ai-chat-message-sources';
-      const sourcesTitle = document.createElement('strong');
-      sourcesTitle.textContent = 'Sources - For more information, click on the source links below:';
-      sourcesWrapper.appendChild(sourcesTitle);
-      const sourcesList = document.createElement('ul');
-      processedSourcesArray.forEach(source => {
-        const listItem = document.createElement('li');
-        const link = document.createElement('a');
-        link.href = '#';
-        link.textContent = source.displayName;
-        link.style.color = config.themeColor || '#DB2777';
-        link.style.textDecoration = 'underline';
-        link.style.cursor = 'pointer';
-        link.onclick = (e) => {
-          e.preventDefault();
-          console.log('Opening source:', source.displayName, source.viewUrl);
-          showPdfInIframeModal(source.displayName, source.viewUrl);
-        };
-        listItem.appendChild(link);
-        sourcesList.appendChild(listItem);
-      });
-      sourcesWrapper.appendChild(sourcesList);
-      messageElement.appendChild(sourcesWrapper);
-    }
-    messagesContainer.appendChild(messageElement);
-    messagesContainer.scrollTop = messagesContainer.scrollHeight;
-    return messageElement;
-  }
+	function displayMessage(responseText, processedSourcesArray, type) {
+		const messageElement = document.createElement('div');
+		messageElement.classList.add('ai-chat-message', type);
+		const textElement = document.createElement('p');
+		textElement.textContent = responseText;
+		messageElement.appendChild(textElement);
+		if (
+			type === 'bot' &&
+			processedSourcesArray &&
+			processedSourcesArray.length > 0
+		) {
+			const sourcesWrapper = document.createElement('div');
+			sourcesWrapper.className = 'ai-chat-message-sources';
+			const sourcesTitle = document.createElement('strong');
+			sourcesTitle.textContent =
+				'Sources - For more information, click on the source links below:';
+			sourcesWrapper.appendChild(sourcesTitle);
+			const sourcesList = document.createElement('ul');
+			processedSourcesArray.forEach((source) => {
+				const listItem = document.createElement('li');
+				const link = document.createElement('a');
+				link.href = '#';
+				link.textContent = source.displayName;
+				link.style.color = config.themeColor || '#DB2777';
+				link.style.textDecoration = 'underline';
+				link.style.cursor = 'pointer';
+				link.onclick = (e) => {
+					e.preventDefault();
+					console.log(
+						'Opening source:',
+						source.displayName,
+						source.viewUrl
+					);
+					showPdfInIframeModal(source.displayName, source.viewUrl);
+				};
+				listItem.appendChild(link);
+				sourcesList.appendChild(listItem);
+			});
+			sourcesWrapper.appendChild(sourcesList);
+			messageElement.appendChild(sourcesWrapper);
+		}
+		messagesContainer.appendChild(messageElement);
+		messagesContainer.scrollTop = messagesContainer.scrollHeight;
+		return messageElement;
+	}
 
-  async function handleSendMessage() {
-    const question = messageInput.value.trim();
-    if (!question) return;
-    displayMessage(question, [], 'user');
-    messageInput.value = '';
-    messageInput.disabled = true;
-    sendButton.disabled = true;
-    const loadingElement = displayMessage('Thinking...', [], 'loading');
-    try {
-      console.log('Sending chat message to API for accountId:', accountId);
-      console.log('Inside handleSendMessage USER Chat session ID:', sessionId, 'Visitor UUID:', visitorUuid);
-      await fetch(chatMessageApiEndpoint, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-API-Key': apiKey,
-        },
-        body: JSON.stringify({
-          message_text: question,
-          sender_type: 'user',
-          accountId: accountId,
-          chat_session_id: sessionId,
-          visitor_uuid: visitorUuid,
-        }),
-      });
-    } catch (error) {
-      console.error('Chat Message API Call Error:', error);
-      // We don't want to block the chat response on this call, so we log it but don't display an error message
-    }
-    try {
-      console.log('Sending query to API:', question, 'for accountId:', accountId, 'with apiKey:', apiKey.substring(0, 8) + "...");
-      const response = await fetch(widgetApiEndpoint, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-API-Key': apiKey,
-        },
-        body: JSON.stringify({
-          query: question,
-          accountId: accountId,  
-        }),
-      });
-      messagesContainer.removeChild(loadingElement);
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({ detail: 'Server returned an unparsable error.' }));
-        console.error('API Error Response:', errorData);
-        throw new Error(errorData.detail || `API Error: ${response.status}`);
-      }
-      const data = await response.json();
-      console.log('API Success Response:', data);
-      if (data && data.response && data.response.response_text) {
-        const rawSources = data.response.sources || [];
-        const displayableSources = processSourcesForDisplay(rawSources, accountId);
-        displayMessage(data.response.response_text, displayableSources, 'bot');
-        try {
-            console.log('Sending chat message to API for accountId:', accountId);
-            console.log('Inside handleSendMessage BOT Chat session ID:', sessionId, 'Visitor UUID:', visitorUuid);
-            await fetch(chatMessageApiEndpoint, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-API-Key': apiKey,
-                    },
-            body: JSON.stringify({
-            message_text: data.response.response_text,
-            sender_type: 'bot',
-            accountId: accountId,
-            chat_session_id: sessionId,
-            visitor_uuid: visitorUuid,}),
-      });
-    } catch (error) {
-      console.error('Chat Message API Call Error:', error);
-      // We don't want to block the chat response on this call, so we log it but don't display an error message
-    }
-      } else {
-        console.error('API response structure unexpected. Expected data.response.response_text.', data);
-        displayMessage('Sorry, I received an unexpected response from the server.', [], 'error');
-      }
-    } catch (error) {
-        console.error('Widget API Call Error:', error);
-        if (loadingElement && messagesContainer.contains(loadingElement)) {
-            messagesContainer.removeChild(loadingElement);
-        }
-        displayMessage(`Error: ${error.message}`, [], 'error');
-    } finally {
-      messageInput.disabled = false;
-      sendButton.disabled = false;
-      messageInput.focus();
-    }
-  }
+	async function handleSendMessage() {
+		const question = messageInput.value.trim();
+		if (!question) return;
+		displayMessage(question, [], 'user');
+		messageInput.value = '';
+		messageInput.disabled = true;
+		sendButton.disabled = true;
+		const loadingElement = displayMessage('Thinking...', [], 'loading');
+		try {
+			console.log(
+				'Sending chat message to API for accountId:',
+				accountId
+			);
+			console.log(
+				'Inside handleSendMessage USER Chat session ID:',
+				sessionId,
+				'Visitor UUID:',
+				visitorUuid
+			);
+			await fetch(chatMessageApiEndpoint, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					'X-API-Key': apiKey,
+				},
+				body: JSON.stringify({
+					message_text: question,
+					sender_type: 'user',
+					accountId: accountId,
+					chat_session_id: sessionId,
+					visitor_uuid: visitorUuid,
+				}),
+			});
+		} catch (error) {
+			console.error('Chat Message API Call Error:', error);
+			// We don't want to block the chat response on this call, so we log it but don't display an error message
+		}
+		try {
+			console.log(
+				'Sending query to API:',
+				question,
+				'for accountId:',
+				accountId,
+				'with apiKey:',
+				apiKey.substring(0, 8) + '...'
+			);
+			const response = await fetch(widgetApiEndpoint, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					'X-API-Key': apiKey,
+				},
+				body: JSON.stringify({
+					query: question,
+					accountId: accountId,
+				}),
+			});
+			messagesContainer.removeChild(loadingElement);
+			if (!response.ok) {
+				const errorData = await response
+					.json()
+					.catch(() => ({
+						detail: 'Server returned an unparsable error.',
+					}));
+				console.error('API Error Response:', errorData);
+				throw new Error(
+					errorData.detail || `API Error: ${response.status}`
+				);
+			}
+			const data = await response.json();
+			console.log('API Success Response:', data);
+			if (data && data.response && data.response.response_text) {
+				const rawSources = data.response.sources || [];
+				const displayableSources = processSourcesForDisplay(
+					rawSources,
+					accountId
+				);
+				displayMessage(
+					data.response.response_text,
+					displayableSources,
+					'bot'
+				);
+				try {
+					console.log(
+						'Sending chat message to API for accountId:',
+						accountId
+					);
+					console.log(
+						'Inside handleSendMessage BOT Chat session ID:',
+						sessionId,
+						'Visitor UUID:',
+						visitorUuid
+					);
+					await fetch(chatMessageApiEndpoint, {
+						method: 'POST',
+						headers: {
+							'Content-Type': 'application/json',
+							'X-API-Key': apiKey,
+						},
+						body: JSON.stringify({
+							message_text: data.response.response_text,
+							sender_type: 'bot',
+							accountId: accountId,
+							chat_session_id: sessionId,
+							visitor_uuid: visitorUuid,
+						}),
+					});
+				} catch (error) {
+					console.error('Chat Message API Call Error:', error);
+					// We don't want to block the chat response on this call, so we log it but don't display an error message
+				}
+			} else {
+				console.error(
+					'API response structure unexpected. Expected data.response.response_text.',
+					data
+				);
+				displayMessage(
+					'Sorry, I received an unexpected response from the server.',
+					[],
+					'error'
+				);
+			}
+		} catch (error) {
+			console.error('Widget API Call Error:', error);
+			if (loadingElement && messagesContainer.contains(loadingElement)) {
+				messagesContainer.removeChild(loadingElement);
+			}
+			displayMessage(`Error: ${error.message}`, [], 'error');
+		} finally {
+			messageInput.disabled = false;
+			sendButton.disabled = false;
+			messageInput.focus();
+		}
+	}
 
-  async function handleSendEmail() {
-    clearEmailFormStatus();
-    const name = emailFormNameInput.value.trim();
-    const email = emailFormEmailInput.value.trim();
-    const message = emailFormMessageInput.value.trim();
+	async function handleSendEmail() {
+		clearEmailFormStatus();
+		const name = emailFormNameInput.value.trim();
+		const email = emailFormEmailInput.value.trim();
+		const message = emailFormMessageInput.value.trim();
 
-    if (!name) {
-      displayEmailFormStatus(config.emailFormErrorNameRequired || 'Please enter your name.', false);
-      emailFormNameInput.focus();
-      return;
-    }
-    if (!email) {
-      displayEmailFormStatus(config.emailFormErrorEmailRequired || 'Please enter your email address.', false);
-      emailFormEmailInput.focus();
-      return;
-    }
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      displayEmailFormStatus(config.emailFormErrorEmailInvalid || 'Please enter a valid email address.', false);
-      emailFormEmailInput.focus();
-      return;
-    }
-    if (!message) {
-      displayEmailFormStatus(config.emailFormErrorMessageRequired || 'Please enter your message.', false);
-      emailFormMessageInput.focus();
-      return;
-    }
+		if (!name) {
+			displayEmailFormStatus(
+				config.emailFormErrorNameRequired || 'Please enter your name.',
+				false
+			);
+			emailFormNameInput.focus();
+			return;
+		}
+		if (!email) {
+			displayEmailFormStatus(
+				config.emailFormErrorEmailRequired ||
+					'Please enter your email address.',
+				false
+			);
+			emailFormEmailInput.focus();
+			return;
+		}
+		const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+		if (!emailRegex.test(email)) {
+			displayEmailFormStatus(
+				config.emailFormErrorEmailInvalid ||
+					'Please enter a valid email address.',
+				false
+			);
+			emailFormEmailInput.focus();
+			return;
+		}
+		if (!message) {
+			displayEmailFormStatus(
+				config.emailFormErrorMessageRequired ||
+					'Please enter your message.',
+				false
+			);
+			emailFormMessageInput.focus();
+			return;
+		}
 
-    emailFormSendButton.disabled = true;
-    emailFormCancelButton.disabled = true;
-    emailFormSendButton.textContent = config.emailFormSendingText || 'Sending...';
+		emailFormSendButton.disabled = true;
+		emailFormCancelButton.disabled = true;
+		emailFormSendButton.textContent =
+			config.emailFormSendingText || 'Sending...';
 
-    try {
-      console.log('Sending email form data to API for accountId:', accountId);
-      const response = await fetch(contactApiEndpoint, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-API-Key': apiKey,
-        },
-        body: JSON.stringify({
-          name: name,
-          email: email,
-          message: message,
-          sessionId: sessionId,
-          visitorUuid: visitorUuid,
-        }),
-      });
+		try {
+			console.log(
+				'Sending email form data to API for accountId:',
+				accountId
+			);
+			const response = await fetch(contactApiEndpoint, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					'X-API-Key': apiKey,
+				},
+				body: JSON.stringify({
+					name: name,
+					email: email,
+					message: message,
+					sessionId: sessionId,
+					visitorUuid: visitorUuid,
+				}),
+			});
 
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({ detail: 'Failed to send email. Server error.' }));
-        throw new Error(errorData.detail || `API Error: ${response.status}`);
-      }
+			if (!response.ok) {
+				const errorData = await response
+					.json()
+					.catch(() => ({
+						detail: 'Failed to send email. Server error.',
+					}));
+				throw new Error(
+					errorData.detail || `API Error: ${response.status}`
+				);
+			}
 
-      console.log('Email form submitted successfully.');
-      displayEmailFormStatus(config.emailFormSuccessMessage || 'Thank you! Your message has been sent.', true);
-      clearEmailForm();
-      setTimeout(() => {
-        if(isEmailFormVisible) switchToChatView();
-      }, 3000);
+			console.log('Email form submitted successfully.');
+			displayEmailFormStatus(
+				config.emailFormSuccessMessage ||
+					'Thank you! Your message has been sent.',
+				true
+			);
+			clearEmailForm();
+			setTimeout(() => {
+				if (isEmailFormVisible) switchToChatView();
+			}, 3000);
+		} catch (error) {
+			console.error('Email Form API Call Error:', error);
+			displayEmailFormStatus(
+				error.message ||
+					config.emailFormGenericError ||
+					'An error occurred. Please try again.',
+				false
+			);
+		} finally {
+			emailFormSendButton.disabled = false;
+			emailFormCancelButton.disabled = false;
+			emailFormSendButton.textContent =
+				config.emailFormSendButtonText || 'Send Email';
+		}
+	}
 
-    } catch (error) {
-      console.error('Email Form API Call Error:', error);
-      displayEmailFormStatus(error.message || (config.emailFormGenericError || 'An error occurred. Please try again.'), false);
-    } finally {
-      emailFormSendButton.disabled = false;
-      emailFormCancelButton.disabled = false;
-      emailFormSendButton.textContent = config.emailFormSendButtonText || 'Send Email';
-    }
-  }
+	// --- Initialization Function ---
+	function initializeWidget() {
+		console.log('Initializing widget...');
+		injectStyles();
+		createChatToggleButton(); // Ensures original icon logic is used
+		createChatWindow();
 
-  // --- Initialization Function ---
-  function initializeWidget() {
-    console.log('Initializing widget...');
-    injectStyles();
-    createChatToggleButton(); // Ensures original icon logic is used
-    createChatWindow();
+		switchToChatView(false); // Start in chat view, don't focus input yet
 
-    switchToChatView(false); // Start in chat view, don't focus input yet
+		if (config.initialBotMessage && !isEmailFormVisible) {
+			displayMessage(config.initialBotMessage, [], 'bot');
+		}
+		console.log('Widget initialized.');
+	}
 
-    if (config.initialBotMessage && !isEmailFormVisible) {
-      displayMessage(config.initialBotMessage, [], 'bot');
-    }
-    console.log('Widget initialized.');
-  }
-
-  // --- Start the Widget ---
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initializeWidget);
-  } else {
-    initializeWidget();
-  }
-
+	// --- Start the Widget ---
+	if (document.readyState === 'loading') {
+		document.addEventListener('DOMContentLoaded', initializeWidget);
+	} else {
+		initializeWidget();
+	}
 })();
