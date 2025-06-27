@@ -3,10 +3,7 @@
 		<header class="shadow-sm bg-white">
 			<nav class="container mx-auto p-4 flex justify-between">
 				<h1 class="font-bold text-xl text-primary">
-					<span v-if="account_organisation">
-						{{ account_organisation }}
-					</span>
-					<span v-else>
+					<span>
 						<NuxtLink to="/login">YourDocsAI</NuxtLink>
 					</span>
 				</h1>
