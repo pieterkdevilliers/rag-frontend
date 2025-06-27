@@ -634,7 +634,7 @@
     chatWindow.querySelector('.ai-chat-input-area').style.display = 'flex';
     chatFooter.style.display = 'flex';
 
-    chatHeaderTitle.textContent = config.widgetTitle || 'Chat with Us';
+    chatHeaderTitle.textContent = config.widgetTitle || 'Any questions we can help with?';
     clearEmailForm();
     clearEmailFormStatus();
     if (focusChatInput && isChatOpen) {
