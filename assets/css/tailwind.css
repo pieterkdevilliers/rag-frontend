@@ -296,10 +296,6 @@
 	.chat-sessions__table {
 		@apply w-full;
 	}
-	.chat-sessions__table th {
-		@apply font-roboto-condensed;
-	}
-
 	.chat-item {
 		@apply text-sm;
 	}
@@ -347,7 +343,27 @@
 		@apply flex items-center justify-between;
 	}
 	.layout--user_access .search-input__container {
-		@apply pt-6;
+		@apply flex;
+	}
+
+	.search-pagination-container {
+		@apply flex justify-between items-center mt-3;
+	}
+
+	/* Pagination */
+	.pagination {
+		@apply flex justify-end px-3 py-3.5;
+	}
+	.pagination button {
+		@apply font-light;
+	}
+	.pagination--bottom {
+		@apply pt-3 border-t border-slate-200;
+	}
+
+	/* Tables */
+	.content-table th {
+		@apply text-accent font-roboto-condensed;
 	}
 }
 

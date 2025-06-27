@@ -21,8 +21,11 @@
 				</UTooltip>
 			</div>
 		</div>
-		<div class="flex pt-6">
-			<UInput v-model="q" placeholder="Filter folders..." />
+		<div class="search-pagination-container">
+			<!-- Search Input -->
+			<div class="search-input__container">
+				<UInput v-model="q" placeholder="Filter folders..." />
+			</div>
 		</div>
 		<div class="card-grid">
 			<div v-for="folder in filteredFolders" :key="folder.id">
