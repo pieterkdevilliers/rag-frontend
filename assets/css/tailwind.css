@@ -338,6 +338,17 @@
 	.query-form__container .form__button-container {
 		@apply mt-0 md:self-end;
 	}
+
+	/* Page Headers */
+	.layout--user_access .container--default {
+		@apply pt-3;
+	}
+	.layout--user_access .page-header {
+		@apply flex items-center justify-between;
+	}
+	.layout--user_access .search-input__container {
+		@apply pt-6;
+	}
 }
 
 @layer components {
