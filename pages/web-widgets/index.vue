@@ -1,8 +1,11 @@
 <template>
 	<section class="Web-widgets container--default mx-auto">
-		<h2 class="heading heading--2">Web Widgets</h2>
-		<div v-if="canAddWidgets">
-			<div class="flex justify-end mb-4">
+		<div class="page-header">
+			<h2 class="heading heading--2">Web Widgets</h2>
+			<div
+				v-if="canAddWidgets"
+				class="flex justify-start sm:justify-end gap-6 my-2"
+			>
 				<UButton
 					icon="i-heroicons:plus-circle-16-solid"
 					variant="outline"
@@ -10,7 +13,9 @@
 					@click="openAddWidgetModal"
 				/>
 			</div>
-
+		</div>
+		<div class="search-pagination-container"></div>
+		<div v-if="canAddWidgets">
 			<div class="web-widgets-grid card-grid">
 				<div v-for="widget in widgets?.api_keys" :key="widget.id">
 					<WidgetCard
