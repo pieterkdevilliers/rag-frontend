@@ -344,6 +344,7 @@
         font-size: 13px;
         transition: background-color 0.2s, color 0.2s;
         align-self: center;
+        margin-top: 15px;
       }
       .ai-chat-show-email-form-button:hover {
         background-color: ${config.themeColor || '#DB2777'};
