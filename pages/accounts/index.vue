@@ -12,7 +12,10 @@
 		/>
 	</section>
 	<section class="my-subscriptions container--default mx-auto">
-		<h2 class="heading heading--h2">My Subscriptions</h2>
+		<div class="page-header">
+			<h2 class="heading heading--h2">My Subscriptions</h2>
+		</div>
+		<div class="search-pagination-container"></div>
 		<div class="subscription-grid card-grid">
 			<div
 				v-for="subscription in subscriptions?.subscriptions"
