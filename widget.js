@@ -437,7 +437,7 @@
       }
     `;
 		document.head.appendChild(style);
-		console.log('Widget styles injected.');
+		console.log(config.buttonText || 'Widget styles injected.');
 	}
 
 	// --- UI Creation Functions ---
@@ -445,14 +445,12 @@
 		chatToggleButton = document.createElement('button');
 		chatToggleButton.className = 'ai-chat-widget-toggle';
 
-		const buttonText = 'How can we help?';
-
 		// The innerHTML remains the same, containing both icon and text
 		chatToggleButton.innerHTML = `
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="28px" height="28px">
         <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 10H6v-2h12v2zm0-3H6V7h12v2z"/>
       </svg>
-      <span>${buttonText}</span>
+      <span>${config.buttonText || 'How can we help?'}</span>
     `;
 
 		chatToggleButton.setAttribute('aria-label', 'Open Chat');
@@ -463,7 +461,7 @@
 		// --- MODIFICATION START ---
 		// After 10 seconds (10000 milliseconds), add the 'expanded' class to the button.
 		setTimeout(() => {
-			if (chatToggleButton) {
+			if (chatToggleButton && !isChatOpen) {
 				// Check if the button still exists
 				chatToggleButton.classList.add('expanded');
 				console.log('Chat toggle button expanded.');
