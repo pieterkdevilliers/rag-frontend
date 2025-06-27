@@ -50,24 +50,90 @@
   function injectStyles() {
     const style = document.createElement('style');
     style.textContent = `
+      /* --- Base style for the Chat Toggle Button --- */
       .ai-chat-widget-toggle {
+        /* Positioning */
         position: fixed;
         bottom: 20px;
         right: 20px;
-        width: 60px;
-        height: 60px;
-        background-color: ${config.themeColor || '#DB2777'};
-        color: white; /* This color is used by "fill: currentColor" in the SVG */
-        border-radius: 50%;
+        z-index: 9999;
+        
+        /* Flexbox for centering content */
         display: flex;
         align-items: center;
-        justify-content: center;
-        font-size: 28px; /* Primarily for if text was used instead of SVG */
-        cursor: pointer;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-        z-index: 99998;
+        justify-content: center; /* Center the icon in the circle */
+
+        /* Initial State: A Circle */
+        width: 60px;
+        height: 60px;
+        border-radius: 50%; /* This makes it a circle */
+        padding: 0; /* Remove padding for the initial circle state */
+        
+        /* Appearance */
+        background-color:${config.themeColor || '#DB2777'};
+        color: white;
         border: none;
-        transition: transform 0.2s ease-in-out;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        cursor: pointer;
+        overflow: hidden; /* Crucial: Hides the text that's outside the button's initial width */
+
+        /* --- ANIMATION --- */
+        /* Smoothly transition the properties that will change */
+        transition: width 0.4s ease-in-out, 
+                    border-radius 0.4s ease-in-out,
+                    padding 0.4s ease-in-out;
+      }
+
+      /* --- Style for the Text Span inside the button --- */
+      .ai-chat-widget-toggle span {
+        /* Initial State: Hidden */
+        max-width: 0;
+        opacity: 0;
+        
+        /* Keep text on one line during animation */
+        white-space: nowrap; 
+
+        /* Text appearance */
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        font-size: 16px;
+        font-weight: 600;
+        margin-left: 0; /* No margin when hidden */
+
+        /* --- ANIMATION --- */
+        /* Animate the span's properties. Delay opacity so it fades in after expanding. */
+        transition: max-width 0.4s ease-in-out, 
+                    opacity 0.2s 0.2s ease-in-out, /* opacity starts after 0.2s delay */
+                    margin-left 0.4s ease-in-out;
+      }
+
+      /* --- HOVER and FOCUS states --- */
+      .ai-chat-widget-toggle:hover {
+        background-color:${config.themeColor || '#DB2777'};
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+      }
+      .ai-chat-widget-toggle:focus-visible {
+        outline: 2px solid ${config.themeColor || '#DB2777'};
+        outline-offset: 2px;
+      }
+
+      /* 
+      =========================================================
+        EXPANDED STATE: When the .expanded class is added 
+      =========================================================
+      */
+      .ai-chat-widget-toggle.expanded {
+        /* Final State: A Pill/Rectangle */
+        width: auto; /* Let the content determine the width */
+        border-radius: 50px; /* A "pill" shape */
+        padding: 12px 20px; /* Add padding back in */
+      }
+
+      /* The text span becomes visible inside the expanded button */
+      .ai-chat-widget-toggle.expanded span {
+        max-width: 150px; /* Set a max-width for the text to expand into */
+        opacity: 1;
+        margin-left: 8px; /* Create a gap between the icon and text */
       }
       .ai-chat-widget-toggle:hover {
         transform: scale(1.1);
@@ -371,15 +437,31 @@
   function createChatToggleButton() {
     chatToggleButton = document.createElement('button');
     chatToggleButton.className = 'ai-chat-widget-toggle';
-    // This is the original SVG icon logic from your provided code
-    chatToggleButton.innerHTML = config.widgetButtonIcon || `
+
+    const buttonText = 'How can we help?'; 
+
+    // The innerHTML remains the same, containing both icon and text
+    chatToggleButton.innerHTML = `
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="28px" height="28px">
         <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 10H6v-2h12v2zm0-3H6V7h12v2z"/>
-      </svg>`;
+      </svg>
+      <span>${buttonText}</span>
+    `;
+
     chatToggleButton.setAttribute('aria-label', 'Open Chat');
     chatToggleButton.onclick = toggleChatWindow;
     document.body.appendChild(chatToggleButton);
     console.log('Chat toggle button created.');
+
+    // --- MODIFICATION START ---
+    // After 10 seconds (10000 milliseconds), add the 'expanded' class to the button.
+    setTimeout(() => {
+      if (chatToggleButton) { // Check if the button still exists
+        chatToggleButton.classList.add('expanded');
+        console.log('Chat toggle button expanded.');
+      }
+    }, 10000); 
+    // --- MODIFICATION END ---
   }
 
   function createChatWindow() {
