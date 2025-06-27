@@ -1,91 +1,99 @@
 <template>
-	<header class="shadow-sm bg-white">
-		<nav class="container mx-auto p-4 flex justify-between">
-			<h1 class="font-bold text-xl text-primary">
-				{{ account_organisation }}
-			</h1>
-			<ul class="flex gap-4 flex-wrap">
-				<li>
-					<UButton
-						v-if="!account_unique_id"
-						to="/"
-						label="Home"
-						icon="i-heroicons:home"
-					>
-					</UButton>
-				</li>
-				<li v-if="!account_unique_id">
-					<UButton
-						to="/login"
-						icon="i-heroicons:arrow-right-end-on-rectangle"
-						label="Login"
-					>
-					</UButton>
-				</li>
-				<li v-if="account_unique_id" id="chats-button">
+	<div class="layout--user_access">
+		<header class="shadow-sm bg-white">
+			<nav class="container mx-auto p-4 flex justify-between">
+				<h1 class="font-bold text-xl text-primary">
+					<span v-if="account_organisation">
+						{{ account_organisation }}
+					</span>
+					<span v-else> YourDocsAI </span>
+				</h1>
+				<ul class="flex gap-4 flex-wrap">
+					<li>
+						<UButton
+							v-if="!account_unique_id"
+							to="/"
+							label="Home"
+							icon="i-heroicons:home"
+						>
+						</UButton>
+					</li>
+					<li v-if="!account_unique_id">
+						<UButton
+							to="/login"
+							icon="i-heroicons:arrow-right-end-on-rectangle"
+							label="Login"
+						>
+						</UButton>
+					</li>
+					<li v-if="account_unique_id" id="chats-button">
 						<UButton
 							to="/chats"
 							label="Chat Sessions"
 							icon="i-heroicons:chat-bubble-bottom-center-text"
 						>
 						</UButton>
-				</li>
-				<li v-if="account_unique_id" id="users-button">
-					<UButton to="/users" label="Users" icon="i-heroicons:users">
-					</UButton>
-				</li>
-				<li v-if="account_unique_id" id="documents-button">
-					<UButton
-						to="/folders"
-						label="Documents"
-						icon="i-heroicons:document-magnifying-glass"
-					>
-					</UButton>
-				</li>
-				<li v-if="account_unique_id" id="widgets-button">
-					<UButton
-						to="/web-widgets"
-						label="Web Widgets"
-						icon="i-heroicons:code-bracket"
-					>
-					</UButton>
-				</li>
-				<li v-if="account_unique_id" id="account-button">
-					<UButton
-						to="/accounts"
-						label="My Account"
-						icon="i-heroicons:user-circle"
-					>
-					</UButton>
-				</li>
-				<li v-if="account_unique_id">
-					<UButton
-						to="/login"
-						label="Logout"
-						icon="i-heroicons:arrow-left-end-on-rectangle"
-					>
-					</UButton>
-				</li>
-			</ul>
-		</nav>
-	</header>
-	<div class="container mx-auto p-4">
-		<slot />
-	</div>
-	<footer>
-		<div class="container mx-auto p-4 text-center">
-			<Queries />
+					</li>
+					<li v-if="account_unique_id" id="users-button">
+						<UButton
+							to="/users"
+							label="Users"
+							icon="i-heroicons:users"
+						>
+						</UButton>
+					</li>
+					<li v-if="account_unique_id" id="documents-button">
+						<UButton
+							to="/folders"
+							label="Documents"
+							icon="i-heroicons:document-magnifying-glass"
+						>
+						</UButton>
+					</li>
+					<li v-if="account_unique_id" id="widgets-button">
+						<UButton
+							to="/web-widgets"
+							label="Web Widgets"
+							icon="i-heroicons:code-bracket"
+						>
+						</UButton>
+					</li>
+					<li v-if="account_unique_id" id="account-button">
+						<UButton
+							to="/accounts"
+							label="My Account"
+							icon="i-heroicons:user-circle"
+						>
+						</UButton>
+					</li>
+					<li v-if="account_unique_id">
+						<UButton
+							to="/login"
+							label="Logout"
+							icon="i-heroicons:arrow-left-end-on-rectangle"
+						>
+						</UButton>
+					</li>
+				</ul>
+			</nav>
+		</header>
+		<div class="container mx-auto p-4">
+			<slot />
 		</div>
-	</footer>
+		<footer>
+			<div class="container mx-auto p-4 text-center">
+				<Queries />
+			</div>
+		</footer>
 
-	<!-- Add UNotifications here -->
-	<UNotifications />
+		<!-- Add UNotifications here -->
+		<UNotifications />
+	</div>
 </template>
 
 <script setup lang="ts">
-
-import { driver } from "driver.js";
-import "driver.js/dist/driver.css";
+import { driver } from 'driver.js';
+import 'driver.js/dist/driver.css';
 import { ref, computed, watchEffect, onMounted } from 'vue';
 import Queries from '~/components/Queries.vue';
 import { useAuthStore } from '~/stores/auth';
@@ -127,10 +135,8 @@ watchEffect(async () => {
 	}
 });
 
-
 import { driver } from 'driver.js';
 import 'driver.js/dist/driver.css';
-
 
 onMounted(() => {
 	if (showTour.value) {

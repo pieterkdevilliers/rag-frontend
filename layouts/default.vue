@@ -1,76 +1,87 @@
 <template>
-	<header class="shadow-sm bg-white">
-		<nav class="container mx-auto p-4 flex justify-between">
-			<h1 class="font-bold text-xl text-primary">
-				{{ account_organisation }}
-			</h1>
-			<ul class="flex gap-4 flex-wrap max-w-full">
-				<li>
-					<UButton
-						v-if="!account_unique_id"
-						to="/"
-						label="Home"
-						icon="i-heroicons:home"
-					>
-					</UButton>
-				</li>
-				<li v-if="!account_unique_id">
-					<UButton
-						to="/login"
-						icon="i-heroicons:arrow-right-end-on-rectangle"
-						label="Login"
-					>
-					</UButton>
-				</li>
-				<li v-if="account_unique_id">
-					<UButton
-						to="/chats"
-						label="Chat Sessions"
-						icon="i-heroicons:chat-bubble-bottom-center-text"
-					>
-					</UButton>
-				</li>
-				<li v-if="account_unique_id">
-					<UButton to="/users" label="Users" icon="i-heroicons:users">
-					</UButton>
-				</li>
-				<li v-if="account_unique_id">
-					<UButton
-						to="/folders"
-						label="Documents"
-						icon="i-heroicons:document-magnifying-glass"
-					>
-					</UButton>
-				</li>
-				<li v-if="account_unique_id">
-					<UButton
-						to="/web-widgets"
-						label="Web Widgets"
-						icon="i-heroicons:code-bracket"
-					>
-					</UButton>
-				</li>
-				<li v-if="account_unique_id">
-					<UButton
-						to="/accounts"
-						label="My Account"
-						icon="i-heroicons:user-circle"
-					>
-					</UButton>
-				</li>
-				<li v-if="account_unique_id">
-					<UButton
-						to="/login"
-						label="Logout"
-						icon="i-heroicons:arrow-left-end-on-rectangle"
-					>
-					</UButton>
-				</li>
-			</ul>
-		</nav>
-	</header>
-	<div class="container container--full mx-auto">
-		<slot />
+	<div class="layout--default">
+		<header class="shadow-sm bg-white">
+			<nav class="container mx-auto p-4 flex justify-between">
+				<h1 class="font-bold text-xl text-primary">
+					<span v-if="account_organisation">
+						{{ account_organisation }}
+					</span>
+					<span v-else>
+						<NuxtLink to="/login">YourDocsAI</NuxtLink>
+					</span>
+				</h1>
+				<ul class="flex gap-4 flex-wrap max-w-full">
+					<li>
+						<UButton
+							v-if="!account_unique_id"
+							to="/"
+							label="Home"
+							icon="i-heroicons:home"
+						>
+						</UButton>
+					</li>
+					<li v-if="!account_unique_id">
+						<UButton
+							to="/login"
+							icon="i-heroicons:arrow-right-end-on-rectangle"
+							label="Login"
+						>
+						</UButton>
+					</li>
+					<li v-if="account_unique_id">
+						<UButton
+							to="/chats"
+							label="Chat Sessions"
+							icon="i-heroicons:chat-bubble-bottom-center-text"
+						>
+						</UButton>
+					</li>
+					<li v-if="account_unique_id">
+						<UButton
+							to="/users"
+							label="Users"
+							icon="i-heroicons:users"
+						>
+						</UButton>
+					</li>
+					<li v-if="account_unique_id">
+						<UButton
+							to="/folders"
+							label="Documents"
+							icon="i-heroicons:document-magnifying-glass"
+						>
+						</UButton>
+					</li>
+					<li v-if="account_unique_id">
+						<UButton
+							to="/web-widgets"
+							label="Web Widgets"
+							icon="i-heroicons:code-bracket"
+						>
+						</UButton>
+					</li>
+					<li v-if="account_unique_id">
+						<UButton
+							to="/accounts"
+							label="My Account"
+							icon="i-heroicons:user-circle"
+						>
+						</UButton>
+					</li>
+					<li v-if="account_unique_id">
+						<UButton
+							to="/login"
+							label="Logout"
+							icon="i-heroicons:arrow-left-end-on-rectangle"
+						>
+						</UButton>
+					</li>
+				</ul>
+			</nav>
+		</header>
+		<div class="container container--full mx-auto">
+			<slot />
+		</div>
 	</div>
 </template>
 

@@ -1,25 +1,27 @@
 <template>
 	<section class="folders container--default mx-auto">
-		<h2 class="heading heading--h2">Folders</h2>
-		<div class="flex justify-start sm:justify-end gap-6 my-2">
-			<UTooltip text="Add new files to AI database">
-				<UButton
-					icon="i-heroicons-arrow-path-20-solid"
-					label="Update AI Database"
-					variant="solid"
-					@click="openRefreshDBModal"
-				/>
-			</UTooltip>
-			<UTooltip text="Add a new folder">
-				<UButton
-					icon="i-heroicons:plus-circle-16-solid"
-					variant="outline"
-					label="Add Folder"
-					@click="openModal"
-				/>
-			</UTooltip>
+		<div class="page-header">
+			<h2 class="heading heading--h2">Folders</h2>
+			<div class="flex justify-start sm:justify-end gap-6 my-2">
+				<UTooltip text="Add new files to AI database">
+					<UButton
+						icon="i-heroicons-arrow-path-20-solid"
+						label="Update AI Database"
+						variant="solid"
+						@click="openRefreshDBModal"
+					/>
+				</UTooltip>
+				<UTooltip text="Add a new folder">
+					<UButton
+						icon="i-heroicons:plus-circle-16-solid"
+						variant="outline"
+						label="Add Folder"
+						@click="openModal"
+					/>
+				</UTooltip>
+			</div>
 		</div>
-		<div class="flex py-3.5">
+		<div class="flex pt-6">
 			<UInput v-model="q" placeholder="Filter folders..." />
 		</div>
 		<div class="card-grid">
