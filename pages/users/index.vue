@@ -1,15 +1,17 @@
 <template>
 	<section class="users container--default mx-auto">
-		<h2 class="text-xl text-primary">Users</h2>
-
-		<div class="flex justify-end mb-4">
-			<UButton
-				icon="i-heroicons:plus-circle-16-solid"
-				variant="outline"
-				label="Add User"
-				@click="openModal"
-			/>
+		<div class="page-header">
+			<h2 class="heading heading--h2">Users</h2>
+			<div class="flex justify-start sm:justify-end gap-6 my-2">
+				<UButton
+					icon="i-heroicons:plus-circle-16-solid"
+					variant="outline"
+					label="Add User"
+					@click="openModal"
+				/>
+			</div>
 		</div>
+		<div class="search-pagination-container"></div>
 
 		<div class="user-grid card-grid">
 			<div v-for="user in users?.users" :key="user.id">
