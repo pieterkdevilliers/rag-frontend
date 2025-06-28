@@ -3,6 +3,9 @@
 @tailwind utilities;
 
 @layer base {
+	.boo {
+		@apply bg-red-500 border-2 border-red-500;
+	}
 	body {
 		@apply bg-gray-50 text-slate-700 font-sans font-light text-lg;
 	}
@@ -267,27 +270,6 @@
 		@apply mx-auto;
 	}
 
-	/* General Cards Layout */
-	.card-grid {
-		@apply grid grid-cols-1 gap-8 lg:gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mt-6;
-	}
-	.card-grid__card {
-		@apply text-base h-full flex flex-col;
-	}
-	.card-grid__card .card__body {
-		@apply flex-grow text-base;
-	}
-	.card-grid__card .card__body p:not(:first-child) {
-		@apply mt-2;
-	}
-	.card-grid .card__footer {
-		@apply mt-auto;
-	}
-	.card-grid__card .card__body strong,
-	.card-grid__card .card__footer strong {
-		@apply font-roboto-condensed;
-	}
-
 	/* My Account */
 	/* Subscriptions */
 	.subscription-card__details strong,
@@ -371,6 +353,14 @@
 	.content-table th {
 		@apply text-accent font-roboto-condensed;
 	}
+
+	/* Main Navigation */
+	.nav--vertical {
+		@apply outline outline-red-500;
+	}
+	.nav--horizontal {
+		@apply outline outline-blue-500;
+	}
 }
 
 @layer components {
@@ -420,4 +410,27 @@
 	.modal .heading__span--block:last-child {
 		@apply mt-0;
 	}
+	/* General Cards Layout */
+	.card-grid {
+		@apply grid grid-cols-1 gap-8 lg:gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mt-6;
+	}
+	.card-grid__card {
+		@apply text-base h-full flex flex-col;
+	}
+	.card-grid__card .card__body {
+		@apply flex-grow text-base;
+	}
+	.card-grid__card .card__body p:not(:first-child) {
+		@apply mt-2;
+	}
+	.card-grid .card__footer {
+		@apply mt-auto;
+	}
+	.card-grid__card .card__body strong,
+	.card-grid__card .card__footer strong {
+		@apply font-roboto-condensed;
+	}
+}
+
+@layer utilities {
 }

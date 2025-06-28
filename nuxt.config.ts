@@ -8,6 +8,7 @@ export default defineNuxtConfig({
 		'@nuxt/ui',
 		'@nuxtjs/color-mode',
 		'@nuxtjs/google-fonts',
+		'@nuxtjs/tailwindcss',
 	],
 	colorMode: {
 		preference: 'light', // default value of $colorMode.preference
