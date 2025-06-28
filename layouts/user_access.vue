@@ -1,6 +1,7 @@
 <template>
 	<div class="layout--user_access">
 		<header class="shadow-sm bg-white">
+			<Navbar />
 			<nav class="container mx-auto p-4 flex justify-between">
 				<h1 class="font-bold text-xl text-primary">
 					<span v-if="account_organisation">
@@ -97,6 +98,7 @@ import 'driver.js/dist/driver.css';
 import { ref, computed, watchEffect, onMounted } from 'vue';
 import Queries from '~/components/Queries.vue';
 import { useAuthStore } from '~/stores/auth';
+import Navbar from '~/components/Navbar.vue';
 
 const config = useRuntimeConfig();
 const authStore = useAuthStore();

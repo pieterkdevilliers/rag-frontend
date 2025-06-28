@@ -1,6 +1,7 @@
 <template>
 	<div class="layout--default">
 		<header class="shadow-sm bg-white">
+			<Navbar />
 			<nav class="container mx-auto p-4 flex justify-between">
 				<h1 class="font-bold text-xl text-primary">
 					<span>
