@@ -19,7 +19,10 @@
 	</div>
 	<!-- Desktop -->
 	<nav class="hidden md:block">
-		<UHorizontalNavigation :links="menuItems"> </UHorizontalNavigation>
+		<UHorizontalNavigation
+			:links="!isAuthenticated ? LoggedOutMenuItems : LoggedInMenuItems"
+		>
+		</UHorizontalNavigation>
 	</nav>
 	<p>Nav Open: {{ navOpen }}</p>
 	<p>Logged In: {{ isAuthenticated }}</p>
@@ -28,41 +31,62 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import { useAuthStore } from '~/stores/auth';
-import type { NavigationMenuItem } from '@nuxt/ui';
 const authStore = useAuthStore();
-const account_unique_id = ref(authStore.uniqueAccountId || null);
-// const isAuthenticated = ref(!!account_unique_id.value);
 const isAuthenticated = computed(() => authStore.uniqueAccountId !== null);
 const navOpen = ref(false);
 
-const LoggedOutMenuItems: NavigationMenuItem[] = [
-	{
-		label: 'Home',
-		to: '/',
-		icon: 'i-heroicons:home',
-		type: 'label',
-	},
+interface NavigationMenuItem {
+	label: string;
+	to: string;
+	icon: string;
+	type: 'label' | 'link';
+}
+
+const LoggedOutMenuItems = ref<NavigationMenuItem[]>([
 	{
 		label: 'Login',
 		to: '/login',
-		icon: 'i-heroicons:user-circle',
+		icon: 'i-heroicons:arrow-right-end-on-rectangle',
+		type: 'link',
 	},
-];
+]);
 
 const LoggedInMenuItems = ref<NavigationMenuItem[]>([
 	{
-		label: 'Home',
-		to: '/',
-		icon: 'i-heroicons:home',
+		label: 'Chat Sessions',
+		to: '/chats',
+		icon: 'i-heroicons:chat-bubble-bottom-center-text',
 		type: 'label',
 	},
 	{
-		label: 'About',
-		to: '/about',
+		label: 'Users',
+		to: '/users',
+		icon: 'i-heroicons:users',
+		type: 'link',
 	},
 	{
-		label: 'Contact',
-		to: '/contact',
+		label: 'Documents',
+		to: '/folders',
+		icon: 'i-heroicons:document-magnifying-glass',
+		type: 'link',
+	},
+	{
+		label: 'Web Widgets',
+		to: '/web-widgets',
+		icon: 'i-heroicons:code-bracket',
+		type: 'link',
+	},
+	{
+		label: 'My Account',
+		to: '/accounts',
+		icon: 'i-heroicons:user-circle',
+		type: 'link',
+	},
+	{
+		label: 'Logout',
+		to: '/login',
+		icon: 'i-heroicons:arrow-left-end-on-rectangle',
+		type: 'link',
 	},
 ]);
 </script>

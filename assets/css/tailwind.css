@@ -343,7 +343,7 @@
 		@apply pt-3;
 	}
 	.layout--user_access .page-header {
-		@apply flex flex-col items-start lg:flex-row lg:items-center justify-between;
+		@apply flex flex-col items-start lg:flex-row lg:items-center justify-between mb-3;
 	}
 	.layout--user_access .search-input__container {
 		@apply flex;
