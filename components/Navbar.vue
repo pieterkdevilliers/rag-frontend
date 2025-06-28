@@ -1,6 +1,6 @@
 <template>
 	<!-- Mobile -->
-	<div>
+	<div class="md:hidden">
 		<UButton
 			@click="navOpen = !navOpen"
 			:icon="navOpen ? 'i-heroicons:x-mark' : 'i-heroicons:bars-3'"
@@ -12,7 +12,7 @@
 				:links="
 					!isAuthenticated ? LoggedOutMenuItems : LoggedInMenuItems
 				"
-				:class="navOpen ? '' : 'hidden'"
+				:class="[navOpen ? '' : 'hidden', 'nav--vertical']"
 			>
 			</UVerticalNavigation>
 		</nav>
@@ -21,11 +21,10 @@
 	<nav class="hidden md:block">
 		<UHorizontalNavigation
 			:links="!isAuthenticated ? LoggedOutMenuItems : LoggedInMenuItems"
+			:class="'nav--horizontal'"
 		>
 		</UHorizontalNavigation>
 	</nav>
-	<p>Nav Open: {{ navOpen }}</p>
-	<p>Logged In: {{ isAuthenticated }}</p>
 </template>
 
 <script setup lang="ts">
@@ -56,7 +55,7 @@ const LoggedInMenuItems = ref<NavigationMenuItem[]>([
 		label: 'Chat Sessions',
 		to: '/chats',
 		icon: 'i-heroicons:chat-bubble-bottom-center-text',
-		type: 'label',
+		type: 'link',
 	},
 	{
 		label: 'Users',

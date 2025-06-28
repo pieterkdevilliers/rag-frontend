@@ -14,12 +14,12 @@
 		<div class="search-pagination-container"></div>
 
 		<div class="user-grid card-grid">
-			<div v-for="user in users?.users" :key="user.id">
+			<div v-for="user in users?.users">
 				<UserCard
+					:key="user.id"
 					:user="user"
 					@user-deleted="handleUserRemoved"
 					@edit-user-clicked="openEditUserModal"
-					class="card-grid__card"
 				/>
 			</div>
 		</div>

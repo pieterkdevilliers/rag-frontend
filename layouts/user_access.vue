@@ -1,7 +1,7 @@
 <template>
 	<div class="layout--user_access">
 		<header class="shadow-sm bg-white">
-			<Navbar />
+			<!-- <Navbar /> -->
 			<nav class="container mx-auto p-4 flex justify-between">
 				<h1 class="font-bold text-xl text-primary">
 					<span v-if="account_organisation">
