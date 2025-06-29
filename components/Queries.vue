@@ -80,7 +80,7 @@
 			</UCard>
 		</div>
 
-		<!-- <DocumentViewerModal
+		<DocumentViewerModal
 			:is-open="isDocumentModalOpen"
 			:file-identifier="selectedFileToView"
 			:account-unique-id="account_unique_id"
@@ -88,7 +88,7 @@
 			@update:is-open="isDocumentModalOpen = $event"
 			:pdf-src="documentSrc"
 			:pdf-url="documentUrl"
-		/> -->
+		/>
 		<UNotifications />
 	</div>
 </template>
