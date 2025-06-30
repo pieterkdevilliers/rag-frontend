@@ -204,7 +204,7 @@
 	.form__label-field input[type='number'],
 	.form__label-field select,
 	.form__label-field textarea {
-		@apply border border-slate-300 rounded-lg w-full ring-0 focus:ring-2 focus:ring-accent focus:border-transparent placeholder:text-slate-300;
+		@apply border border-slate-300 rounded-lg w-full ring-0 focus:ring-2 focus:ring-accent focus:border-transparent placeholder:text-slate-300 text-base lg:text-inherit;
 	}
 	.form__button {
 		@apply w-full max-w-full flex justify-center;
@@ -353,13 +353,16 @@
 
 	/* Main Navigation */
 	.mobile-navbar__container {
-		@apply relative flex flex-col overflow-hidden min-w-48 min-h-64 border-2 border-blue-500;
+		@apply relative;
 	}
-	.mobile-navbar__container .navbar__toggle {
-		@apply self-end;
+	.mobile-navbar__container .navbar {
+		@apply absolute top-8 w-44 h-fit bg-white z-50 transition-all duration-500 ease-in-out shadow-md;
 	}
-	.mobile-navbar__container .vertical-nav-wrapper-class {
-		@apply absolute top-12 left-0 w-full h-full bg-white z-50 border-2 border-orange-500;
+	.nav--closed {
+		@apply -right-56;
+	}
+	.nav--open {
+		@apply right-0;
 	}
 	.nav--horizontal {
 		@apply outline-none;
