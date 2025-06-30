@@ -10,6 +10,7 @@
 					multiple
 					@change="handleFileSelection"
 					ref="fileInputRef"
+					accept=".pdf,.docx,.doc,.md,.txt"
 					class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
 					aria-describedby="file_input_help"
 				/>
@@ -61,8 +62,11 @@
 </template>
 
 <script setup lang="ts">
+
+const ALLOWED_EXTENSIONS = ['.pdf', '.docx', '.doc', '.md', '.txt'];
+
 const config = useRuntimeConfig();
-import { ref, reactive } from 'vue';
+import { ref, reactive, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useAuthStore } from '~/stores/auth';
 const toast = useToast();
@@ -103,10 +107,38 @@ const apiAuthorizationToken = authStore.access_token;
 
 const handleFileSelection = (event: Event) => {
 	const target = event.target as HTMLInputElement;
-	if (target.files) {
-		state.selectedFiles = Array.from(target.files);
-		errorMessage.value = ''; // Clear previous errors on new selection
-		successMessage.value = '';
+	if (!target.files) return;
+
+	// Clear previous messages
+	errorMessage.value = '';
+	successMessage.value = '';
+
+	const allSelectedFiles = Array.from(target.files);
+	const validFiles: File[] = [];
+	const invalidFiles: File[] = [];
+
+	for (const file of allSelectedFiles) {
+		const extension = file.name.slice(file.name.lastIndexOf('.')).toLowerCase();
+		if (ALLOWED_EXTENSIONS.includes(extension)) {
+			validFiles.push(file);
+		} else {
+			invalidFiles.push(file);
+		}
+	}
+
+	// Update the state with only the valid files
+	state.selectedFiles = validFiles;
+
+	// If there were any invalid files, show a specific error message
+	if (invalidFiles.length > 0) {
+		const invalidFileNames = invalidFiles.map((file) => file.name).join(', ');
+		errorMessage.value = `Unsupported file type(s) were ignored: ${invalidFileNames}.`;
+		toast.add({
+			title: 'Unsupported Files',
+			description: `The following files were not added because their type is not supported: ${invalidFileNames}`,
+			color: 'orange',
+			icon: 'i-heroicons-exclamation-triangle',
+		});
 	}
 };
 
