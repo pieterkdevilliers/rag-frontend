@@ -1,13 +1,13 @@
 <template>
 	<!-- Mobile -->
-	<div class="md:hidden">
+	<div class="lg:hidden mobile-navbar__container">
 		<UButton
 			@click="navOpen = !navOpen"
 			:icon="navOpen ? 'i-heroicons:x-mark' : 'i-heroicons:bars-3'"
-			:class="'md:hidden'"
+			:class="['lg:hidden', 'navbar__toggle']"
 		>
 		</UButton>
-		<nav>
+		<nav class="navbar">
 			<UVerticalNavigation
 				:links="
 					!isAuthenticated ? LoggedOutMenuItems : LoggedInMenuItems
@@ -18,7 +18,7 @@
 		</nav>
 	</div>
 	<!-- Desktop -->
-	<nav class="hidden md:block">
+	<nav class="navbar hidden lg:block">
 		<UHorizontalNavigation
 			:links="!isAuthenticated ? LoggedOutMenuItems : LoggedInMenuItems"
 			:class="'nav--horizontal'"
@@ -39,6 +39,7 @@ interface NavigationMenuItem {
 	to: string;
 	icon: string;
 	type: 'label' | 'link';
+	slot?: string;
 }
 
 const LoggedOutMenuItems = ref<NavigationMenuItem[]>([
