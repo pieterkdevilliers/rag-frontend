@@ -3,9 +3,6 @@
 @tailwind utilities;
 
 @layer base {
-	.boo {
-		@apply bg-red-500 border-2 border-red-500;
-	}
 	body {
 		@apply bg-gray-50 text-slate-700 font-sans font-light text-lg;
 	}
@@ -355,11 +352,17 @@
 	}
 
 	/* Main Navigation */
-	.nav--vertical {
-		@apply outline outline-red-500;
+	.mobile-navbar__container {
+		@apply relative flex flex-col overflow-hidden min-w-48 min-h-64 border-2 border-blue-500;
+	}
+	.mobile-navbar__container .navbar__toggle {
+		@apply self-end;
+	}
+	.mobile-navbar__container .vertical-nav-wrapper-class {
+		@apply absolute top-12 left-0 w-full h-full bg-white z-50 border-2 border-orange-500;
 	}
 	.nav--horizontal {
-		@apply outline outline-blue-500;
+		@apply outline-none;
 	}
 }
 

@@ -1,15 +1,15 @@
 <template>
 	<div class="layout--user_access">
 		<header class="shadow-sm bg-white">
-			<!-- <Navbar /> -->
-			<nav class="container mx-auto p-4 flex justify-between">
+			<div class="container mx-auto p-4 flex justify-between">
 				<h1 class="font-bold text-xl text-primary">
 					<span v-if="account_organisation">
 						{{ account_organisation }}
 					</span>
 					<span v-else> YourDocsAI </span>
 				</h1>
-				<ul class="flex gap-4 flex-wrap">
+				<Navbar />
+				<!-- <ul class="flex gap-4 flex-wrap">
 					<li>
 						<UButton
 							v-if="!account_unique_id"
@@ -75,8 +75,8 @@
 						>
 						</UButton>
 					</li>
-				</ul>
-			</nav>
+				</ul> -->
+			</div>
 		</header>
 		<div class="container mx-auto p-4">
 			<slot />
