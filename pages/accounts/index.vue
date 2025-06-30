@@ -25,77 +25,145 @@
 			</div>
 		</div>
 	</section>
+	<section class="my-subscriptions container--default mx-auto">
+		<h2 class="heading heading--h2">Notification Webhook</h2>
+			<div class="card-grid">
+				<div>
+					<WebhookCard
+						:webhook="webhook"
+						@edit-webhook-clicked="openEditWebhookModal"
+					/>
+				</div>
+			</div>
+	</section>
 
 	<SubscriptionModal v-model="isSubscriptionModalOpen" />
+
+		<!-- Edit Webook Modal -->
+	<EditWebhookModal
+		:is-open="isEditWebhookModalOpen"
+		:webhook="webhookToEdit"
+		@close="closeEditWebhookModal"
+		@webhook-updated="handleWebhookUpdated"
+	/>
 
 	<UNotifications />
 </template>
 
 <script setup lang="ts">
-const config = useRuntimeConfig();
-import SubscriptionCard from '~/components/SubscriptionCard.vue';
-import SubscriptionModal from '~/components/SubscriptionModal.vue';
-import { ref } from 'vue';
-import { useAuthStore } from '~/stores/auth';
+	const config = useRuntimeConfig();
+	import SubscriptionCard from '~/components/SubscriptionCard.vue';
+	import SubscriptionModal from '~/components/SubscriptionModal.vue';
+	import WebhookCard from '~/components/WebhookCard.vue'
+	import EditWebhookModal from '~/components/EditWebhookModal.vue';
+	import { ref } from 'vue';
+	import { useAuthStore } from '~/stores/auth';
 
-definePageMeta({
-	middleware: 'auth',
-	layout: 'user-access',
-});
+	definePageMeta({
+		middleware: 'auth',
+		layout: 'user-access',
+	});
 
-const authStore = useAuthStore();
-const toast = useToast(); // For notifications
+	const authStore = useAuthStore();
+	const toast = useToast(); // For notifications
 
-const apiAuthorizationToken = authStore.access_token;
-const uniqueAccountId = authStore.uniqueAccountId;
-const activeSubscription = computed(() => authStore.subs_status);
-console.log('activeSubscription: ', activeSubscription);
-const accountOrganisation = ref('');
+	const apiAuthorizationToken = authStore.access_token;
+	const uniqueAccountId = authStore.uniqueAccountId;
+	const activeSubscription = computed(() => authStore.subs_status);
+	console.log('activeSubscription: ', activeSubscription);
+	const accountOrganisation = ref('');
 
-const isSubscriptionModalOpen = ref(false);
+	const isSubscriptionModalOpen = ref(false);
 
-const openSubscriptionModal = () => {
-	isSubscriptionModalOpen.value = true;
-};
+	const openSubscriptionModal = () => {
+		isSubscriptionModalOpen.value = true;
+	};
 
-const closeSubscriptionModal = () => {
-	isSubscriptionModalOpen.value = false;
-};
+	const closeSubscriptionModal = () => {
+		isSubscriptionModalOpen.value = false;
+	};
 
-interface Subscription {
-	id: number;
-	stripe_subscription_id: string;
-	stripe_customer_id: string;
-	status: string;
-	current_period_end: Date;
-	type: string; // 'monthly' or 'yearly'
-	trial_start: Date | null;
-	trial_end: Date | null;
-	subscription_start: Date | null;
-	stripe_account_url: string | null;
-	related_product_title: string | null;
-}
+	interface Subscription {
+		id: number;
+		stripe_subscription_id: string;
+		stripe_customer_id: string;
+		status: string;
+		current_period_end: Date;
+		type: string; // 'monthly' or 'yearly'
+		trial_start: Date | null;
+		trial_end: Date | null;
+		subscription_start: Date | null;
+		stripe_account_url: string | null;
+		related_product_title: string | null;
+	}
 
-const {
-	data: subscriptions,
-	error,
-	refresh,
-} = await useFetch(
-	`${config.public.apiBase}/stripe-subscriptions/${uniqueAccountId}`,
-	{
+	const {
+			data: subscriptions,
+			error,
+			refresh,
+		} = await useFetch(
+			`${config.public.apiBase}/stripe-subscriptions/${uniqueAccountId}`,
+			{
+				method: 'GET',
+				headers: {
+					accept: 'application/json',
+					Authorization: `Bearer ${apiAuthorizationToken}`,
+				},
+			}
+		);
+
+		authStore.setSubsStatus(subscriptions.value.active_subscription);
+
+		if (error.value) {
+			console.error('Error fetching subscriptions:', error.value);
+		} else {
+			console.log('Stored Unique Account ID:', authStore.uniqueAccountId);
+		}
+
+	interface Webhook {
+			id: number;
+			webhook_url: string;
+		}
+
+	const {
+		data: webhook,
+		error: webhookError,
+    	refresh: refreshWebhook,
+	} = await useFetch(`${config.public.apiBase}/accounts/${uniqueAccountId}`, {
 		method: 'GET',
 		headers: {
 			accept: 'application/json',
 			Authorization: `Bearer ${apiAuthorizationToken}`,
 		},
+	});
+	console.log("Webhooks Data: ", webhook.value.account.webhook_url)
+
+	if (error.value) {
+		console.error('Error fetching users:', error.value);
+	} else {
+		console.log('Stored Unique Account ID:', authStore.uniqueAccountId);
 	}
-);
 
-authStore.setSubsStatus(subscriptions.value.active_subscription);
+	const refreshWebhooks = async () => {
+		console.log('Refreshing webhooks...');
+		await refresh();
+	};
 
-if (error.value) {
-	console.error('Error fetching subscriptions:', error.value);
-} else {
-	console.log('Stored Unique Account ID:', authStore.uniqueAccountId);
-}
+	// --- State for Edit Webhook Modal ---
+	const isEditWebhookModalOpen = ref(false);
+	const webhookToEdit = ref<Webhook | null>(null);
+
+	const openEditWebhookModal = (webhook: Webhook) => {
+		webhookToEdit.value = webhook;
+		isEditWebhookModalOpen.value = true;
+	};
+
+	const closeEditWebhookModal = () => {
+		isEditWebhookModalOpen.value = false;
+		webhookToEdit.value = null; // Clear the selected user
+	};
+
+	const handleWebhookUpdated = async (updatedWebhook: Webhook) => {
+		await refreshWebhook();
+	};
 </script>
