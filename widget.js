@@ -55,7 +55,7 @@
 		const style = document.createElement('style');
 		style.textContent = `
       /* --- Base style for the Chat Toggle Button --- */
-      .ai-chat-widget-toggle {
+      button.ai-chat-widget-toggle {
         /* Positioning */
         position: fixed;
         bottom: 20px;
@@ -74,13 +74,11 @@
         padding: 0; /* Remove padding for the initial circle state */
         
         /* Appearance */
-        background-color:${config.themeColor || '#DB2777'};
         color: white;
         border: none;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         cursor: pointer;
         overflow: hidden; /* Crucial: Hides the text that's outside the button's initial width */
-
         /* --- ANIMATION --- */
         /* Smoothly transition the properties that will change */
         transition: width 0.4s ease-in-out, 
@@ -108,17 +106,6 @@
         transition: max-width 0.4s ease-in-out, 
                     opacity 0.2s 0.2s ease-in-out, /* opacity starts after 0.2s delay */
                     margin-left 0.4s ease-in-out;
-      }
-
-      /* --- HOVER and FOCUS states --- */
-      .ai-chat-widget-toggle:hover {
-        background-color:${config.themeColor || '#DB2777'};
-        transform: translateY(-2px);
-        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
-      }
-      .ai-chat-widget-toggle:focus-visible {
-        outline: 2px solid ${config.themeColor || '#DB2777'};
-        outline-offset: 2px;
       }
 
       /* 
@@ -180,7 +167,7 @@
         border-top-left-radius: 9px;
         border-top-right-radius: 9px;
       }
-      .ai-chat-close-button {
+      button.ai-chat-close-button {
         background: none;
         border: none;
         color: white;
@@ -257,11 +244,10 @@
         border: 1px solid #ddd;
         border-radius: 20px;
         margin-right: 8px;
-        font-size: 14px;
+        font-size: 16px;
       }
       .ai-chat-input-area button {
         padding: 0 12px;
-        background-color: ${config.themeColor || '#DB2777'};
         color: white;
         border: none;
         border-radius: 20px;
@@ -410,7 +396,6 @@
         font-weight: bold;
       }
       .ai-chat-email-form-actions .send {
-        background-color: ${config.themeColor || '#DB2777'};
         color: white;
       }
       .ai-chat-email-form-actions .cancel {
@@ -435,6 +420,36 @@
         color: #c62828;
         border: 1px solid #ef9a9a;
       }
+		/* --- DEFAULT, HOVER and FOCUS states --- */
+		button.ai-chat-widget-toggle:hover {
+			transform: translateY(-2px);
+			box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+		}
+		button.ai-chat-widget-toggle:focus-visible {
+			outline: 2px solid ${config.themeColor || '#DB2777'};
+			outline-offset: 2px;
+		}
+		button.ai-chat-widget-toggle,
+		button.ai-chat-widget-toggle:hover,
+		.ai-chat-input-area button,
+		.ai-chat-input-area button:hover,
+		button.ai-chat-show-email-form-button,
+		button.ai-chat-show-email-form-button:hover,
+		.ai-chat-email-form-actions button.send,
+		.ai-chat-email-form-actions button.send:hover,
+		.ai-chat-email-form-actions button.cancel:hover {
+			background-color:${config.themeColor || '#DB2777'};
+		}
+		.ai-chat-footer .ai-chat-footer-branding:hover {
+			color: ${config.themeColor || '#DB2777'};
+		}
+		button.ai-chat-close-button,
+		button.ai-chat-close-button:hover {
+			background-color: transparent;
+		}
+		button:hover {
+			opacity: 0.8;
+		}
     `;
 		document.head.appendChild(style);
 		console.log(config.buttonText || 'Widget styles injected.');
@@ -866,11 +881,9 @@
 			});
 			messagesContainer.removeChild(loadingElement);
 			if (!response.ok) {
-				const errorData = await response
-					.json()
-					.catch(() => ({
-						detail: 'Server returned an unparsable error.',
-					}));
+				const errorData = await response.json().catch(() => ({
+					detail: 'Server returned an unparsable error.',
+				}));
 				console.error('API Error Response:', errorData);
 				throw new Error(
 					errorData.detail || `API Error: ${response.status}`
@@ -1011,11 +1024,9 @@
 			});
 
 			if (!response.ok) {
-				const errorData = await response
-					.json()
-					.catch(() => ({
-						detail: 'Failed to send email. Server error.',
-					}));
+				const errorData = await response.json().catch(() => ({
+					detail: 'Failed to send email. Server error.',
+				}));
 				throw new Error(
 					errorData.detail || `API Error: ${response.status}`
 				);
