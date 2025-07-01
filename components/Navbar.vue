@@ -13,6 +13,7 @@
 				navOpen ? 'nav--open' : 'nav--closed',
 				'navbar nav--vertical',
 			]"
+			@click="closeNav()"
 		>
 		</UVerticalNavigation>
 	</div>
@@ -86,6 +87,12 @@ const mobileNavbar = ref<HTMLElement | null>(null);
 
 function toggleNav() {
 	navOpen.value = !navOpen.value;
+}
+
+function closeNav() {
+	setTimeout(() => {
+		navOpen.value = false;
+	}, 800);
 }
 
 function handleOutsideClick(event: MouseEvent) {
