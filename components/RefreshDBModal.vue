@@ -9,13 +9,15 @@
           <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1" @click="$emit('close')" />
         </div>
       </template>
-
-      <UCheckbox
-        v-model="replace"
-        label="Replace or Update?"
-        class="mb-4"
-      />
+      <div v-if="ai_db_status">
+        <UCheckbox
+          v-model="replace"
+          label="Replace or Update?"
+          class="mb-4"
+        />
       <p>Check this box to replace the existing AI Database with the latest documents, leave it unchecked to simply update your existing AI Database.</p>
+      </div>
+
       <div class="p-4">
         <p>Are you sure you want to update the AI Database with the latest documents?</p>
         <p class="text-sm text-gray-500 dark:text-gray-400">This action may take some time and cannot be undone easily.</p>
@@ -36,7 +38,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue';
+import { useAuthStore } from '~/stores/auth';
+import { ref, watch, computed } from 'vue';
+
+const authStore = useAuthStore();
+const ai_db_status = computed(
+	() => authStore.processed_docs_count > 0
+);
 
 const props = defineProps<{
   isOpen: boolean;

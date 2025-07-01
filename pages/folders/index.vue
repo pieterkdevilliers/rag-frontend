@@ -79,6 +79,7 @@ interface Folder {
 	id: number;
 	folder_name: string;
 }
+
 import { ref } from 'vue';
 import { useAuthStore } from '~/stores/auth';
 import AddFolderForm from '~/components/AddFolderForm.vue'; // Import modal component
@@ -100,6 +101,7 @@ const {
 	},
 });
 
+
 const handleFolderRemoved = (deletedFolderId: number) => {
 	console.log(
 		`Folder with ID ${deletedFolderId} was reported as deleted. Triggering refresh.`
@@ -113,6 +115,7 @@ if (error.value) {
 } else {
 	// Check if the response has the expected structure
 	if (folders.value) {
+		authStore.setProcessedDocsCount(folders.value.processed_docs_count)
 		console.log('Folders:', folders.value);
 		console.log('Stored Unique Account ID:', authStore.uniqueAccountId);
 	} else {

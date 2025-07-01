@@ -99,17 +99,20 @@ const handleLogin = async () => {
 		const accountOrganisation = data.account_organisation;
 		const docsCount = data.docs_count;
 		const subsStatus = data.active_subscription;
+		const processed_docs_count = data.processed_docs_count
 		authStore.setUniqueAccountId(uniqueAccountId);
 		authStore.setAuthToken(access_token);
 		authStore.setAccountOrganisation(accountOrganisation);
 		authStore.setDocsCount(docsCount);
 		authStore.setSubsStatus(subsStatus);
+		authStore.setProcessedDocsCount(processed_docs_count);
 
 		if (response.ok) {
 			// CHECK for a redirect path in the URL query
 			const redirectPath = route.query.redirect as string | undefined;
 			console.log('Docs Count in AuthStore: ', docsCount);
 			console.log('Subs Status in AuthStore: ', subsStatus);
+			console.log('Processed Docs Count in AuthStore: ', processed_docs_count);
 
 			// If a redirect path exists, go there. Otherwise, go to a default page.
 			if (redirectPath) {
