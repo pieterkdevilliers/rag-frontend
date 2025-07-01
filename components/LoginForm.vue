@@ -118,7 +118,7 @@ const handleLogin = async () => {
 			if (redirectPath) {
 				router.push(redirectPath);
 			} else {
-				router.push('/chats');
+				router.push('/dashboards');
 			}
 		}
 	} catch (error) {
