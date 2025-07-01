@@ -436,6 +436,17 @@
 	.nav--horizontal {
 		@apply outline-none;
 	}
+	.nav--horizontal *,
+	.nav--horizontal *:hover,
+	.nav--horizontal *::before,
+	.nav--horizontal *:hover::before,
+	.nav--horizontal *::after,
+	.nav--horizontal *:hover::after {
+		@apply transition-all duration-300 ease-in-out;
+	}
+	.nav--horizontal .nav-active-class:hover::after {
+		@apply bg-primary-500;
+	}
 }
 
 @layer utilities {

@@ -4,18 +4,16 @@ export default defineAppConfig({
 			wrapper: 'nav-wrapper-class',
 			container: 'nav-container-class gap-4',
 			inner: 'nav-inner-class',
-			base: 'nav-base-class px-2.5 py-1.5 rounded-md',
-			before: 'nav-before-class hover:bg-primary-600',
-			after: 'nav-after-class',
-			active: 'nav-active-class bg-primary-600 hover:bg-primary-500 hover:before:bg-primary-500 after:bg-transparent',
-			inactive:
-				'nav-inactive-class bg-primary-500 hover:bg-primary-600 hover:before:bg-primary-600',
-			label: 'nav-label-class text-white font-normal',
+			base: 'nav-base-class',
+			before: 'nav-before-class hover:before:bg-slate-50',
+			after: 'nav-after-class hover:after:bg-slate-200',
+			active: 'nav-active-class text-primary-600 hover::after:bg-primary-600',
+			inactive: 'nav-inactive-class text-slate-500 hover:text-slate-500',
+			label: 'nav-label-class font-roboto-condensed text-base font-normal',
 			icon: {
-				base: 'nav-icon-base-class group-hover:text-white',
-				active: 'nav-icon-active-class text-white group-hover:text-white',
-				inactive:
-					'nav-icon-inactive-class text-white group-hover:text-white',
+				base: 'nav-icon-base-class',
+				active: 'nav-icon-active-class text-primary-600',
+				inactive: 'nav-icon-inactive-class text-slate-500',
 			},
 		},
 		verticalNavigation: {
