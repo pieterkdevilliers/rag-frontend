@@ -204,7 +204,7 @@
 	.form__label-field input[type='number'],
 	.form__label-field select,
 	.form__label-field textarea {
-		@apply border border-slate-300 rounded-lg w-full ring-0 focus:ring-2 focus:ring-accent focus:border-transparent placeholder:text-slate-300 text-base lg:text-inherit;
+		@apply border border-slate-300 rounded-lg w-full ring-0 focus:ring-2 focus:ring-accent focus:border-transparent placeholder:text-slate-300 text-base lg:text-sm;
 	}
 	.form__button {
 		@apply w-full max-w-full flex justify-center;
