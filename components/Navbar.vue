@@ -76,6 +76,12 @@ const LoggedInMenuItems = ref([
 		type: 'link',
 	},
 	{
+		label: 'Dashboard',
+		to: '/dashboards',
+		icon: 'i-heroicons:chart-pie',
+		type: 'link',
+	},
+	{
 		label: 'Logout',
 		to: '/login',
 		icon: 'i-heroicons:arrow-left-end-on-rectangle',
