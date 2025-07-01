@@ -157,7 +157,7 @@
         transition: transform 0.3s ease-out, opacity 0.3s ease-out, visibility 0s linear 0s;
       }
       .ai-chat-header {
-        background-color: ${config.themeColor || '#DB2777'};
+        background-color: ${config.themeColor || '#db2777'};
         color: white;
         padding: 10px 15px;
         font-weight: bold;
@@ -191,7 +191,7 @@
         line-height: 1.4;
       }
       .ai-chat-message.user {
-        background-color: ${config.themeColor || '#DB2777'};
+        background-color: ${config.themeColor || '#db2777'};
         color: white;
         align-self: flex-end;
         border-bottom-right-radius: 4px;
@@ -328,19 +328,15 @@
       .ai-chat-show-email-form-button {
         padding: 8px 15px;
         background-color: transparent;
-        color: ${config.themeColor || '#DB2777'};
-        border: 1px solid ${config.themeColor || '#DB2777'};
+        border: 1px solid ${config.themeColor || '#db2777'};
         border-radius: 20px;
+		color: white;
         cursor: pointer;
         font-size: 13px;
         font-weight: normal;
         transition: background-color 0.2s, color 0.2s;
         align-self: center;
         margin-top: 15px;
-      }
-      .ai-chat-show-email-form-button:hover {
-        background-color: ${config.themeColor || '#DB2777'};
-        color: white;
       }
       .ai-chat-footer .ai-chat-footer-branding {
         align-self: flex-start; 
@@ -426,7 +422,7 @@
 			box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
 		}
 		button.ai-chat-widget-toggle:focus-visible {
-			outline: 2px solid ${config.themeColor || '#DB2777'};
+			outline: 2px solid ${config.themeColor || '#db2777'};
 			outline-offset: 2px;
 		}
 		button.ai-chat-widget-toggle,
@@ -438,10 +434,14 @@
 		.ai-chat-email-form-actions button.send,
 		.ai-chat-email-form-actions button.send:hover,
 		.ai-chat-email-form-actions button.cancel:hover {
-			background-color:${config.themeColor || '#DB2777'};
+			background-color:${config.themeColor || '#db2777'};
+		}
+		.ai-chat-show-email-form-button:hover,
+		.ai-chat-show-email-form-button:hover {
+			color: white;
 		}
 		.ai-chat-footer .ai-chat-footer-branding:hover {
-			color: ${config.themeColor || '#DB2777'};
+			color: ${config.themeColor || '#db2777'};
 		}
 		button.ai-chat-close-button,
 		button.ai-chat-close-button:hover {
@@ -799,7 +799,7 @@
 				const link = document.createElement('a');
 				link.href = '#';
 				link.textContent = source.displayName;
-				link.style.color = config.themeColor || '#DB2777';
+				link.style.color = config.themeColor || '#db2777';
 				link.style.textDecoration = 'underline';
 				link.style.cursor = 'pointer';
 				link.onclick = (e) => {
