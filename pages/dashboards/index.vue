@@ -24,6 +24,12 @@
             />
 
             <DashboardStatsCard
+                title="Email Messages - Last 30 Days:"
+                :loading="pending"
+                :value="data?.email_messages_count ?? 0"
+            />
+
+            <DashboardStatsCard
                 title="Source Documents in AI Database:"
                 :loading="pending"
                 :value="data?.processed_docs_count ?? 0"
