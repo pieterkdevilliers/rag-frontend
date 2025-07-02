@@ -23,6 +23,24 @@
 			:links="!isAuthenticated ? LoggedOutMenuItems : LoggedInMenuItems"
 			:class="'nav--horizontal'"
 		>
+            <!-- Use the #default slot to customize rendering -->
+			<template #default="{ link }">
+                <!-- If the link has children, render a UDropdown -->
+				<UDropdown 
+					v-if="link.children"
+					:items="[link.children]"
+					:popper="{ placement: 'bottom-start' }"
+					:ui="{ item: { padding: 'px-2.5 py-2' } }"
+					>
+					<UButton
+						:label="link.label"
+						color="gray"
+						variant="ghost"
+                        trailing-icon="i-heroicons-chevron-down-20-solid"
+					/>
+				</UDropdown>
+
+			</template>
 		</UHorizontalNavigation>
 	</nav>
 </template>
@@ -36,6 +54,55 @@ const isAuthenticated = computed(() => authStore.uniqueAccountId !== null);
 const navOpen = ref(false);
 
 const LoggedOutMenuItems = ref([
+	{
+		label: 'Home',
+		to: '/',
+		icon: 'i-heroicons:home',
+		type: 'link',
+		exact: true,
+	},
+	{
+		label: 'Pricing',
+		to: '/#pricing',
+		icon: 'i-heroicons:currency-dollar',
+	},
+	{
+		label: 'About',
+		to: '/about',
+		icon: 'i-heroicons:information-circle',
+		children: [
+			{
+				label: 'The Problem',
+				to: '/#problem',
+				icon: 'i-heroicons:exclamation-triangle',
+				type: 'link',
+			},
+			{
+				label: 'The Solution',
+				to: '/#solution',
+				icon: 'i-heroicons:map',
+				type: 'link',
+			},
+			{
+				label: 'The Benefit',
+				to: '/#benefit',
+				icon: 'i-heroicons:lifebuoy',
+				type: 'link',
+			},
+			{
+				label: 'The How',
+				to: '/#how',
+				icon: 'i-heroicons:wrench-screwdriver',
+				type: 'link',
+			},
+			{
+				label: 'The Why',
+				to: '/#why',
+				icon: 'i-heroicons:cake',
+				type: 'link',
+			},
+		]
+	},
 	{
 		label: 'Login',
 		to: '/login',
