@@ -11,37 +11,29 @@
 
 		<!-- The grid now uses our new reusable component -->
 		<div class="card-grid">
-            <UTooltip text="Number of Chat Sessions in the last 30 days">
                 <DashboardStatsCard
                     title="Chat Sessions - Last 30 Days:"
                     :loading="pending"
                     :value="data?.chat_session_count ?? 0"
                 />
-            </UTooltip>
 
-            <UTooltip text="Number of visitor questions answered in the last 30 days">
                 <DashboardStatsCard
                     title="Questions Answered - Last 30 Days:"
                     :loading="pending"
                     :value="data?.questions_answered_count ?? 0"
                 />
-            </UTooltip>
 
-            <UTooltip text="Number of 'Email Us' submissions in the last 30 days">
                 <DashboardStatsCard
                     title="Email Messages - Last 30 Days:"
                     :loading="pending"
                     :value="data?.email_message_count ?? 0"
                 />
-            </UTooltip>
 
-            <UTooltip text="Number of documents procesed into your AI Database">
                 <DashboardStatsCard
                     title="Source Documents in AI Database:"
                     :loading="pending"
                     :value="data?.processed_docs_count ?? 0"
                 />
-            </UTooltip>
 
 		</div>
 	</section>
