@@ -26,7 +26,7 @@
             <DashboardStatsCard
                 title="Email Messages - Last 30 Days:"
                 :loading="pending"
-                :value="data?.email_messages_count ?? 0"
+                :value="data?.email_message_count ?? 0"
             />
 
             <DashboardStatsCard
