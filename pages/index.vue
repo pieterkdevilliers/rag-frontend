@@ -10,6 +10,9 @@
 			<HomeSolutionSection />
 		</section>
 		<section>
+			<HomePricingSection />
+		</section>
+		<section>
 			<HomeBenefitSection />
 		</section>
 		<section>
@@ -31,11 +34,6 @@
 // Import Vue's lifecycle hooks
 import { onMounted, onUnmounted } from 'vue';
 
-// --- Your existing imports ---
-import HomeHeroSection from '~/components/HomeHeroSection.vue';
-import HomeProblemSection from '~/components/HomeProblemSection.vue';
-import HomeWhyYourDocsAISection from '~/components/HomeWhyYourDocsAISection.vue';
-// ... and so on for your other components
 
 let scriptElement: HTMLScriptElement | null = null;
 
