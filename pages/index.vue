@@ -1,24 +1,24 @@
 <template>
 	<div class="page--landing">
-		<section>
+		<section id="hero">
 			<HomeHeroSection />
 		</section>
-		<section>
+		<section id="problem">
 			<HomeProblemSection />
 		</section>
-		<section>
+		<section id="solution">
 			<HomeSolutionSection />
 		</section>
-		<section>
+		<section id="pricing">
 			<HomePricingSection />
 		</section>
-		<section>
+		<section id="benefit">
 			<HomeBenefitSection />
 		</section>
-		<section>
+		<section id="how">
 			<HomeHowItWorksSection />
 		</section>
-		<section>
+		<section id="why">
 			<HomeWhyYourDocsAISection />
 		</section>
 		<section>
@@ -78,3 +78,12 @@ onUnmounted(() => {
 	delete (window as any).myAIChatWidgetConfig;
 });
 </script>
+
+<style>
+/* This targets all direct children <section> tags within the .page--landing div */
+.page--landing > section {
+  /* Adjust this value to the height of your fixed navigation bar! */
+  /* This is a common height, but you should measure yours. */
+  scroll-margin-top: 80px; 
+}
+</style>
