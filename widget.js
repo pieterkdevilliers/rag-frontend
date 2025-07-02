@@ -49,11 +49,14 @@
 	let emailFormStatusMessage;
 
 	let isEmailFormVisible = false;
+	let widgetStyleElement = null;
 
 	// --- Styles ---
 	function injectStyles() {
 		const style = document.createElement('style');
-		style.textContent = `
+		widgetStyleElement = document.createElement('style');
+		widgetStyleElement.id = 'yourdocsai-widget-styles';
+		widgetStyleElement.textContent = `
       /* --- Base style for the Chat Toggle Button --- */
       button.ai-chat-widget-toggle {
         /* Positioning */
@@ -451,7 +454,7 @@
 			opacity: 0.8;
 		}
     `;
-		document.head.appendChild(style);
+		document.head.appendChild(widgetStyleElement);
 		console.log(config.buttonText || 'Widget styles injected.');
 	}
 
@@ -1072,6 +1075,38 @@
 		}
 		console.log('Widget initialized.');
 	}
+
+
+	function destroyWidget() {
+		console.log('Destroying YourDocsAI Widget...');
+
+		// 1. Remove the main UI elements from the body
+		if (chatToggleButton) chatToggleButton.remove();
+		if (chatWindow) chatWindow.remove();
+		if (currentIframeModal) currentIframeModal.remove(); // Also remove any open modals
+
+		// 2. Remove the injected styles from the head
+		if (widgetStyleElement) widgetStyleElement.remove();
+
+		// 3. Clean up the global API object itself
+		delete window.YourDocsAI;
+
+		// 4. Reset internal variables (good practice)
+		chatToggleButton = null;
+		chatWindow = null;
+		widgetStyleElement = null;
+		currentIframeModal = null;
+
+		console.log('Widget destroyed successfully.');
+		}
+
+		// Expose the destroy function on a global object.
+		// We also add the init function in case it's needed for advanced scenarios.
+		window.YourDocsAI = {
+			init: initializeWidget,
+			destroy: destroyWidget,
+		};
+
 
 	// --- Start the Widget ---
 	if (document.readyState === 'loading') {
