@@ -101,6 +101,7 @@
 const config = useRuntimeConfig();
 import { ref, computed, watch, nextTick } from 'vue';
 import { useAuthStore } from '~/stores/auth';
+import { scrollToResponseAnchor } from '~/public/js/common';
 
 const authStore = useAuthStore();
 const question = ref('');
@@ -164,7 +165,7 @@ const handleQuery = async () => {
 	queryResponseText.value = null;
 	queryResponseSourcesRaw.value = [];
 	loading.value = true;
-	await scrollToResponseAnchor();
+	await scrollToResponseAnchor('.query-response__container');
 	try {
 		const response = await fetch(
 			`${
@@ -207,18 +208,19 @@ const handleQuery = async () => {
 		loading.value = false;
 	}
 };
-const scrollToResponseAnchor = async () => {
-	await nextTick();
-	const responseAnchor = document.querySelector('.query-response__container');
-	if (responseAnchor) {
-		responseAnchor.scrollIntoView({ behavior: 'smooth' });
-	}
-};
+// const scrollToResponseAnchor = async () => {
+// 	await nextTick();
+// 	const responseAnchor = document.querySelector('.query-response__container');
+// 	if (responseAnchor) {
+// 		responseAnchor.scrollIntoView({ behavior: 'smooth' });
+// 	}
+// };
 
 // Ensure the scroll happens after the response is ready
 watch(queryResponseText, async (newValue) => {
 	if (newValue) {
-		await scrollToResponseAnchor();
+		// await scrollToResponseAnchor();
+		await scrollToResponseAnchor('.query-response__container');
 	}
 });
 

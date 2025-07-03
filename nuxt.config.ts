@@ -30,6 +30,13 @@ export default defineNuxtConfig({
 				},
 			],
 			link: [{}],
+			script: [
+				{
+					src: '/js/common.js',
+					type: 'module',
+					defer: true,
+				},
+			],
 		},
 	},
 	runtimeConfig: {
