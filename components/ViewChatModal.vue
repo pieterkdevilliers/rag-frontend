@@ -73,9 +73,25 @@
 						<p class="chat-item__message">
 							{{ message.message_text }}
 						</p>
-						<p v-if="message.sender_type === 'bot'" class="chat-item__sources">
-							{{ message.source_files }}
-						</p>
+						<div 
+							v-if="message.sender_type === 'bot' && message.source_files.length > 0" 
+							class="mt-2 pt-2 border-t border-gray-200 dark:border-gray-600"
+						>
+							<span class="text-xs font-semibold text-gray-600 dark:text-gray-400">Sources:</span>
+							<ul class="text-sm list-disc list-inside mt-1 space-y-1">
+								<!-- Loop through the processed source objects -->
+								<li v-for="source in message.source_files" :key="source.fileIdentifier">
+									<a
+										:href="source.viewUrl"
+										target="_blank"
+										rel="noopener noreferrer"
+										class="color: #555 dark:text-blue-400 hover:underline"
+									>
+										{{ source.displayName }}
+									</a>
+								</li>
+							</ul>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -99,13 +115,22 @@
 
 <script setup lang="ts">
 const config = useRuntimeConfig();
+
+// Define the structure for a processed source file
+interface ProcessedSource {
+  displayName: string;
+  fileIdentifier: string;
+  viewUrl: string;
+}
+
+// Update ChatMessage to use the new ProcessedSource interface
 interface ChatMessage {
 	message_id: string;
 	sender_type: 'user' | 'bot';
 	message_text: string;
 	timestamp: string;
 	chat_session_id: number;
-	source_files: string[];
+	source_files: ProcessedSource[]; // Changed from string[]
 }
 
 const props = defineProps({
@@ -116,7 +141,7 @@ const props = defineProps({
 });
 
 const emit = defineEmits(['close']);
-import { defineProps } from 'vue';
+import { defineProps, computed } from 'vue';
 import { useAuthStore } from '~/stores/auth';
 
 const authStore = useAuthStore();
@@ -131,12 +156,60 @@ const { data, status, error } = await useFetch(
 			accept: 'application/json',
 			Authorization: `Bearer ${apiAuthorizationToken}`,
 		},
+		// --- THIS IS THE KEY MODIFICATION ---
 		transform: (response: any): ChatMessage[] => {
-			return response?.chat_messages || [];
+			const rawMessages = response?.chat_messages || [];
+			if (!Array.isArray(rawMessages)) {
+				return []; // Return empty array if data is not in the expected format
+			}
+
+			// Map over each raw message to transform it
+			return rawMessages.map((message) => {
+				
+                // Use your existing logic to process the source_files for this message
+				const processedSources = (message.source_files || []).map((sourceString: string) => {
+                    // This is your logic, adapted for this context
+					const originalFileIdentifier = sourceString.split('/').pop() || sourceString;
+					let displayNameWithoutId = originalFileIdentifier;
+					const lastUnderscoreIndex = originalFileIdentifier.lastIndexOf('_');
+
+					if (lastUnderscoreIndex !== -1) {
+						const partAfterUnderscore = originalFileIdentifier.substring(lastUnderscoreIndex + 1);
+						if (/[a-f0-9]+\.(pdf|txt|docx|md)$/i.test(partAfterUnderscore)) {
+							displayNameWithoutId = originalFileIdentifier.substring(0, lastUnderscoreIndex);
+						}
+					}
+
+					displayNameWithoutId = displayNameWithoutId.replace(/\.(pdf|txt|docx|md)$/i, '');
+					
+                    // New capitalization logic:
+					const cleanedName = displayNameWithoutId.replace(/_/g, ' ').replace(/-/g, ' ').trim();
+					const displayName = cleanedName
+						.split(' ') // 1. Split into an array of words: "my file name" -> ["my", "file", "name"]
+						.map(word => word.charAt(0).toUpperCase() + word.slice(1)) // 2. Capitalize first letter of each word
+						.join(' '); // 3. Join them back with spaces: "My File Name"
+					// END of the change
+
+					const viewUrl = `${config.public.apiBase}/files/view/${account_unique_id}/${encodeURIComponent(originalFileIdentifier)}`;
+					
+					return {
+						displayName: displayName || originalFileIdentifier,
+						fileIdentifier: originalFileIdentifier,
+						viewUrl: viewUrl,
+					};
+				});
+
+				// Return the message object with the original properties,
+                // but with the `source_files` array replaced by our new processed array.
+				return {
+					...message,
+					source_files: processedSources,
+				};
+			});
 		},
 	}
 );
-console.log('Response: ', data)
+
 if (error.value) {
 	console.error('Error fetching chat messages:', error.value);
 }
