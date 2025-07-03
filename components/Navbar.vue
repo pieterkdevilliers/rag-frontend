@@ -13,8 +13,27 @@
 				navOpen ? 'nav--open' : 'nav--closed',
 				'navbar nav--vertical',
 			]"
-			@click="closeNav()"
 		>
+			<template #default="{ link }">
+				<!-- If the link has children, render a UDropdown -->
+				<UDropdown
+					v-if="link.children"
+					:class="['has-children']"
+					:items="[link.children]"
+					:popper="{ placement: 'bottom-start' }"
+					:ui="{ item: { padding: 'px-2.5 py-2' } }"
+				>
+					<UButton
+						:label="link.label"
+						color="gray"
+						trailing-icon="i-heroicons-chevron-down-20-solid"
+					/>
+				</UDropdown>
+				<!-- If the link doesn't have children, handle click to close nav -->
+				<div v-else @click="closeNav()" class="link-item">
+					<UButton :label="link.label" color="gray" variant="ghost" />
+				</div>
+			</template>
 		</UVerticalNavigation>
 	</div>
 	<!-- Desktop -->
@@ -23,23 +42,22 @@
 			:links="!isAuthenticated ? LoggedOutMenuItems : LoggedInMenuItems"
 			:class="'nav--horizontal'"
 		>
-            <!-- Use the #default slot to customize rendering -->
+			<!-- Use the #default slot to customize rendering -->
 			<template #default="{ link }">
-                <!-- If the link has children, render a UDropdown -->
-				<UDropdown 
+				<!-- If the link has children, render a UDropdown -->
+				<UDropdown
 					v-if="link.children"
 					:items="[link.children]"
 					:popper="{ placement: 'bottom-start' }"
 					:ui="{ item: { padding: 'px-2.5 py-2' } }"
-					>
+				>
 					<UButton
 						:label="link.label"
 						color="gray"
 						variant="ghost"
-                        trailing-icon="i-heroicons-chevron-down-20-solid"
+						trailing-icon="i-heroicons-chevron-down-20-solid"
 					/>
 				</UDropdown>
-
 			</template>
 		</UHorizontalNavigation>
 	</nav>
@@ -68,40 +86,40 @@ const LoggedOutMenuItems = ref([
 	},
 	{
 		label: 'About',
-		to: '/about',
+		to: '',
 		icon: 'i-heroicons:information-circle',
 		children: [
 			{
 				label: 'The Problem',
-				to: '/#problem',
+				to: '#problem',
 				icon: 'i-heroicons:exclamation-triangle',
 				type: 'link',
 			},
 			{
 				label: 'The Solution',
-				to: '/#solution',
+				to: '#solution',
 				icon: 'i-heroicons:map',
 				type: 'link',
 			},
 			{
 				label: 'The Benefit',
-				to: '/#benefit',
+				to: '#benefit',
 				icon: 'i-heroicons:lifebuoy',
 				type: 'link',
 			},
 			{
 				label: 'The How',
-				to: '/#how',
+				to: '#how',
 				icon: 'i-heroicons:wrench-screwdriver',
 				type: 'link',
 			},
 			{
 				label: 'The Why',
-				to: '/#why',
+				to: '#why',
 				icon: 'i-heroicons:cake',
 				type: 'link',
 			},
-		]
+		],
 	},
 	{
 		label: 'Login',

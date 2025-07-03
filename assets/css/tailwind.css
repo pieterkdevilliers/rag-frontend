@@ -3,6 +3,9 @@
 @tailwind utilities;
 
 @layer base {
+	* {
+		@apply scroll-smooth;
+	}
 	body {
 		@apply bg-gray-50 text-slate-700 font-sans font-light text-lg;
 	}
@@ -430,7 +433,8 @@
 	.nav--closed {
 		@apply opacity-0;
 	}
-	.nav--open {
+	.nav--open,
+	.nav--open * {
 		@apply opacity-100;
 	}
 	.nav--horizontal {
@@ -446,6 +450,18 @@
 	}
 	.nav--horizontal .nav-active-class:hover::after {
 		@apply bg-primary-500;
+	}
+
+	/* Dropdown */
+	.dropdown-trigger-class button {
+		@apply font-roboto-condensed font-normal text-base;
+	}
+	.dropdown-trigger-class[aria-expanded='true'] button {
+		@apply text-primary-600;
+	}
+	.dropdown-bg-class,
+	.dropdown-base-class {
+		@apply bg-green-500;
 	}
 }
 
