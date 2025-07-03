@@ -856,6 +856,7 @@
 					accountId: accountId,
 					chat_session_id: sessionId,
 					visitor_uuid: visitorUuid,
+					sources: []
 				}),
 			});
 		} catch (error) {
@@ -928,6 +929,7 @@
 							accountId: accountId,
 							chat_session_id: sessionId,
 							visitor_uuid: visitorUuid,
+							sources: data.response.sources
 						}),
 					});
 				} catch (error) {
