@@ -73,7 +73,7 @@
 						<p class="chat-item__message">
 							{{ message.message_text }}
 						</p>
-						<p class="chat-item__sources">
+						<p v-if="message.sender_type === 'bot'" class="chat-item__sources">
 							{{ message.source_files }}
 						</p>
 					</div>
