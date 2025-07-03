@@ -72,6 +72,7 @@
 						<!-- The actual message text -->
 						<p class="chat-item__message">
 							{{ message.message_text }}
+							{{ message.sources }}
 						</p>
 					</div>
 				</div>
@@ -102,6 +103,7 @@ interface ChatMessage {
 	message_text: string;
 	timestamp: string;
 	chat_session_id: number;
+	sources: string[];
 }
 
 const props = defineProps({
@@ -132,7 +134,7 @@ const { data, status, error } = await useFetch(
 		},
 	}
 );
-
+console.log('Response: ', data)
 if (error.value) {
 	console.error('Error fetching chat messages:', error.value);
 }
