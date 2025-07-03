@@ -72,7 +72,7 @@
 						<!-- The actual message text -->
 						<p class="chat-item__message">
 							{{ message.message_text }}
-							{{ message.sources }}
+							{{ message.source_files }}
 						</p>
 					</div>
 				</div>
@@ -103,7 +103,7 @@ interface ChatMessage {
 	message_text: string;
 	timestamp: string;
 	chat_session_id: number;
-	sources: string[];
+	source_files: string[];
 }
 
 const props = defineProps({
