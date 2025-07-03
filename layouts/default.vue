@@ -5,15 +5,13 @@
 				class="container mx-auto p-4 flex justify-between items-center"
 			>
 				<h1 class="font-bold text-xl text-primary">
-					<span>
-						<NuxtLink to="/login">YourDocsAI</NuxtLink>
-					</span>
+					<span>YourDocsAI</span>
 				</h1>
 				<Navbar />
 			</div>
 		</header>
 		<div class="container container--full mx-auto">
-			<slot />
+			<NuxtPage />
 		</div>
 	</div>
 </template>

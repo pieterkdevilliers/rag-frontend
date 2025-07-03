@@ -37,7 +37,7 @@
 		</UVerticalNavigation>
 	</div>
 	<!-- Desktop -->
-	<nav class="navbar hidden lg:block">
+	<div class="navbar hidden lg:block">
 		<UHorizontalNavigation
 			:links="!isAuthenticated ? LoggedOutMenuItems : LoggedInMenuItems"
 			:class="'nav--horizontal'"
@@ -60,7 +60,7 @@
 				</UDropdown>
 			</template>
 		</UHorizontalNavigation>
-	</nav>
+	</div>
 </template>
 
 <script setup lang="ts">
@@ -74,14 +74,15 @@ const navOpen = ref(false);
 const LoggedOutMenuItems = ref([
 	{
 		label: 'Home',
-		to: '/',
+		to: '#hero',
 		icon: 'i-heroicons:home',
-		type: 'link',
 		exact: true,
+		anchor: 'hero',
+		type: 'link',
 	},
 	{
 		label: 'Pricing',
-		to: '/#pricing',
+		to: '#pricing',
 		icon: 'i-heroicons:currency-dollar',
 	},
 	{
