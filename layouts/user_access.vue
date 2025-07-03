@@ -1,8 +1,8 @@
 <template>
-	<div class="layout--user_access">
-		<header class="shadow-sm bg-white">
+	<div class="layout layout--user_access">
+		<header class="main-header">
 			<div
-				class="container mx-auto p-4 flex justify-between items-center"
+				class="container mx-auto px-4 py-2 flex justify-between items-center"
 			>
 				<h1 class="font-bold text-xl text-primary">
 					<span v-if="account_organisation">
