@@ -727,9 +727,17 @@
 				/\.(pdf|txt|docx|md)$/i,
 				''
 			);
-			let displayName = displayNameWithoutId
+
+			let cleanedName = displayNameWithoutId
 				.replace(/_/g, ' ')
 				.replace(/-/g, ' ');
+
+			let displayName = cleanedName
+				.trim()
+				.split(' ')
+				.map(word => word.charAt(0).toUpperCase() + word.slice(1))
+				.join(' ');
+
 			const viewUrl = `${apiBaseUrl}/api/v1/files/view/${accountUniqueIdForSourceLink}/${encodeURIComponent(
 				originalFileIdentifier
 			)}`;
