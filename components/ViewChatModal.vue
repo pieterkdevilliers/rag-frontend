@@ -72,6 +72,8 @@
 						<!-- The actual message text -->
 						<p class="chat-item__message">
 							{{ message.message_text }}
+						</p>
+						<p class="chat-item__sources">
 							{{ message.source_files }}
 						</p>
 					</div>
