@@ -29,20 +29,31 @@
 						trailing-icon="i-heroicons-chevron-down-20-solid"
 					/>
 				</UDropdown>
-				<!-- If the link doesn't have children, handle click to close nav -->
-				<div v-else @click="closeNav()" class="link-item">
-					<UButton :label="link.label" color="gray" variant="ghost" />
-				</div>
+
+				<!-- 
+                    FIX #1: 
+                    - Pass the `:to="link.to"` prop to UButton to make it a real link.
+                    - Remove the unnecessary <div> wrapper.
+                    - Move the @click event directly to the button.
+                -->
+				<UButton
+					v-else
+					:to="link.to"
+					:label="link.label"
+					color="gray"
+					variant="ghost"
+					@click="closeNav()"
+				/>
 			</template>
 		</UVerticalNavigation>
 	</div>
+
 	<!-- Desktop -->
 	<div class="navbar hidden lg:block">
 		<UHorizontalNavigation
 			:links="!isAuthenticated ? LoggedOutMenuItems : LoggedInMenuItems"
 			:class="'nav--horizontal'"
 		>
-			<!-- Use the #default slot to customize rendering -->
 			<template #default="{ link }">
 				<!-- If the link has children, render a UDropdown -->
 				<UDropdown
@@ -58,6 +69,20 @@
 						trailing-icon="i-heroicons-chevron-down-20-solid"
 					/>
 				</UDropdown>
+
+				<!-- 
+                    FIX #2: 
+                    Add a `v-else` block to render the regular links.
+                    Without this, your Home, Pricing, and Login links would not appear
+                    on desktop.
+                -->
+				<UButton
+					v-else
+					:to="link.to"
+					:label="link.label"
+					color="gray"
+					variant="ghost"
+				/>
 			</template>
 		</UHorizontalNavigation>
 	</div>
@@ -74,10 +99,9 @@ const navOpen = ref(false);
 const LoggedOutMenuItems = ref([
 	{
 		label: 'Home',
-		to: '#hero',
+		to: '/',
 		icon: 'i-heroicons:home',
 		exact: true,
-		anchor: 'hero',
 		type: 'link',
 	},
 	{

@@ -14,8 +14,7 @@
 			</div>
 		</header>
 		<div class="container mx-auto p-4">
-			<!-- <slot /> -->
-			<NuxtPage />
+			<slot />
 		</div>
 		<footer>
 			<div class="container mx-auto p-4 text-center">
