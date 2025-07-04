@@ -3,6 +3,9 @@
 		<section id="hero">
 			<HomeHeroSection />
 		</section>
+		<section id="benefit">
+			<HomeBenefitSection />
+		</section>
 		<section id="problem">
 			<HomeProblemSection />
 		</section>
@@ -11,9 +14,6 @@
 		</section>
 		<section id="pricing">
 			<HomePricingSection />
-		</section>
-		<section id="benefit">
-			<HomeBenefitSection />
 		</section>
 		<section id="how">
 			<HomeHowItWorksSection />
@@ -34,7 +34,6 @@
 // Import Vue's lifecycle hooks
 import { onMounted, onUnmounted } from 'vue';
 
-
 let scriptElement: HTMLScriptElement | null = null;
 
 onMounted(() => {
@@ -47,12 +46,13 @@ onMounted(() => {
 		accountId: '8c53b4f906488f44',
 		apiKey: 'dd08b16e3d1da35a4e7973ef51fcd2d27422982883ee1174def4c922df503a87',
 		buttonText: 'Try YourDocsAI here',
-		widgetTitle: 'Ask questions about YourDocsAI'
+		widgetTitle: 'Ask questions about YourDocsAI',
 	};
 
 	// 2. Create the script element
 	scriptElement = document.createElement('script');
-	scriptElement.src = 'https://d31env5c5sjhq3.cloudfront.net/static/widget.js';
+	scriptElement.src =
+		'https://d31env5c5sjhq3.cloudfront.net/static/widget.js';
 	scriptElement.async = true;
 	scriptElement.defer = true;
 
@@ -82,8 +82,8 @@ onUnmounted(() => {
 <style>
 /* This targets all direct children <section> tags within the .page--landing div */
 .page--landing > section {
-  /* Adjust this value to the height of your fixed navigation bar! */
-  /* This is a common height, but you should measure yours. */
-  scroll-margin-top: 80px; 
+	/* Adjust this value to the height of your fixed navigation bar! */
+	/* This is a common height, but you should measure yours. */
+	scroll-margin-top: 80px;
 }
 </style>
