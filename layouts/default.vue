@@ -11,7 +11,7 @@
 			</div>
 		</header>
 		<div class="container container--full mx-auto">
-			<NuxtPage />
+			<slot />
 		</div>
 	</div>
 </template>
