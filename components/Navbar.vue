@@ -8,29 +8,12 @@
 		>
 		</UButton>
 		<UVerticalNavigation
-			:links="mobileLinks"
+			:links="!isAuthenticated ? LoggedOutMenuItems : LoggedInMenuItems"
 			:class="[
 				navOpen ? 'nav--open' : 'nav--closed',
 				'navbar nav--vertical',
 			]"
 		>
-			<!-- STRATEGY 1: Minimal Override for UVerticalNavigation -->
-			<template #default="{ link }">
-				<UDropdown
-					v-if="link.children"
-					:class="['has-children']"
-					:items="[link.children]"
-					:popper="{ placement: 'bottom-start' }"
-					:ui="{ item: { padding: 'px-2.5 py-2' } }"
-				>
-					<UButton
-						:label="link.label"
-						color="gray"
-						trailing-icon="i-heroicons-chevron-down-20-solid"
-					/>
-				</UDropdown>
-				<!-- NO v-else. This is correct for this component. -->
-			</template>
 		</UVerticalNavigation>
 	</div>
 
@@ -40,36 +23,6 @@
 			:links="!isAuthenticated ? LoggedOutMenuItems : LoggedInMenuItems"
 			:class="'nav--horizontal'"
 		>
-			<!--
-                !!!!! FINAL FIX !!!!!
-                STRATEGY 2: Full Override for UHorizontalNavigation
-                This component requires us to handle all cases (if AND else).
-            -->
-			<template #default="{ link }">
-				<!-- Case 1: The link is a dropdown -->
-				<UDropdown
-					v-if="link.children"
-					:items="[link.children]"
-					:popper="{ placement: 'bottom-start' }"
-					:ui="{ item: { padding: 'px-2.5 py-2' } }"
-				>
-					<UButton
-						:label="link.label"
-						color="gray"
-						variant="ghost"
-						trailing-icon="i-heroicons-chevron-down-20-solid"
-					/>
-				</UDropdown>
-
-				<!-- Case 2: The link is a regular button/link -->
-				<UButton
-					v-else
-					:to="link.to"
-					:label="link.label"
-					color="gray"
-					variant="ghost"
-				/>
-			</template>
 		</UHorizontalNavigation>
 	</div>
 </template>
@@ -92,7 +45,7 @@ const LoggedOutMenuItems = ref([
 	},
 	{
 		label: 'Pricing',
-		to: '/#pricing',
+		to: '#pricing',
 		icon: 'i-heroicons:currency-dollar',
 	},
 	// {
@@ -106,17 +59,37 @@ const LoggedOutMenuItems = ref([
 	// 		{ label: 'The Why', to: '/#why', icon: 'i-heroicons:cake' },
 	// 	],
 	// },
-	{ label: 'Login', to: '/login', icon: 'i-heroicons:arrow-right-end-on-rectangle' },
+	{
+		label: 'Login',
+		to: '/login',
+		icon: 'i-heroicons:arrow-right-end-on-rectangle',
+	},
 ]);
 
 const LoggedInMenuItems = ref([
-	{ label: 'Chat Sessions', to: '/chats', icon: 'i-heroicons:chat-bubble-bottom-center-text' },
+	{
+		label: 'Chat Sessions',
+		to: '/chats',
+		icon: 'i-heroicons:chat-bubble-bottom-center-text',
+	},
 	{ label: 'Users', to: '/users', icon: 'i-heroicons:users' },
-	{ label: 'Documents', to: '/folders', icon: 'i-heroicons:document-magnifying-glass' },
-	{ label: 'Web Widgets', to: '/web-widgets', icon: 'i-heroicons:code-bracket' },
+	{
+		label: 'Documents',
+		to: '/folders',
+		icon: 'i-heroicons:document-magnifying-glass',
+	},
+	{
+		label: 'Web Widgets',
+		to: '/web-widgets',
+		icon: 'i-heroicons:code-bracket',
+	},
 	{ label: 'My Account', to: '/accounts', icon: 'i-heroicons:user-circle' },
 	{ label: 'Dashboard', to: '/dashboards', icon: 'i-heroicons:chart-pie' },
-	{ label: 'Logout', to: '/login', icon: 'i-heroicons:arrow-left-end-on-rectangle' },
+	{
+		label: 'Logout',
+		to: '/login',
+		icon: 'i-heroicons:arrow-left-end-on-rectangle',
+	},
 ]);
 
 const mobileNavbar = ref<HTMLElement | null>(null);
@@ -132,13 +105,15 @@ function closeNav() {
 }
 
 const mobileLinks = computed(() => {
-    const items = !isAuthenticated.value ? LoggedOutMenuItems.value : LoggedInMenuItems.value;
-    return items.map(item => {
-        if (item.children) {
-            return item;
-        }
-        return { ...item, click: closeNav };
-    });
+	const items = !isAuthenticated.value
+		? LoggedOutMenuItems.value
+		: LoggedInMenuItems.value;
+	return items.map((item) => {
+		if (item.children) {
+			return item;
+		}
+		return { ...item, click: closeNav };
+	});
 });
 
 function handleOutsideClick(event: MouseEvent) {
