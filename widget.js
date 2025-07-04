@@ -153,6 +153,20 @@
         visibility: hidden;
         transition: transform 0.3s ease-out, opacity 0.3s ease-out, visibility 0s linear 0.3s;
       }
+      
+      /* =======================================================
+         START: MODIFICATION FOR DESKTOP HEIGHT
+         ======================================================= */
+      @media (min-width: 768px) {
+        .ai-chat-widget-window {
+          height: 825px;     /* Taller height for desktop */
+          max-height: 90vh;  /* Taller max-height for desktop */
+        }
+      }
+      /* =======================================================
+         END: MODIFICATION FOR DESKTOP HEIGHT
+         ======================================================= */
+
       .ai-chat-widget-window.open {
         transform: translateY(0) scale(1);
         opacity: 1;
@@ -205,6 +219,13 @@
         align-self: flex-start;
         border-bottom-left-radius: 4px;
       }
+		/* Add this rule to give paragraphs some breathing room */
+	  .ai-chat-message.bot p {
+		margin: 0 0 0.75em 0; /* Add some margin to the bottom of each paragraph */
+		}
+	  .ai-chat-message.bot p:last-child {
+		margin-bottom: 0; /* Remove margin from the very last paragraph */
+		}
       .ai-chat-message.error {
         background-color: #ffebee;
         color: #c62828;
@@ -458,7 +479,8 @@
 		console.log(config.buttonText || 'Widget styles injected.');
 	}
 
-	// --- UI Creation Functions ---
+	// --- [ Rest of your JavaScript code remains unchanged ] ---
+    // --- UI Creation Functions ---
 	function createChatToggleButton() {
 		chatToggleButton = document.createElement('button');
 		chatToggleButton.className = 'ai-chat-widget-toggle';
@@ -790,9 +812,30 @@
 	function displayMessage(responseText, processedSourcesArray, type) {
 		const messageElement = document.createElement('div');
 		messageElement.classList.add('ai-chat-message', type);
-		const textElement = document.createElement('p');
-		textElement.textContent = responseText;
-		messageElement.appendChild(textElement);
+
+		// Check if the message is from the bot before trying to split it
+		if (type === 'bot' && responseText) {
+			// This regex splits the text after a period, question mark, or exclamation mark
+			// that is followed by a space. It keeps the punctuation.
+			// This is a heuristic to create paragraphs from a single block of text.
+			const sentences = responseText.split(/(?<=[.?!])\s+/);
+
+			sentences.forEach(sentence => {
+				// Ensure we don't create empty <p> tags
+				if (sentence.trim()) {
+					const p = document.createElement('p');
+					p.textContent = sentence;
+					messageElement.appendChild(p);
+				}
+			});
+		} else {
+			// For user messages, errors, or loading text, use a single paragraph
+			const p = document.createElement('p');
+			p.textContent = responseText;
+			messageElement.appendChild(p);
+		}
+
+
 		if (
 			type === 'bot' &&
 			processedSourcesArray &&
