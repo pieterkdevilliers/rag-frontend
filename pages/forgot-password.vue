@@ -8,11 +8,13 @@
 						Enter your email address and we will send you a link to
 						reset your password.
 					</p>
-					<div class="form-container border-box border-box--center">
+					<div
+						class="form-container border-box border-box--center max-w-lg mx-auto"
+					>
 						<div class="form-component">
 							<form @submit.prevent="handleForgotPassword">
 								<!-- We show the message once the request is complete (success or error) -->
-								<div v-if="message" class="message">
+								<div v-if="message" class="message mt-5">
 									{{ message }}
 								</div>
 								<div class="form__label-fields">
