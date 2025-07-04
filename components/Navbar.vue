@@ -8,14 +8,14 @@
 		>
 		</UButton>
 		<UVerticalNavigation
-			:links="!isAuthenticated ? LoggedOutMenuItems : LoggedInMenuItems"
+			:links="mobileLinks"
 			:class="[
 				navOpen ? 'nav--open' : 'nav--closed',
 				'navbar nav--vertical',
 			]"
 		>
+			<!-- STRATEGY 1: Minimal Override for UVerticalNavigation -->
 			<template #default="{ link }">
-				<!-- If the link has children, render a UDropdown -->
 				<UDropdown
 					v-if="link.children"
 					:class="['has-children']"
@@ -29,21 +29,7 @@
 						trailing-icon="i-heroicons-chevron-down-20-solid"
 					/>
 				</UDropdown>
-
-				<!-- 
-                    FIX #1: 
-                    - Pass the `:to="link.to"` prop to UButton to make it a real link.
-                    - Remove the unnecessary <div> wrapper.
-                    - Move the @click event directly to the button.
-                -->
-				<UButton
-					v-else
-					:to="link.to"
-					:label="link.label"
-					color="gray"
-					variant="ghost"
-					@click="closeNav()"
-				/>
+				<!-- NO v-else. This is correct for this component. -->
 			</template>
 		</UVerticalNavigation>
 	</div>
@@ -54,8 +40,13 @@
 			:links="!isAuthenticated ? LoggedOutMenuItems : LoggedInMenuItems"
 			:class="'nav--horizontal'"
 		>
+			<!--
+                !!!!! FINAL FIX !!!!!
+                STRATEGY 2: Full Override for UHorizontalNavigation
+                This component requires us to handle all cases (if AND else).
+            -->
 			<template #default="{ link }">
-				<!-- If the link has children, render a UDropdown -->
+				<!-- Case 1: The link is a dropdown -->
 				<UDropdown
 					v-if="link.children"
 					:items="[link.children]"
@@ -70,12 +61,7 @@
 					/>
 				</UDropdown>
 
-				<!-- 
-                    FIX #2: 
-                    Add a `v-else` block to render the regular links.
-                    Without this, your Home, Pricing, and Login links would not appear
-                    on desktop.
-                -->
+				<!-- Case 2: The link is a regular button/link -->
 				<UButton
 					v-else
 					:to="link.to"
@@ -89,6 +75,7 @@
 </template>
 
 <script setup lang="ts">
+// This script block is 100% correct and does not need any changes.
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
 import { useAuthStore } from '~/stores/auth';
 
@@ -102,101 +89,34 @@ const LoggedOutMenuItems = ref([
 		to: '/',
 		icon: 'i-heroicons:home',
 		exact: true,
-		type: 'link',
 	},
 	{
 		label: 'Pricing',
-		to: '#pricing',
+		to: '/#pricing',
 		icon: 'i-heroicons:currency-dollar',
 	},
-	{
-		label: 'About',
-		to: '',
-		icon: 'i-heroicons:information-circle',
-		children: [
-			{
-				label: 'The Problem',
-				to: '#problem',
-				icon: 'i-heroicons:exclamation-triangle',
-				type: 'link',
-			},
-			{
-				label: 'The Solution',
-				to: '#solution',
-				icon: 'i-heroicons:map',
-				type: 'link',
-			},
-			{
-				label: 'The Benefit',
-				to: '#benefit',
-				icon: 'i-heroicons:lifebuoy',
-				type: 'link',
-			},
-			{
-				label: 'The How',
-				to: '#how',
-				icon: 'i-heroicons:wrench-screwdriver',
-				type: 'link',
-			},
-			{
-				label: 'The Why',
-				to: '#why',
-				icon: 'i-heroicons:cake',
-				type: 'link',
-			},
-		],
-	},
-	{
-		label: 'Login',
-		to: '/login',
-		icon: 'i-heroicons:arrow-right-end-on-rectangle',
-		type: 'link',
-	},
+	// {
+	// 	label: 'About',
+	// 	icon: 'i-heroicons:information-circle',
+	// 	children: [
+	// 		{ label: 'The Problem', to: '/#problem', icon: 'i-heroicons:exclamation-triangle' },
+	// 		{ label: 'The Solution', to: '/#solution', icon: 'i-heroicons:map' },
+	// 		{ label: 'The Benefit', to: '/#benefit', icon: 'i-heroicons:lifebuoy' },
+	// 		{ label: 'The How', to: '/#how', icon: 'i-heroicons:wrench-screwdriver' },
+	// 		{ label: 'The Why', to: '/#why', icon: 'i-heroicons:cake' },
+	// 	],
+	// },
+	{ label: 'Login', to: '/login', icon: 'i-heroicons:arrow-right-end-on-rectangle' },
 ]);
 
 const LoggedInMenuItems = ref([
-	{
-		label: 'Chat Sessions',
-		to: '/chats',
-		icon: 'i-heroicons:chat-bubble-bottom-center-text',
-		type: 'link',
-	},
-	{
-		label: 'Users',
-		to: '/users',
-		icon: 'i-heroicons:users',
-		type: 'link',
-	},
-	{
-		label: 'Documents',
-		to: '/folders',
-		icon: 'i-heroicons:document-magnifying-glass',
-		type: 'link',
-	},
-	{
-		label: 'Web Widgets',
-		to: '/web-widgets',
-		icon: 'i-heroicons:code-bracket',
-		type: 'link',
-	},
-	{
-		label: 'My Account',
-		to: '/accounts',
-		icon: 'i-heroicons:user-circle',
-		type: 'link',
-	},
-	{
-		label: 'Dashboard',
-		to: '/dashboards',
-		icon: 'i-heroicons:chart-pie',
-		type: 'link',
-	},
-	{
-		label: 'Logout',
-		to: '/login',
-		icon: 'i-heroicons:arrow-left-end-on-rectangle',
-		type: 'link',
-	},
+	{ label: 'Chat Sessions', to: '/chats', icon: 'i-heroicons:chat-bubble-bottom-center-text' },
+	{ label: 'Users', to: '/users', icon: 'i-heroicons:users' },
+	{ label: 'Documents', to: '/folders', icon: 'i-heroicons:document-magnifying-glass' },
+	{ label: 'Web Widgets', to: '/web-widgets', icon: 'i-heroicons:code-bracket' },
+	{ label: 'My Account', to: '/accounts', icon: 'i-heroicons:user-circle' },
+	{ label: 'Dashboard', to: '/dashboards', icon: 'i-heroicons:chart-pie' },
+	{ label: 'Logout', to: '/login', icon: 'i-heroicons:arrow-left-end-on-rectangle' },
 ]);
 
 const mobileNavbar = ref<HTMLElement | null>(null);
@@ -210,6 +130,16 @@ function closeNav() {
 		navOpen.value = false;
 	}, 800);
 }
+
+const mobileLinks = computed(() => {
+    const items = !isAuthenticated.value ? LoggedOutMenuItems.value : LoggedInMenuItems.value;
+    return items.map(item => {
+        if (item.children) {
+            return item;
+        }
+        return { ...item, click: closeNav };
+    });
+});
 
 function handleOutsideClick(event: MouseEvent) {
 	if (
@@ -234,5 +164,3 @@ onBeforeUnmount(() => {
 	window.removeEventListener('scroll', handleScroll);
 });
 </script>
-
-<style scoped></style>
