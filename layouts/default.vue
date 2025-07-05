@@ -4,7 +4,7 @@
 			<div
 				class="container mx-auto px-4 py-2 flex justify-between items-center"
 			>
-				<h1 class="font-bold text-xl text-primary">
+				<h1>
 					<span>YourDocsAI</span>
 				</h1>
 				<Navbar />
