@@ -86,4 +86,12 @@ onUnmounted(() => {
 	/* This is a common height, but you should measure yours. */
 	scroll-margin-top: 80px;
 }
+#hero {
+	clip-path: polygon(0 0, 100% 0, 100% 90%, 0% 100%);
+}
+@media screen and (min-width: 768px) {
+	#hero {
+		clip-path: polygon(0 0, 100% 0, 100% 90%, 0% 100%);
+	}
+}
 </style>

@@ -7,7 +7,7 @@
 		@apply scroll-smooth;
 	}
 	body {
-		@apply bg-gray-50 text-slate-700 font-sans font-light text-lg;
+		@apply bg-white text-slate-700 font-sans font-light text-lg;
 	}
 
 	h1,
@@ -72,14 +72,6 @@
 	}
 	.border-box--purple {
 		@apply border-purple-200;
-	}
-
-	/* Hero Section */
-	.page--landing .container__hero-section p {
-		@apply text-xl md:text-2xl;
-	}
-	.page--landing .container__hero-section .form-container {
-		@apply mt-6;
 	}
 
 	/* Problem Section */
@@ -176,6 +168,9 @@
 	}
 	.text-block--center {
 		@apply text-center;
+	}
+	.text-block--left {
+		@apply text-left;
 	}
 	.text-block--wide {
 		@apply xl:max-w-3xl mx-auto;
@@ -353,6 +348,88 @@
 	.content-table th {
 		@apply text-accent font-roboto-condensed;
 	}
+
+	/* Hero Section */
+	.page--landing #hero {
+		@apply bg-gradient-to-br from-purple-800 to-pink-500 pt-[60px] text-white pb-16;
+	}
+	.page--landing .container__hero-section p {
+		@apply text-xl md:text-2xl;
+	}
+	.page--landing .container__hero-section .form-container {
+		@apply mt-6;
+	}
+	.page--landing #hero,
+	.page--landing #hero :is(h1, p, strong, em) {
+		@apply text-white text-left;
+	}
+	.page--landing #hero h1 {
+		@apply text-3xl my-2.5 md:my-6;
+	}
+	.page--landing #hero p {
+		@apply text-base;
+	}
+	.page--landing #hero .form-container {
+		@apply bg-white/50 backdrop-blur-md rounded-lg shadow-lg p-3 md:p-6 max-w-3xl;
+	}
+	.page--landing #hero .form-component {
+		@apply shadow-none p-3 md:p-6;
+	}
+	.page--landing #hero .form-container h3 {
+		@apply font-roboto-condensed text-purple-800;
+	}
+	.page--landing #hero .form__label-fields {
+		@apply flex-col gap-3 justify-center items-center p-0;
+	}
+	.page--landing #hero .form__label-field {
+		@apply w-full max-w-[400px] mt-2;
+	}
+	.page--landing #hero .form__label {
+		@apply text-slate-500;
+	}
+	.page--landing #hero .form__label-field input[type='text'],
+	.page--landing #hero .form__label-field input[type='email'],
+	.page--landing #hero .form__label-field input[type='password'] {
+		@apply px-2.5 py-1 rounded-md;
+	}
+	.page--landing #hero .form__label-field input[type='text']:focus,
+	.page--landing #hero .form__label-field input[type='email']:focus,
+	.page--landing #hero .form__label-field input[type='password']:focus {
+		@apply ring-primary-600/40;
+	}
+	.layout--default .main-header h1 {
+		@apply text-white font-roboto-condensed font-medium text-lg md:text-xl;
+	}
+	.layout--default
+		.main-header
+		.navbar
+		:is(
+			.nav-inactive-class,
+			.nav-icon-inactive-class,
+			.nav-inactive-class:hover,
+			.nav-icon-inactive-class:hover,
+			.nav-active-class:hover,
+			.nav-icon-class:hover
+		) {
+		@apply text-slate-100;
+	}
+	.layout--default
+		.main-header
+		.navbar
+		:is(
+			.nav-active-class,
+			.nav-icon-active-class,
+			.nav-active-class:hover,
+			.nav-icon-active-class:hover
+		) {
+		@apply text-pink-200;
+	}
+	.layout--default .main-header .navbar :is(:hover ::before) {
+		@apply bg-white/20;
+	}
+	.layout--default .main-header .navbar :is(:hover ::after) {
+		@apply bg-transparent;
+	}
 }
 
 @layer components {
@@ -426,10 +503,16 @@
 	/* Main Navigation */
 	/* Main Header */
 	.main-header {
-		@apply bg-white shadow fixed top-0 left-0 right-0 z-40;
+		@apply bg-white/95 shadow fixed top-0 left-0 right-0 z-40;
 	}
 	.layout {
 		@apply mt-[60px] md:mt-[70px] lg:mt-[80px];
+	}
+	.layout.layout--default {
+		@apply mt-0;
+	}
+	.layout.layout--default .main-header {
+		@apply bg-purple-950/75;
 	}
 	.mobile-navbar__container {
 		@apply relative;
