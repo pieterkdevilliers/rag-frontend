@@ -30,18 +30,46 @@
 <script setup lang="ts">
 import { driver } from 'driver.js';
 import 'driver.js/dist/driver.css';
-import { ref, computed, watchEffect, onMounted } from 'vue';
+import { ref, computed, watchEffect, onMounted, nextTick, onBeforeUnmount } from 'vue';
 import Queries from '~/components/Queries.vue';
 import { useAuthStore } from '~/stores/auth';
 import Navbar from '~/components/Navbar.vue';
 
 const config = useRuntimeConfig();
 const authStore = useAuthStore();
+const isDesktop = ref(false);
 
 // Make `account_unique_id` reactive by deriving it from the store
 const account_unique_id = computed(() => authStore.uniqueAccountId || null);
 const account_organisation = ref('');
-const showTour = computed(() => authStore.docs_count === 0);
+
+onMounted(() => {
+    // Tailwind's `lg` breakpoint is 1024px.
+    const mediaQuery = window.matchMedia('(min-width: 1024px)');
+    
+    // Set the initial value
+    isDesktop.value = mediaQuery.matches;
+
+    // Update the value whenever the viewport size changes
+    const onMediaChange = (e: MediaQueryListEvent) => {
+        isDesktop.value = e.matches;
+    };
+
+    mediaQuery.addEventListener('change', onMediaChange);
+
+    // Clean up the listener when the component is unmounted
+    onBeforeUnmount(() => {
+        mediaQuery.removeEventListener('change', onMediaChange);
+    });
+});
+
+// --- UPDATED: The final trigger for the tour ---
+const shouldStartTour = computed(() => {
+    // All three conditions must be true
+    return authStore.docs_count === 0 && 
+           authStore.uniqueAccountId !== null && 
+           isDesktop.value;
+});
 
 // Watch for changes in `account_unique_id` and fetch details
 watchEffect(async () => {
@@ -72,57 +100,69 @@ watchEffect(async () => {
 	}
 });
 
-import { driver } from 'driver.js';
-import 'driver.js/dist/driver.css';
 
-onMounted(() => {
-	if (showTour.value) {
-		const driverObj = driver({
-			showProgress: true,
-			steps: [
-				{
-					element: '#chats-button',
-					popover: {
-						title: 'Chats',
-						description:
-							'View chat history including questions and answers.',
+watch(shouldStartTour, (shouldShow) => {
+	// Check if the tour should be shown
+	if (shouldShow) {
+		// 2. Wrap the driver logic in nextTick
+		nextTick(() => {
+			// Now, the DOM is updated and the Navbar elements should exist
+			const driverObj = driver({
+				showProgress: true,
+				steps: [
+					{
+						element: '#chats-button',
+						popover: {
+							title: 'Chat Sessions',
+							description:
+								'View chat history including questions and answers.',
+						},
 					},
-				},
-				{
-					element: '#users-button',
-					popover: {
-						title: 'Users',
-						description: 'Add or remove users from your account.',
+					{
+						element: '#users-button',
+						popover: {
+							title: 'Users',
+							description: 'Add or remove users from your account.',
+						},
 					},
-				},
-				{
-					element: '#documents-button',
-					popover: {
-						title: 'Documents',
-						description:
-							'Add folder and documents, and process the files into your AI Database when ready.',
+					{
+						element: '#documents-button',
+						popover: {
+							title: 'Documents',
+							description:
+								'Add folder and documents, and process the files into your AI Database when ready.',
+						},
 					},
-				},
-				{
-					element: '#widgets-button',
-					popover: {
-						title: 'Web Widgets',
-						description:
-							'Generate your API Key and Web-Widget, to add to your website, for your visitors to use.',
+					{
+						element: '#widgets-button',
+						popover: {
+							title: 'Web Widgets',
+							description:
+								'Generate your API Key and Web-Widget, to add to your website, for your visitors to use.',
+						},
 					},
-				},
-				{
-					element: '#account-button',
-					popover: {
-						title: 'Your Account',
-						description: 'View and manage your subscription.',
+					{
+						element: '#account-button',
+						popover: {
+							title: 'Your Account',
+							description: 'View and manage your subscription and notification webhook.',
+						},
 					},
-				},
-			],
+					{
+						element: '#dashboard-button',
+						popover: {
+							title: 'Your Dashboard',
+							description: 'Dashboard showing account ussage stats.',
+						},
+					},
+				],
+			});
+			console.log('chats-button check: ', document.querySelector('#chats-button'));
+
+			driverObj.drive();
 		});
-		driverObj.drive();
 	}
-});
+}, { immediate: true });
 </script>
 
 <style scoped>
