@@ -47,7 +47,7 @@
 		@apply max-w-64 md:max-w-3xl mx-auto text-center my-6;
 	}
 	.page--landing :is(section) {
-		@apply flex justify-center items-center bg-slate-50 px-5 xl:px-0 pb-6;
+		@apply flex justify-center items-center bg-slate-100 px-5 xl:px-0 pb-6;
 	}
 	.page--landing section:nth-child(even) {
 		@apply bg-white;
@@ -75,8 +75,14 @@
 	}
 
 	/* Problem Section */
+	.page--landing #problem {
+		@apply relative md:min-h-[360px] lg:min-h-[330px] xl:min-h-[300px] items-start md:mb-52 lg:mb-32;
+	}
 	.problem-section {
 		@apply container mx-auto lg:px-4 lg:py-8;
+	}
+	.problem-section .overflow-content {
+		@apply shadow-lg bg-white p-6 md:absolute md:left-1/2 md:transform md:-translate-x-1/2 w-full md:max-w-2xl lg:max-w-5xl xl:max-w-6xl;
 	}
 	.problem-box__description {
 		@apply mt-3 text-base;
