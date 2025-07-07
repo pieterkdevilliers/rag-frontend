@@ -45,6 +45,16 @@
 				<!-- This will now display the correct status -->
 				<p><strong>Status:</strong> {{ props.subscription.status }}</p>
 			</div>
+			<div v-if="props.subscription.status === 'active'">
+				<UTooltip text="Cancel Subscription">
+					<UButton
+						icon="i-heroicons:x-mark"
+						label="Cancel Subscription"
+						@click="openConfirmCancelModal"
+						:loading="isCancelling"
+					/>
+				</UTooltip>
+			</div>
 		</template>
 	</UCard>
 </template>
