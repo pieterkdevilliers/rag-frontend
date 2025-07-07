@@ -5,7 +5,7 @@
         </template>
             <div>
                 <p>Description: {{ product.product_description }}</p>
-                <p>${{ product.product_price.toFixed(2) }} - Billed {{ planCycle }}</p>
+                <p>£{{ product.product_price.toFixed(2) }} - Billed {{ planCycle }}</p>
             </div>
 
         <template #footer>
