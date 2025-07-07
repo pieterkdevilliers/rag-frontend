@@ -20,6 +20,14 @@
 			<div class="container mx-auto p-4 text-center">
 				<Queries />
 			</div>
+			<div class="container mx-auto p-4 text-center">
+				<p class="text-center text-sm text-gray-500">
+					&copy; {{ new Date().getFullYear() }} YourDocsAI. All rights
+					reserved.
+				</p>
+				<p> Privacy Policy <a href="/privacy-policy" class="text-blue-500">here</a>.</p>
+				<p> Terms of Service <a href="/terms-of-service" class="text-blue-500">here</a>.</p>
+			</div>
 		</footer>
 
 		<!-- Add UNotifications here -->

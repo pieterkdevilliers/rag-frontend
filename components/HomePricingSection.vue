@@ -54,7 +54,7 @@ const steps = ref<Step[]>([
 	},
 	{
 		icon: shallowRef(CurrencyDollarIcon),
-		title: '$45/m or $450/year',
+		title: '£25/m or £250/year',
 		description:
 			'<strong>Save</strong> by signing up for an annual plan.',
 	},
