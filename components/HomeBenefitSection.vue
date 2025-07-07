@@ -6,38 +6,35 @@
 			</h2>
 		</div>
 
-		<div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-			<div
+		<div
+			class="grid grid-cols-1 gap-8 md:gap-14 md:grid-cols-2 lg:grid-cols-3"
+		>
+			<PlainCard
 				v-for="(benefit, index) in benefits"
 				:key="index"
-				class="benefit-item border-box border-box--purple"
+				:class="['card--plain']"
 			>
-				<div class="flex items-center mb-3">
-					<!-- Optional: Icon placeholder -->
-					<div class="flex-shrink-0">
-						<component
-							:is="benefit.icon"
-							v-if="benefit.icon"
-							class="icon--purple size--8"
-							aria-hidden="true"
-						/>
-						<div
-							v-else
-							class="h-8 w-8 bg-primary-100 dark:bg-primary-900 rounded-full flex items-center justify-center"
+				<template #header>
+					<component
+						:is="benefit.icon"
+						v-if="benefit.icon"
+						class="card__icon icon--bg icon--purple size--8 md:size--10"
+						aria-hidden="true"
+					/>
+					<div
+						v-else
+						class="h-8 w-8 bg-primary-100 dark:bg-primary-900 rounded-full flex items-center justify-center"
+					>
+						<!-- Fallback visual if no specific icon -->
+						<span
+							class="text-primary-600 dark:text-primary-400 text-lg"
+							>✓</span
 						>
-							<!-- Fallback visual if no specific icon -->
-							<span
-								class="text-primary-600 dark:text-primary-400 text-lg"
-								>✓</span
-							>
-						</div>
 					</div>
-					<h3 class="card__title ms-4 text-lg leading-6">
-						{{ benefit.title }}
-					</h3>
-				</div>
-				<p class="text-base" v-html="benefit.description"></p>
-			</div>
+					<h3 class="card__title">{{ benefit.title }}</h3>
+				</template>
+				<div v-html="benefit.description"></div>
+			</PlainCard>
 		</div>
 	</div>
 </template>
@@ -53,6 +50,7 @@ import {
 	SparklesIcon,
 	TicketIcon,
 } from '@heroicons/vue/24/outline';
+import PlainCard from '~/components/PlainCard.vue';
 
 interface Benefit {
 	icon?: Component; // Make icon optional or provide a default
