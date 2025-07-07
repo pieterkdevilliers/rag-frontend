@@ -87,7 +87,7 @@ onUnmounted(() => {
 	scroll-margin-top: 80px;
 }
 #hero {
-	clip-path: polygon(0 0, 100% 0, 100% 90%, 0% 100%);
+	clip-path: polygon(0 0, 100% 0, 100% 97%, 0% 100%);
 }
 @media screen and (min-width: 768px) {
 	#hero {

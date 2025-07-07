@@ -44,7 +44,7 @@
 		@apply mb-20;
 	}
 	.page--landing :is(h1, h2) {
-		@apply max-w-3xl mx-auto text-center my-6;
+		@apply max-w-64 md:max-w-3xl mx-auto text-center my-6;
 	}
 	.page--landing :is(section) {
 		@apply flex justify-center items-center bg-slate-50 px-5 xl:px-0 pb-6;
@@ -151,7 +151,7 @@
 
 	/* Structure */
 	.container--default {
-		@apply p-0 md:px-4 md:py-8 mx-auto;
+		@apply p-0 md:px-4 md:py-8 mx-auto max-w-6xl;
 	}
 	.container--full {
 		@apply w-full min-w-full max-w-full p-0;
@@ -353,6 +353,9 @@
 	.page--landing #hero {
 		@apply bg-gradient-to-br from-purple-800 to-pink-500 pt-[60px] text-white pb-16;
 	}
+	.page--landing .container__hero-section {
+		@apply py-2 md:pt-[40px] md:pb-14;
+	}
 	.page--landing .container__hero-section p {
 		@apply text-xl md:text-2xl;
 	}
@@ -365,6 +368,9 @@
 	}
 	.page--landing #hero h1 {
 		@apply text-3xl my-2.5 md:my-6;
+	}
+	.page--landing section h2 {
+		@apply text-purple-950;
 	}
 	.page--landing #hero p {
 		@apply text-base;
@@ -444,6 +450,9 @@
 	}
 	.icon--purple {
 		@apply text-purple-500;
+	}
+	.icon--bg.icon--purple {
+		@apply bg-purple-500 text-white rounded-full flex justify-center items-center p-1;
 	}
 	.icon__number {
 		@apply rounded-full text-white flex items-center justify-center text-2xl shadow-md mb-6 mx-auto;
@@ -555,6 +564,14 @@
 	.dropdown-trigger-class[aria-expanded='true'] button {
 		@apply text-primary-600;
 	}
+
+	/* Card - Plain */
+	.card--plain .card__title {
+		@apply text-lg font-medium font-roboto-condensed mt-1;
+	}
+	/* .card--plain .card__body {
+		@apply mt-3;
+	} */
 }
 
 @layer utilities {
