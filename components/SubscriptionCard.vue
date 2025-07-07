@@ -57,14 +57,32 @@
 			</div>
 		</template>
 	</UCard>
+
+	<!-- Confirmation Modal -->
+	<ConfirmCancelModal
+		:is-open="isModalOpen"
+		:item-name="props.subscription.related_product_title"
+		@update:is-open="isModalOpen = $event"
+		@confirm="handleCancelSubscription"
+		@cancel="closeConfirmCancelModal"
+		@close="closeConfirmCancelModal"
+	/>
 </template>
 
 <script setup lang="ts">
 import { defineProps, computed } from 'vue';
 import { format, parseISO } from 'date-fns';
 
-// ★★★ THE FIX IS HERE ★★★
-// Assign the entire result of defineProps to a 'props' constant.
+const toast = useToast();
+const config = useRuntimeConfig();
+const authStore = useAuthStore();
+const isModalOpen = ref(false);
+const isCancelling = ref(false);
+const uniqueAccountId = authStore.uniqueAccountId;
+const apiAuthorizationToken = authStore.access_token;
+
+const emit = defineEmits(['subscriptionCanceled']);
+
 const props = defineProps<{
 	subscription: {
 		id: number;
@@ -80,6 +98,14 @@ const props = defineProps<{
 		related_product_title: string | null;
 	};
 }>();
+
+const openConfirmCancelModal = () => {
+	isModalOpen.value = true;
+};
+
+const closeConfirmCancelModal = () => {
+	isModalOpen.value = false;
+};
 
 const displayType = computed(() => {
 	if (props.subscription.type === 'month') {
@@ -98,4 +124,38 @@ function formatDateTime(isoString: string | null | undefined): string {
 	}
 	return format(parseISO(isoString), 'd MMMM yyyy');
 }
+
+
+const handleCancelSubscription = async () => {
+	isCancelling.value = true;
+	closeConfirmCancelModal(); // Close modal immediately
+
+	try {
+		await $fetch(
+			`${config.public.apiBase}/cancel-stripe-sub/${uniqueAccountId}/${props.subscription.stripe_subscription_id}`,
+			{
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					accept: 'application/json',
+					Authorization: `Bearer ${apiAuthorizationToken}`,
+				},
+			}
+		);
+
+		toast.add({
+			title: 'Subscription Canceled',
+			description: `Subscription "${props.subscription.id} - ${props.subscription.related_product_title}" has been canceled.`,
+			color: 'green',
+		});
+		emit('subscriptionCanceled', props.subscription.id);
+	} catch (error: any) {
+		console.error('Error canceling subscription:', error);
+		const errorMessage =
+			error.data?.detail || error.message || 'Could not cancel subscription.';
+		toast.add({ title: 'Error', description: errorMessage, color: 'red' });
+	} finally {
+		isCancelling.value = false;
+	}
+};
 </script>
