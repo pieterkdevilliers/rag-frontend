@@ -8,22 +8,26 @@
 				<span class="heading__span--block">Are You Losing Time?</span>
 			</h2>
 		</div>
-		<div class="grid sm:grid-cols-2 lg:grid-cols-4 justify-center gap-6">
+		<div class="overflow-content">
 			<div
-				v-for="(problem, index) in problems"
-				:key="index"
-				class="problem-box border-box border-box--center border-box--purple"
+				class="grid sm:grid-cols-2 lg:grid-cols-4 justify-center gap-6"
 			>
-				<div class="flex flex-col items-center">
-					<component
-						:is="problem.icon"
-						v-if="problem.icon"
-						class="icon--purple size--10"
-						aria-hidden="true"
-					/>
-					<p class="problem-box__description">
-						{{ problem.description }}
-					</p>
+				<div
+					v-for="(problem, index) in problems"
+					:key="index"
+					class="problem-box border-box border-box--center border-box--purple"
+				>
+					<div class="flex flex-col items-center">
+						<component
+							:is="problem.icon"
+							v-if="problem.icon"
+							class="icon--purple size--10"
+							aria-hidden="true"
+						/>
+						<p class="problem-box__description">
+							{{ problem.description }}
+						</p>
+					</div>
 				</div>
 			</div>
 		</div>
