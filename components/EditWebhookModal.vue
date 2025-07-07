@@ -120,9 +120,9 @@ const submitForm = async (event: FormSubmitEvent<Schema>) => {
 		emit('webhookUpdated', updatedWebhookData); // Emit event with the updated user data from API
 		handleClose(); // Close the modal
 	} catch (error: any) {
-		console.error('Error updating user:', error);
+		console.error('Error updating webhook:', error);
 		const errorMessage =
-			error.data?.detail || error.message || 'Could not update user.';
+			error.data?.detail || error.message || 'Could not update webhook.';
 		toast.add({ title: 'Error', description: errorMessage, color: 'red' });
 	} finally {
 		isLoading.value = false;

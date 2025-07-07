@@ -53,7 +53,7 @@
 <script setup lang="ts">
 defineProps<{
 	isOpen: boolean;
-	itemName: string;
+	itemName: string | null;
 }>();
 
 defineEmits(['update:isOpen', 'confirm', 'cancel', 'close']);

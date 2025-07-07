@@ -21,7 +21,9 @@
 				v-for="subscription in subscriptions?.subscriptions"
 				:key="subscription.id"
 			>
-				<SubscriptionCard :subscription="subscription" />
+				<SubscriptionCard
+				:subscription="subscription"
+				@subscription-canceled="handleSubscriptionCanceled" />
 			</div>
 		</div>
 	</section>
@@ -56,7 +58,7 @@
 	import SubscriptionModal from '~/components/SubscriptionModal.vue';
 	import WebhookCard from '~/components/WebhookCard.vue'
 	import EditWebhookModal from '~/components/EditWebhookModal.vue';
-	import { ref } from 'vue';
+	import { ref, watch } from 'vue';
 	import { useAuthStore } from '~/stores/auth';
 
 	definePageMeta({
@@ -97,6 +99,28 @@
 		related_product_title: string | null;
 	}
 
+
+	// [NEW METHOD]
+	// This handler receives the `canceledId` from the emit.
+	const handleSubscriptionCanceled = (canceledId: number) => {
+		// Ensure we have data to work with
+		if (!subscriptions.value || !subscriptions.value.subscriptions) {
+			return;
+		}
+
+		// Find the specific subscription in our local array
+		const subToUpdate = subscriptions.value.subscriptions.find(
+			(sub) => sub.id === canceledId
+		);
+
+		// If found, update its status. Vue's reactivity will do the rest!
+		if (subToUpdate) {
+			subToUpdate.status = 'canceled';
+			console.log(`Updated subscription ${canceledId} status locally.`);
+		}
+	};
+
+
 	const {
 			data: subscriptions,
 			error,
@@ -109,16 +133,23 @@
 					accept: 'application/json',
 					Authorization: `Bearer ${apiAuthorizationToken}`,
 				},
+				cache: 'no-cache' 
 			}
 		);
 
-		authStore.setSubsStatus(subscriptions.value.active_subscription);
 
 		if (error.value) {
 			console.error('Error fetching subscriptions:', error.value);
 		} else {
 			console.log('Stored Unique Account ID:', authStore.uniqueAccountId);
 		}
+
+		watch(subscriptions, (newSubscriptionsValue) => {
+        if (newSubscriptionsValue) {
+            authStore.setSubsStatus(newSubscriptionsValue.active_subscription);
+            console.log('Auth store status updated to:', newSubscriptionsValue.active_subscription);
+        }
+    }, { immediate: true });
 
 	interface Webhook {
 			id: number;
