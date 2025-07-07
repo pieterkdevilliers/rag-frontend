@@ -8,7 +8,7 @@
 					Instantly.</span
 				>
 				<span class="heading__span--block"
-					><strong>Start Your Free Trial Today!</strong></span
+					><strong>Create Your Account Today!</strong></span
 				>
 			</h2>
 		</div>
