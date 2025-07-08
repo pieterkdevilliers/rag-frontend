@@ -7,10 +7,10 @@
 			<div
 				v-for="(step, index) in steps"
 				:key="index"
-				class="step-item border-box border-box--center border-box--purple"
+				class="step-item shadow-box"
 			>
 				<!-- Number Bubble - its styling remains distinct -->
-				<div class="icon__number">
+				<div class="icon icon__number">
 					<component
 						:is="step.icon"
 						v-if="step.icon"
