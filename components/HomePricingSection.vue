@@ -1,7 +1,7 @@
 <template>
 	<div class="how-it-works-section container--default mx-auto">
 		<div class="text-center mb-10 md:mb-12">
-			<h2 class="heading heading--2">What It Costs</h2>
+			<h2 class="text-gradient heading heading--2">What It Costs</h2>
 		</div>
 		<div class="grid md:grid-cols-3 gap-6 lg:gap-8">
 			<div
@@ -12,11 +12,11 @@
 				<!-- Number Bubble - its styling remains distinct -->
 				<div class="icon__number">
 					<component
-							:is="step.icon"
-							v-if="step.icon"
-							class="icon--white size--8"
-							aria-hidden="true"
-						/>
+						:is="step.icon"
+						v-if="step.icon"
+						class="icon--white size--8"
+						aria-hidden="true"
+					/>
 				</div>
 				<!-- Text Content -->
 				<div>
@@ -55,8 +55,7 @@ const steps = ref<Step[]>([
 	{
 		icon: shallowRef(CurrencyDollarIcon),
 		title: '£25/m or £250/year',
-		description:
-			'<strong>Save</strong> by signing up for an annual plan.',
+		description: '<strong>Save</strong> by signing up for an annual plan.',
 	},
 	{
 		icon: shallowRef(ArchiveBoxXMarkIcon),

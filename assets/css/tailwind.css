@@ -362,6 +362,9 @@
 	.page--landing .container__hero-section {
 		@apply py-2 md:pt-[40px] md:pb-14;
 	}
+	.page--landing .container__hero-section .grid {
+		@apply max-w-6xl mx-auto;
+	}
 	.page--landing .container__hero-section p {
 		@apply text-xl md:text-2xl;
 	}
@@ -373,13 +376,13 @@
 		@apply text-white text-left;
 	}
 	.page--landing #hero h1 {
-		@apply text-3xl my-2.5 md:my-6;
+		@apply text-2xl lg:text-3xl my-2.5 mx-0 max-w-full md:my-6;
 	}
 	.page--landing section h2 {
 		@apply text-purple-950;
 	}
 	.page--landing #hero p {
-		@apply text-base;
+		@apply text-lg;
 	}
 	.page--landing #hero .form-container {
 		@apply bg-white/50 backdrop-blur-md rounded-lg shadow-lg p-3 md:p-6 max-w-3xl;
@@ -409,8 +412,31 @@
 	.page--landing #hero .form__label-field input[type='password']:focus {
 		@apply ring-primary-600/40;
 	}
+
+	/* Solution Section */
+	.page--landing #solution {
+		@apply lg:mt-44 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))]
+
+from-pink-600
+to-purple-800;
+	}
+	.page--landing #solution :is(.heading, span, p, strong, em) {
+		@apply text-white text-center text-shadow text-shadow-blur-lg;
+	}
+	.page--landing #solution :is(p, strong, em) {
+		@apply text-xl;
+	}
 	.layout--default .main-header h1 {
 		@apply text-white font-roboto-condensed font-medium text-lg md:text-xl;
+	}
+	/* .page--landing #solution .text-shadow {
+		@apply text-shadow text-shadow-blur-lg;
+	} */
+	.text-gradient,
+	.page--landing .text-gradient,
+	.page--landing #problem .text-gradient,
+	.page--landing #solution .text-gradient {
+		@apply bg-gradient-to-r from-purple-600 to-pink-500 bg-clip-text text-transparent;
 	}
 	.layout--default
 		.main-header
@@ -510,10 +536,10 @@
 	.card-grid .card__footer {
 		@apply mt-auto;
 	}
-	.card-grid__card .card__body strong,
+	/* .card-grid__card .card__body strong,
 	.card-grid__card .card__footer strong {
 		@apply font-roboto-condensed;
-	}
+	} */
 
 	/* Main Navigation */
 	/* Main Header */

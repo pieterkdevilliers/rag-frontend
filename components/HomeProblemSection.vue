@@ -1,11 +1,13 @@
 <template>
-	<div class="problem-section">
+	<div class="problem-section overflow-container">
 		<div class="container__inner">
 			<h2 class="mb-8">
-				<span class="heading__span--block"
+				<span class="text-gradient heading__span--block"
 					>Are Your Website Visitors Getting Frustrated?</span
 				>
-				<span class="heading__span--block">Are You Losing Time?</span>
+				<span class="text-gradient heading__span--block"
+					>Are You Losing Time?</span
+				>
 			</h2>
 		</div>
 		<div class="overflow-content">
@@ -36,7 +38,13 @@
 
 <script setup lang="ts">
 import { ref, shallowRef, type Component } from 'vue';
-import { QuestionMarkCircleIcon } from '@heroicons/vue/24/outline';
+import {
+	QuestionMarkCircleIcon,
+	DocumentMagnifyingGlassIcon,
+	ClockIcon,
+	BanknotesIcon,
+	InformationCircleIcon,
+} from '@heroicons/vue/24/outline';
 
 interface Problem {
 	icon?: Component; // Make icon optional or provide a default
@@ -45,22 +53,22 @@ interface Problem {
 
 const problems = ref<Problem[]>([
 	{
-		icon: shallowRef(QuestionMarkCircleIcon),
+		icon: shallowRef(DocumentMagnifyingGlassIcon),
 		description:
 			"Visitors can't find answers on your site and leave frustrated?",
 	},
 	{
-		icon: shallowRef(QuestionMarkCircleIcon),
+		icon: shallowRef(ClockIcon),
 		description:
 			'Spending too much time answering the same customer questions over and over?',
 	},
 	{
-		icon: shallowRef(QuestionMarkCircleIcon),
+		icon: shallowRef(BanknotesIcon),
 		description:
 			"Losing potential sales because prospects can't get immediate information when they need it?",
 	},
 	{
-		icon: shallowRef(QuestionMarkCircleIcon),
+		icon: shallowRef(InformationCircleIcon),
 		description: 'Want to provide 24/7 support without hiring more staff?',
 	},
 ]);

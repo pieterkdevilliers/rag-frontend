@@ -2,10 +2,10 @@
 	<div class="solution-section container--default">
 		<div class="container__inner">
 			<h2 class="heading">
-				<span class="heading__span--block"
+				<span class="heading__span--block font-extrabold"
 					>Introducing YourDocsAI:</span
 				>
-				<span class="heading__span--block"
+				<span class="heading__span--block font-normal"
 					>Your Website's Smart, Document-Powered Helper</span
 				>
 			</h2>
@@ -16,8 +16,10 @@
 				</p>
 				<p>
 					Simply upload your business documents – FAQs, product specs,
-					pricing, return policies, how-to guides. YourDocsAI learns
-					<strong><em>exclusively</em></strong
+					pricing, return policies and how-to guides.
+				</p>
+				<p>
+					YourDocsAI learns <strong><em>exclusively</em></strong
 					>&nbsp; from this content.
 				</p>
 				<p>
