@@ -1,9 +1,9 @@
 <template>
 	<div class="how-it-works-section container--default mx-auto">
 		<div class="text-center mb-10 md:mb-12">
-			<h2 class="heading heading--2">How It Works</h2>
+			<h2 class="text-gradient heading heading--2">How It Works</h2>
 		</div>
-		<div class="grid md:grid-cols-3 gap-6 lg:gap-8">
+		<div class="grid md:grid-cols-3 gap-12 lg:gap-16">
 			<div
 				v-for="(step, index) in steps"
 				:key="index"
@@ -21,6 +21,7 @@
 					</h3>
 					<p class="text-base" v-html="step.description"></p>
 				</div>
+				<i class="step-arrow">&rarr;</i>
 			</div>
 		</div>
 	</div>
@@ -44,7 +45,7 @@ const steps = ref<Step[]>([
 	},
 	{
 		number: 2,
-		title: 'Customize & Embed Your Chat Widget',
+		title: 'Customize & Embed Your Widget',
 		description:
 			'<strong>Easily add</strong> the YourDocsAI chat to your website.',
 	},

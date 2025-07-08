@@ -452,6 +452,20 @@ to-purple-800;
 		@apply shadow-none;
 	}
 
+	/* How It Works Section */
+	#how .step-item {
+		@apply relative border-2 lg:border-4 border-purple-400;
+	}
+	#how .step-item .icon__number {
+		@apply font-bold md:text-3xl bg-gradient-to-r from-purple-600 to-pink-500;
+	}
+	#how .step-item .step-arrow {
+		@apply absolute left-1/2 -translate-x-1/2 -bottom-12 sm:top-1/2 sm:left-auto sm:bottom-auto sm:-translate-y-1/2 md:-right-14 lg:-right-20 rotate-90 sm:rotate-0 text-5xl md:text-4xl lg:text-5xl font-medium lg:font-extrabold text-gradient;
+	}
+	#how .step-item:last-child .step-arrow {
+		@apply hidden;
+	}
+
 	/* Main Header */
 	.layout--default
 		.main-header
