@@ -196,7 +196,8 @@ const handleSignup = async () => {
 		}
 
 		// --- 4. FINALLY, REDIRECT THE USER ---
-		router.push('/folders');
+		router.push('/login?redirect=/dashboards');
+		console.log('Signup successful, redirecting to login page.');
 	} catch (error: any) {
 		console.error('Error during signup process:', error);
 		errorMessage.value =
