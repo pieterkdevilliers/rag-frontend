@@ -93,23 +93,6 @@
 		@apply text-xl mb-3;
 	}
 
-	/* Why YourDocsAI Section */
-	.why-sourceproof-section .reason-grid {
-		@apply sm:grid sm:gap-6 lg:gap-x-8 lg:gap-y-10 sm:grid-cols-12 lg:grid-cols-12;
-	}
-	.why-sourceproof-section .reason-item {
-		@apply lg:max-w-4xl lg:min-h-40 lg:mx-auto sm:col-span-6 lg:col-span-4;
-	}
-	.why-sourceproof-section .reason-item:not(:first-child) {
-		@apply mt-6 sm:mt-0;
-	}
-	.why-sourceproof-section .count--odd:nth-child(4) {
-		@apply lg:col-start-3;
-	}
-	.why-sourceproof-section .count--odd:nth-child(5) {
-		@apply sm:col-start-4 lg:col-start-7;
-	}
-
 	/* How It Works Section */
 	.how-it-works-section .icon__number {
 		@apply icon__number--purple size--12 sm:size--14 lg:size--16;
@@ -464,6 +447,42 @@ to-purple-800;
 	}
 	#how .step-item:last-child .step-arrow {
 		@apply hidden;
+	}
+
+	/* Why YourDocsAI Section */
+	/* .why-sourceproof-section .reason-grid {
+		@apply sm:grid sm:gap-6 lg:gap-x-8 lg:gap-y-10 sm:grid-cols-12 lg:grid-cols-12;
+	}
+	.why-sourceproof-section .reason-item {
+		@apply lg:max-w-4xl lg:min-h-40 lg:mx-auto sm:col-span-6 lg:col-span-4;
+	}
+	.why-sourceproof-section .reason-item:not(:first-child) {
+		@apply mt-6 sm:mt-0;
+	}
+	.why-sourceproof-section .count--odd:nth-child(4) {
+		@apply lg:col-start-3;
+	}
+	.why-sourceproof-section .count--odd:nth-child(5) {
+		@apply sm:col-start-4 lg:col-start-7;
+	} */
+	/* Why YourDocsAI Section */
+	#why {
+		@apply pb-0;
+	}
+	#why .reason-grid {
+		@apply sm:grid sm:gap-6 lg:gap-x-8 lg:gap-y-6 sm:grid-cols-3 lg:grid-cols-3;
+	}
+	#why .reason-item {
+		@apply lg:max-w-4xl lg:min-h-40 lg:mx-auto;
+	}
+	.why-sourceproof-section .reason-item:not(:first-child) {
+		@apply mt-6 sm:mt-0;
+	}
+	#why .reason-item {
+		@apply m-0;
+	}
+	#why .reason-item .card-grid__card {
+		@apply bg-transparent;
 	}
 
 	/* Main Header */
