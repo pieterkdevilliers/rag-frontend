@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@designbycode/tailwindcss-text-shadow':
+        specifier: ^2.2.1
+        version: 2.2.1(tailwindcss@3.4.17)
       '@heroicons/vue':
         specifier: ^2.2.0
         version: 2.2.0(vue@3.5.13(typescript@5.7.3))
@@ -293,6 +296,11 @@ packages:
   '@dependents/detective-less@5.0.1':
     resolution: {integrity: sha512-Y6+WUMsTFWE5jb20IFP4YGa5IrGY/+a/FbOSjDF/wz9gepU2hwCYSXRHP/vPwBvwcY3SVMASt4yXxbXNXigmZQ==}
     engines: {node: '>=18'}
+
+  '@designbycode/tailwindcss-text-shadow@2.2.1':
+    resolution: {integrity: sha512-TTy4zil7KntCTryQg4PTiba7HVPoxEvrmvp+1pbN4UdwSR1WfKJ8dZu5/5XH2O5EndyRrAft9MpvSn9MqF5QnQ==}
+    peerDependencies:
+      tailwindcss: '>=3.0.0 || >=3.0.0-alpha.1'
 
   '@emnapi/core@1.4.3':
     resolution: {integrity: sha512-4m62DuCE07lw01soJwPiBGC0nAww0Q+RY70VZ+n49yDIO13yyinhbWCeNnaob0lakDtWQzSdtNWzJeOJt2ma+g==}
@@ -4778,6 +4786,10 @@ snapshots:
     dependencies:
       gonzales-pe: 4.3.0
       node-source-walk: 7.0.1
+
+  '@designbycode/tailwindcss-text-shadow@2.2.1(tailwindcss@3.4.17)':
+    dependencies:
+      tailwindcss: 3.4.17
 
   '@emnapi/core@1.4.3':
     dependencies:

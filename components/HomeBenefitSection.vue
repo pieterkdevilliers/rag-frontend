@@ -1,7 +1,7 @@
 <template>
 	<div class="benefits-section container--default mx-auto">
 		<div class="text-center mb-10 md:mb-12">
-			<h2 class="heading heading__h2">
+			<h2 class="text-gradient heading heading__h2">
 				Delight Customers & Free Up Your Time
 			</h2>
 		</div>
