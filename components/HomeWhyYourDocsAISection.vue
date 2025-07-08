@@ -1,36 +1,29 @@
 <template>
 	<div class="why-sourceproof-section container--default mx-auto">
 		<div class="text-center mb-10 md:mb-12">
-			<h2 class="heading heading--2">Why YourDocsAI Chat?</h2>
+			<h2 class="text-gradient heading heading--2">
+				Why YourDocsAI Chat?
+			</h2>
 		</div>
-
-		<!-- <h3>{{ reasons.length }}</h3> -->
 		<div class="reason-grid">
 			<div
 				v-for="(reason, index) in reasons"
 				:key="index"
-				class="reason-item reason-card border-box border-box--purple min-h-40"
+				class="reason-item min-h-40"
 			>
-				<div>
-					<div class="card__header--has-icon">
-						<div class="flex-shrink-0">
-							<component
-								:is="reason.icon"
-								class="icon--purple size--8"
-								aria-hidden="true"
-							/>
-						</div>
-						<h3 class="text-lg leading-6">
+				<PlainCard>
+					<template #header>
+						<component
+							:is="reason.icon"
+							class="icon--bg icon--purple size--8 md:size--10"
+							aria-hidden="true"
+						/>
+						<h3 class="card__title">
 							{{ reason.title }}
 						</h3>
-					</div>
-					<div>
-						<p
-							class="mt-2 text-base"
-							v-html="reason.description"
-						></p>
-					</div>
-				</div>
+					</template>
+					<div v-html="reason.description"></div>
+				</PlainCard>
 			</div>
 		</div>
 	</div>
@@ -45,6 +38,7 @@ import {
 	ClockIcon,
 	CheckBadgeIcon,
 } from '@heroicons/vue/24/outline';
+import PlainCard from './PlainCard.vue';
 
 interface Reason {
 	icon?: Component;
