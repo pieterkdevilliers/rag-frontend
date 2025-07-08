@@ -17,7 +17,7 @@
 				<div
 					v-for="(problem, index) in problems"
 					:key="index"
-					class="problem-box border-box border-box--center border-box--purple"
+					class="problem-box"
 				>
 					<div class="flex flex-col items-center">
 						<component

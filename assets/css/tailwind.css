@@ -413,6 +413,14 @@
 		@apply ring-primary-600/40;
 	}
 
+	/* Problem Section */
+	.problem-box {
+		@apply md:p-6;
+	}
+	.problem-box .problem-box__description {
+		@apply mt-2;
+	}
+
 	/* Solution Section */
 	.page--landing #solution {
 		@apply lg:mt-44 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))]
@@ -429,15 +437,22 @@ to-purple-800;
 	.layout--default .main-header h1 {
 		@apply text-white font-roboto-condensed font-medium text-lg md:text-xl;
 	}
-	/* .page--landing #solution .text-shadow {
-		@apply text-shadow text-shadow-blur-lg;
-	} */
 	.text-gradient,
 	.page--landing .text-gradient,
 	.page--landing #problem .text-gradient,
 	.page--landing #solution .text-gradient {
 		@apply bg-gradient-to-r from-purple-600 to-pink-500 bg-clip-text text-transparent;
 	}
+
+	/* Pricing Section */
+	.shadow-box {
+		@apply bg-white p-4 md:p-6 w-full shadow text-center;
+	}
+	.shadow-box .icon {
+		@apply shadow-none;
+	}
+
+	/* Main Header */
 	.layout--default
 		.main-header
 		.navbar
@@ -487,7 +502,7 @@ to-purple-800;
 		@apply bg-purple-500 text-white rounded-full flex justify-center items-center p-1;
 	}
 	.icon__number {
-		@apply rounded-full text-white flex items-center justify-center text-2xl shadow-md mb-6 mx-auto;
+		@apply rounded-full text-white flex items-center justify-center text-2xl mb-6 mx-auto;
 	}
 	.icon__number--purple {
 		@apply bg-purple-500;
