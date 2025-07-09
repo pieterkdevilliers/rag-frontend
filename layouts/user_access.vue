@@ -29,6 +29,7 @@ import 'driver.js/dist/driver.css';
 import { ref, computed, watchEffect, onMounted } from 'vue';
 import Queries from '~/components/Queries.vue';
 import { useAuthStore } from '~/stores/auth';
+import { useHead, useRoute } from '#imports';
 import Navbar from '~/components/Navbar.vue';
 import Footer from '~/components/Footer.vue';
 
@@ -68,9 +69,6 @@ watchEffect(async () => {
 		account_organisation.value = '';
 	}
 });
-
-import { driver } from 'driver.js';
-import 'driver.js/dist/driver.css';
 
 onMounted(() => {
 	if (showTour.value) {
@@ -119,6 +117,27 @@ onMounted(() => {
 		});
 		driverObj.drive();
 	}
+});
+
+const route = useRoute();
+
+// This computed property will generate a class name like:
+// - /         -> 'page-home'
+// - /about    -> 'page-about'
+// - /user/id  -> 'page-user-id'
+const bodyClass = computed(() => {
+	if (route.path === '/') {
+		return 'page-home';
+	}
+	// Takes the path, removes the leading '/', and replaces other '/' with '-'
+	return `page-${route.path.slice(1).replace(/\//g, '-')}`;
+});
+
+useHead({
+	bodyAttrs: {
+		// Use the reactive computed property here
+		class: bodyClass,
+	},
 });
 </script>
 
