@@ -47,10 +47,10 @@
 		@apply max-w-64 md:max-w-3xl mx-auto text-center my-6;
 	}
 	.page--landing :is(section) {
-		@apply flex justify-center items-center bg-slate-100 px-5 xl:px-0 pb-6;
+		@apply flex justify-center items-center px-5 xl:px-0 pb-6;
 	}
-	.page--landing section:nth-child(even) {
-		@apply bg-white;
+	.page--landing section:nth-child(odd) {
+		@apply bg-slate-100;
 	}
 	.page--landing section p {
 		@apply mt-6;
@@ -367,14 +367,14 @@
 	.page--landing #hero p {
 		@apply text-lg;
 	}
-	.page--landing #hero .form-container {
+	.page--landing .form-container {
 		@apply bg-white/50 backdrop-blur-md rounded-lg shadow-lg p-3 md:p-6 max-w-3xl;
 	}
 	.page--landing #hero .form-component {
 		@apply shadow-none p-3 md:p-6;
 	}
 	.page--landing #hero .form-container h3 {
-		@apply font-roboto-condensed text-purple-800;
+		@apply font-roboto-condensed;
 	}
 	.page--landing #hero .form__label-fields {
 		@apply flex-col gap-3 justify-center items-center p-0;
@@ -382,8 +382,8 @@
 	.page--landing #hero .form__label-field {
 		@apply w-full max-w-[400px] mt-2;
 	}
-	.page--landing #hero .form__label {
-		@apply text-slate-500;
+	.page--landing .form__label {
+		@apply text-purple-800;
 	}
 	.page--landing #hero .form__label-field input[type='text'],
 	.page--landing #hero .form__label-field input[type='email'],
@@ -424,7 +424,7 @@ to-purple-800;
 	.page--landing .text-gradient,
 	.page--landing #problem .text-gradient,
 	.page--landing #solution .text-gradient {
-		@apply bg-gradient-to-r from-purple-600 to-pink-500 bg-clip-text text-transparent;
+		@apply bg-gradient-to-br from-purple-700 to-pink-500 bg-clip-text text-transparent;
 	}
 
 	/* Pricing Section */
@@ -450,24 +450,8 @@ to-purple-800;
 	}
 
 	/* Why YourDocsAI Section */
-	/* .why-sourceproof-section .reason-grid {
-		@apply sm:grid sm:gap-6 lg:gap-x-8 lg:gap-y-10 sm:grid-cols-12 lg:grid-cols-12;
-	}
-	.why-sourceproof-section .reason-item {
-		@apply lg:max-w-4xl lg:min-h-40 lg:mx-auto sm:col-span-6 lg:col-span-4;
-	}
-	.why-sourceproof-section .reason-item:not(:first-child) {
-		@apply mt-6 sm:mt-0;
-	}
-	.why-sourceproof-section .count--odd:nth-child(4) {
-		@apply lg:col-start-3;
-	}
-	.why-sourceproof-section .count--odd:nth-child(5) {
-		@apply sm:col-start-4 lg:col-start-7;
-	} */
-	/* Why YourDocsAI Section */
 	#why {
-		@apply pb-0;
+		@apply pb-20;
 	}
 	#why .reason-grid {
 		@apply sm:grid sm:gap-6 lg:gap-x-8 lg:gap-y-6 sm:grid-cols-3 lg:grid-cols-3;
@@ -483,6 +467,20 @@ to-purple-800;
 	}
 	#why .reason-item .card-grid__card {
 		@apply bg-transparent;
+	}
+
+	/* CTA Section */
+	.page--landing #cta {
+		@apply bg-gradient-to-br from-purple-800 to-pink-500 pt-[60px] text-white pb-16 -mt-24;
+	}
+	.page--landing #cta .container--default {
+		@apply max-w-full w-full;
+	}
+	.page--landing #cta :is(h2, p, strong, em) {
+		@apply text-white w-full max-w-full;
+	}
+	.page--landing #cta .form-container {
+		@apply mx-auto;
 	}
 
 	/* Main Header */

@@ -7,14 +7,14 @@
 			>
 				<div class="text-block text-block--left text-block--wide">
 					<h1 class="heading heading--h1">
-						<span class="heading__span--block"
+						<span class="heading__span--block font-extrabold"
 							>Answer Customer Questions 24/7</span
 						>
 						<span class="heading__span--block"
 							>Instantly & Accurately</span
 						>
 						<span class="heading__span--block"
-							><strong>From Your Website!</strong></span
+							><strong><em>From Your Website!</em></strong></span
 						>
 					</h1>
 					<p>
