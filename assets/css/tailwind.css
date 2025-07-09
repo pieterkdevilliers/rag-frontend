@@ -259,9 +259,6 @@
 	}
 
 	/* Password Reset */
-	.password-reset-form {
-		@apply mt-6;
-	}
 	.password-reset-form .form-container {
 		@apply pt-0;
 	}
