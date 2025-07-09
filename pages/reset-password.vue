@@ -2,63 +2,67 @@
 	<div class="access-page password-reset-form">
 		<div class="container--default">
 			<div class="container__inner">
-				<div class="text-block text-block--center text-block--wide">
-					<h1 class="heading heading--h1">Reset Your Password</h1>
-					<!-- This block shows while validating or if validation fails -->
-					<div
-						v-if="!isTokenValid"
-						class="form-container border-box border-box--center flex-col max-w-md mx-auto"
-					>
-						<p class="error">{{ validationMessage }}</p>
-						<UButton
-							v-if="!isValidating"
-							to="/forgot-password"
-							class="text-center justify-center"
-							>Request a new link</UButton
+				<div class="form-container">
+					<div class="form-component">
+						<h1 class="form__heading">Reset Your Password</h1>
+						<!-- This block shows while validating or if validation fails -->
+						<div
+							v-if="!isTokenValid"
+							class="flex flex-col items-center"
 						>
-					</div>
-
-					<!-- This form is shown only after the token is successfully validated -->
-
-					<form v-else @submit.prevent="handleResetPassword">
-						<div v-if="message" class="message">{{ message }}</div>
-						<div v-if="error" class="error">{{ error }}</div>
-						<div class="form__label-fields">
-							<div class="form__label-field">
-								<label class="form__label" for="password"
-									>New Password</label
-								>
-								<UInput
-									v-model="password"
-									id="password"
-									type="password"
-									placeholder="Enter your new password"
-									autocomplete="off"
-								/>
-							</div>
-							<div class="form__label-field">
-								<label class="form__label" for="password"
-									>Confirm New Password</label
-								>
-								<UInput
-									v-model="confirmPassword"
-									id="password"
-									type="password"
-									placeholder="Confirm your new password"
-									autocomplete="off"
-								/>
-							</div>
-
-							<div class="form__button-container">
-								<UButton
-									type="submit"
-									icon="i-heroicons:arrow-path"
-									label="Reset Password"
-								>
-								</UButton>
-							</div>
+							<p class="error-message">{{ validationMessage }}</p>
+							<UButton
+								v-if="!isValidating"
+								to="/forgot-password"
+								class="text-center mt-6"
+								>Request a new link</UButton
+							>
 						</div>
-					</form>
+
+						<!-- This form is shown only after the token is successfully validated -->
+
+						<form v-else @submit.prevent="handleResetPassword">
+							<div v-if="message" class="message">
+								{{ message }}
+							</div>
+							<div v-if="error" class="error">{{ error }}</div>
+							<div class="form__label-fields">
+								<div class="form__label-field">
+									<label class="form__label" for="password"
+										>New Password</label
+									>
+									<UInput
+										v-model="password"
+										id="password"
+										type="password"
+										placeholder="Enter your new password"
+										autocomplete="off"
+									/>
+								</div>
+								<div class="form__label-field">
+									<label class="form__label" for="password"
+										>Confirm New Password</label
+									>
+									<UInput
+										v-model="confirmPassword"
+										id="password"
+										type="password"
+										placeholder="Confirm your new password"
+										autocomplete="off"
+									/>
+								</div>
+
+								<div class="form__button-container">
+									<UButton
+										type="submit"
+										icon="i-heroicons:arrow-path"
+										label="Reset Password"
+									>
+									</UButton>
+								</div>
+							</div>
+						</form>
+					</div>
 				</div>
 			</div>
 		</div>

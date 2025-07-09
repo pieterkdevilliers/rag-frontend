@@ -1,8 +1,8 @@
 <template>
-	<section class="access-page">
+	<section class="access-page pt-24">
 		<div class="container--default">
 			<div class="container__inner">
-				<div class="form-container border-box border-box--center">
+				<div class="form-container">
 					<LoginForm />
 				</div>
 			</div>

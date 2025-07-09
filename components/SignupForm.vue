@@ -59,7 +59,7 @@
 				</div>
 			</div>
 		</form>
-		<p v-if="errorMessage" class="text-red-600 mt-4 text-center">
+		<p v-if="errorMessage" class="error-message">
 			{{ errorMessage }}
 		</p>
 	</div>

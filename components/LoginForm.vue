@@ -1,6 +1,6 @@
 <template>
 	<div class="form-component login-form">
-		<h1 class="heading heading--1">Login</h1>
+		<h1 class="heading heading--1 form__heading">Account Login</h1>
 		<form @submit.prevent="handleLogin">
 			<div class="form__label-fields">
 				<div class="form__label-field">
@@ -44,12 +44,11 @@
 				</div>
 			</div>
 		</form>
-		<p v-if="errorMessage" class="text-red-600 mt-4">{{ errorMessage }}</p>
+		<p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
 	</div>
 </template>
 
 <script setup lang="ts">
-
 import { ref } from 'vue';
 import { useAuthStore } from '~/stores/auth';
 import { useRouter } from 'vue-router';
@@ -63,7 +62,6 @@ onMounted(() => {
 	// This will log ONLY on the client (in your browser console)
 	console.log('CLIENT MOUNTED - apiBaseURL IS:', config.public.apiBaseURL);
 });
-
 
 const authStore = useAuthStore();
 const router = useRouter();
@@ -99,7 +97,7 @@ const handleLogin = async () => {
 		const accountOrganisation = data.account_organisation;
 		const docsCount = data.docs_count;
 		const subsStatus = data.active_subscription;
-		const processed_docs_count = data.processed_docs_count
+		const processed_docs_count = data.processed_docs_count;
 		authStore.setUniqueAccountId(uniqueAccountId);
 		authStore.setAuthToken(access_token);
 		authStore.setAccountOrganisation(accountOrganisation);
@@ -112,7 +110,10 @@ const handleLogin = async () => {
 			const redirectPath = route.query.redirect as string | undefined;
 			console.log('Docs Count in AuthStore: ', docsCount);
 			console.log('Subs Status in AuthStore: ', subsStatus);
-			console.log('Processed Docs Count in AuthStore: ', processed_docs_count);
+			console.log(
+				'Processed Docs Count in AuthStore: ',
+				processed_docs_count
+			);
 
 			// If a redirect path exists, go there. Otherwise, go to a default page.
 			if (redirectPath) {
