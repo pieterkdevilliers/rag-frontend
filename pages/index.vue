@@ -21,7 +21,7 @@
 		<section id="why">
 			<HomeWhyYourDocsAISection />
 		</section>
-		<section>
+		<section id="cta">
 			<HomeCallToActionSection />
 		</section>
 
@@ -89,9 +89,20 @@ onUnmounted(() => {
 #hero {
 	clip-path: polygon(0 0, 100% 0, 100% 97%, 0% 100%);
 }
+/* #why {
+	clip-path: polygon(0 0, 100% 0%, 100% 100%, 0% 80%);
+} */
+#cta {
+	clip-path: polygon(0 0, 100% 20%, 100% 100%, 0% 100%);
+}
 @media screen and (min-width: 768px) {
 	#hero {
 		clip-path: polygon(0 0, 100% 0, 100% 90%, 0% 100%);
+	}
+}
+@media screen and (min-width: 375px) {
+	#cta {
+		clip-path: polygon(0 0, 100% 5%, 100% 100%, 0% 100%);
 	}
 }
 </style>

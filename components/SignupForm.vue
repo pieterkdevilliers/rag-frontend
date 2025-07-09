@@ -1,6 +1,6 @@
 <template>
 	<div class="form-component signup-form">
-		<h3>Create your account</h3>
+		<h3 class="text-gradient">Create your account</h3>
 		<form @submit.prevent="handleSignup">
 			<div class="form__label-fields">
 				<!-- Email Field Group -->
