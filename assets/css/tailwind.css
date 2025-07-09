@@ -41,7 +41,7 @@
 
 	/* Landing Page */
 	.page--landing {
-		@apply mb-20;
+		@apply mb-0;
 	}
 	.page--landing :is(h1, h2) {
 		@apply max-w-64 md:max-w-3xl mx-auto text-center my-6;
@@ -167,10 +167,22 @@
 
 	/* Access Pages */
 	.access-page {
-		@apply px-6 lg:px-8;
+		@apply px-6 lg:px-8 bg-gradient-to-br from-purple-800 to-pink-500 pt-[60px] text-white pb-16;
 	}
 	.access-page .text-block p {
 		@apply mt-6;
+	}
+	.access-page .form-container {
+		@apply mx-auto;
+	}
+	.access-page .form-component {
+		@apply bg-white rounded-lg p-6;
+	}
+	.access-page .form__heading {
+		@apply text-gradient text-center;
+	}
+	.access-page .form__label {
+		@apply text-purple-800;
 	}
 
 	/* Forms */
@@ -238,6 +250,12 @@
 	}
 	.form-component .form__button-container {
 		@apply min-w-fit;
+	}
+	.form-component p.error-message {
+		@apply text-red-500 text-sm text-center font-normal mt-3;
+	}
+	.form-component p.error-message::before {
+		@apply content-['\26A0'] inline-block mr-1 text-base;
 	}
 
 	/* Password Reset */
@@ -348,14 +366,14 @@
 	.page--landing .container__hero-section .grid {
 		@apply max-w-6xl mx-auto;
 	}
-	.page--landing .container__hero-section p {
+	.page--landing .container__hero-section p:not(.error-message) {
 		@apply text-xl md:text-2xl;
 	}
 	.page--landing .container__hero-section .form-container {
 		@apply mt-6;
 	}
 	.page--landing #hero,
-	.page--landing #hero :is(h1, p, strong, em) {
+	.page--landing #hero :is(h1, p, strong, em):not(.error-message) {
 		@apply text-white text-left;
 	}
 	.page--landing #hero h1 {
@@ -364,10 +382,11 @@
 	.page--landing section h2 {
 		@apply text-purple-950;
 	}
-	.page--landing #hero p {
+	.page--landing #hero p:not(.error-message) {
 		@apply text-lg;
 	}
-	.page--landing .form-container {
+	.page--landing .form-container,
+	.access-page .form-container {
 		@apply bg-white/50 backdrop-blur-md rounded-lg shadow-lg p-3 md:p-6 max-w-3xl;
 	}
 	.page--landing #hero .form-component {
@@ -390,9 +409,9 @@
 	.page--landing #hero .form__label-field input[type='password'] {
 		@apply px-2.5 py-1 rounded-md;
 	}
-	.page--landing #hero .form__label-field input[type='text']:focus,
-	.page--landing #hero .form__label-field input[type='email']:focus,
-	.page--landing #hero .form__label-field input[type='password']:focus {
+	.form__label-field input[type='text']:focus,
+	.form__label-field input[type='email']:focus,
+	.form__label-field input[type='password']:focus {
 		@apply ring-primary-600/40;
 	}
 
@@ -451,7 +470,7 @@ to-purple-800;
 
 	/* Why YourDocsAI Section */
 	#why {
-		@apply pb-20;
+		@apply relative;
 	}
 	#why .reason-grid {
 		@apply sm:grid sm:gap-6 lg:gap-x-8 lg:gap-y-6 sm:grid-cols-3 lg:grid-cols-3;
@@ -468,10 +487,13 @@ to-purple-800;
 	#why .reason-item .card-grid__card {
 		@apply bg-transparent;
 	}
+	#why::after {
+		@apply bg-slate-100 content-[''] w-full h-24 absolute -bottom-24;
+	}
 
 	/* CTA Section */
 	.page--landing #cta {
-		@apply bg-gradient-to-br from-purple-800 to-pink-500 pt-[60px] text-white pb-16 -mt-24;
+		@apply bg-gradient-to-br from-purple-800 to-pink-500 pt-[60px] text-white pb-16;
 	}
 	.page--landing #cta .container--default {
 		@apply max-w-full w-full;
@@ -648,7 +670,7 @@ to-purple-800;
 		@apply flex flex-col items-center justify-center text-sm;
 	}
 	.layout--default .global-footer {
-		@apply mt-auto;
+		@apply mt-auto py-6;
 	}
 	.global-footer .legal {
 		@apply flex items-center gap-6;
