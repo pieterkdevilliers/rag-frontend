@@ -31,7 +31,6 @@
 </template>
 
 <script setup lang="ts">
-// Import Vue's lifecycle hooks
 import { onMounted, onUnmounted } from 'vue';
 
 let scriptElement: HTMLScriptElement | null = null;
@@ -60,38 +59,26 @@ onMounted(() => {
 	document.body.appendChild(scriptElement);
 });
 
-// onUnmounted is now much cleaner and more robust!
 onUnmounted(() => {
-	// --- UPDATED CLEANUP LOGIC ---
-
-	// 1. Call the widget's own destroy function, if it exists.
 	if (typeof (window as any).YourDocsAI?.destroy === 'function') {
 		(window as any).YourDocsAI.destroy();
 	}
 
-	// 2. Clean up the script tag itself.
 	if (scriptElement && document.body.contains(scriptElement)) {
 		document.body.removeChild(scriptElement);
 	}
 
-	// 3. Clean up the global configuration object.
 	delete (window as any).myAIChatWidgetConfig;
 });
 </script>
 
 <style>
-/* This targets all direct children <section> tags within the .page--landing div */
 .page--landing > section {
-	/* Adjust this value to the height of your fixed navigation bar! */
-	/* This is a common height, but you should measure yours. */
 	scroll-margin-top: 80px;
 }
 #hero {
 	clip-path: polygon(0 0, 100% 0, 100% 97%, 0% 100%);
 }
-/* #why {
-	clip-path: polygon(0 0, 100% 0%, 100% 100%, 0% 80%);
-} */
 #cta {
 	clip-path: polygon(0 0, 100% 20%, 100% 100%, 0% 100%);
 }
