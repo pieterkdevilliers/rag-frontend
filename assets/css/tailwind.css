@@ -503,41 +503,6 @@ to-purple-800;
 		@apply mx-auto;
 	}
 
-	/* Main Header */
-	:is(.layout--default, .layout--text_page)
-		.main-header
-		.navbar
-		:is(
-			.nav-inactive-class,
-			.nav-icon-inactive-class,
-			.nav-inactive-class:hover,
-			.nav-icon-inactive-class:hover,
-			.nav-active-class:hover,
-			.nav-icon-class:hover
-		) {
-		@apply text-slate-100;
-	}
-	:is(.layout--default, .layout--text_page)
-		.main-header
-		.navbar
-		:is(
-			.nav-active-class,
-			.nav-icon-active-class,
-			.nav-active-class:hover,
-			.nav-icon-active-class:hover
-		) {
-		@apply text-pink-200;
-	}
-	:is(.layout--default, .layout--text_page)
-		.main-header
-		.navbar
-		:is(:hover ::before) {
-		@apply bg-white/20;
-	}
-	:is(.layout--default, .layout--text_page) :is(:hover ::after) {
-		@apply bg-transparent;
-	}
-
 	/* Text Pages */
 	.layout.layout--text_page {
 		@apply bg-gradient-to-br from-purple-800 to-pink-500 pt-[60px] text-white pt-16 mt-0 flex flex-col justify-between gap-6 items-center h-full;
@@ -643,8 +608,7 @@ to-purple-800;
 	.layout.layout--default {
 		@apply mt-0 flex flex-col justify-start items-center min-h-screen;
 	}
-	.layout.layout--default .main-header,
-	.layout.layout--text_page .main-header {
+	:is(.layout--default, .layout--text_page) .main-header {
 		@apply bg-purple-950/75;
 	}
 	.mobile-navbar__container {
@@ -661,8 +625,34 @@ to-purple-800;
 		@apply opacity-100;
 	}
 	.nav--horizontal {
-		@apply outline-none;
+		@apply relative w-full flex items-center justify-between outline-none;
 	}
+	.nav--horizontal .nav-link {
+		@apply relative w-full flex items-center gap-1.5 px-2.5 py-3.5 rounded-md font-roboto-condensed font-medium text-base focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500;
+	}
+	.nav--horizontal .nav-link {
+		@apply text-slate-500 hover:text-primary-500;
+	}
+	.layout--default .nav--horizontal .nav-link {
+		@apply text-slate-50 hover:text-primary-400;
+	}
+	.nav--horizontal .nav-link:hover {
+		@apply bg-slate-500/5;
+	}
+	.nav--horizontal .nav-link ::after {
+		@apply absolute bottom-0 left-0 right-0 h-[2px];
+		content: '';
+	}
+	.nav--horizontal .nav-link:hover ::after {
+		@apply bg-slate-500;
+	}
+	.nav--horizontal .nav-link.nav-active {
+		@apply text-primary-500 font-medium;
+	}
+	.nav--horizontal .nav-active ::after {
+		@apply bg-primary-500;
+	}
+
 	.nav--horizontal *,
 	.nav--horizontal *:hover,
 	.nav--horizontal *::before,
@@ -671,8 +661,52 @@ to-purple-800;
 	.nav--horizontal *:hover::after {
 		@apply transition-all duration-300 ease-in-out;
 	}
-	.nav--horizontal .nav-active-class:hover::after {
+	.nav--horizontal
+		:is(
+			.nav-active,
+			.nav-active ::after,
+			.nav-active:hover,
+			.nav-active:hover ::after
+		) {
 		@apply bg-primary-500;
+	}
+	.nav--horizontal .nav-link:hover {
+		@apply text-slate-500;
+	}
+	:is(.layout--default, .layout--text_page)
+		.main-header
+		.navbar
+		:is(.nav-link, .nav-link:hover) {
+		@apply text-slate-100;
+	}
+	:is(.layout--default, .layout--text_page)
+		.main-header
+		.navbar
+		.nav-link:hover {
+		@apply bg-slate-50/20;
+	}
+	:is(.layout--default, .layout--text_page)
+		.main-header
+		.navbar
+		.nav-link:hover
+		::after {
+		@apply bg-slate-50;
+	}
+	:is(.layout--default, .layout--text_page)
+		.main-header
+		.navbar
+		:is(.nav-link.nav-active, .nav-link.nav-active:hover) {
+		@apply text-primary-500;
+	}
+	:is(.layout--default, .layout--text_page)
+		.main-header
+		.navbar
+		.nav-link.nav-active:hover
+		::after {
+		@apply bg-primary-500;
+	}
+	:is(.layout--default, .layout--text_page) :is(:hover ::after) {
+		@apply bg-transparent;
 	}
 
 	/* Dropdown */

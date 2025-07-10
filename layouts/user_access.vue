@@ -80,7 +80,7 @@ watchEffect(async () => {
 
 // This will be used to determine if the tour should be shown
 onMounted(() => {
-	const showTour = ref(true);
+	// const showTour = ref(true);
 	if (showTour.value) {
 		const driverObj = driver({
 			showProgress: true,

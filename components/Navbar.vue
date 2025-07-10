@@ -16,26 +16,26 @@
 		/>
 	</div>
 
-	<!-- Desktop -->
 	<div class="navbar hidden lg:block">
-		<nav class="relative w-full flex items-center justify-between">
+		<nav class="navbar nav--horizontal">
 			<ul class="flex items-center min-w-0 gap-4">
 				<li v-for="link in desktopLinks" :key="link.to || link.label">
 					<NuxtLink
-						:to="link.to"
+						:to="getLinkPath(link)"
 						:id="link.attrs?.id"
-						class="group relative w-full flex items-center gap-1.5 px-2.5 py-3.5 rounded-md font-medium text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
-						active-class="text-primary-600 dark:text-white"
-						inactive-class="text-slate-500 hover:text-slate-900 dark:text-gray-400 dark:hover:text-white"
+						:class="[
+							'nav-link',
+							'group',
+							isLinkActive(link) ? 'nav-active' : 'nav-inactive',
+						]"
+						@click="handleAnchorClick(link)"
 					>
 						<UIcon
 							v-if="link.icon"
 							:name="link.icon"
 							class="flex-shrink-0 w-5 h-5"
 						/>
-						<span
-							class="truncate font-roboto-condensed text-base font-normal"
-						>
+						<span class="nav-link__label">
 							{{ link.label }}
 						</span>
 					</NuxtLink>
@@ -46,10 +46,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
+import { ref, computed, onMounted, onBeforeUnmount, watch } from 'vue';
 import { useAuthStore } from '~/stores/auth';
+import { useRoute } from '#imports';
 
-// STEP 1: DEFINE A CLEAR TYPE FOR OUR LINK OBJECTS
+// 1. INTERFACE DEFINITION
 interface NavLink {
 	label: string;
 	to: string;
@@ -60,12 +61,17 @@ interface NavLink {
 	children?: NavLink[];
 }
 
+// 2. STATE & ROUTE INITIALIZATION
 const authStore = useAuthStore();
 const isAuthenticated = computed(() => authStore.uniqueAccountId !== null);
 const navOpen = ref(false);
+const route = useRoute();
+const activeHash = ref(route.hash);
+let observer: IntersectionObserver | null = null;
+const mobileNavbar = ref<HTMLElement | null>(null);
 
+// 3. DATA DEFINITIONS
 const LoggedOutMenuItems = ref<NavLink[]>([
-	// <-- Add type here
 	{
 		label: 'Home',
 		to: '/',
@@ -76,6 +82,10 @@ const LoggedOutMenuItems = ref<NavLink[]>([
 		label: 'Pricing',
 		to: '#pricing',
 		icon: 'i-heroicons:currency-dollar',
+		attrs: {
+			id: 'nav-link-pricing',
+			class: 'anchor-link',
+		},
 	},
 	{
 		label: 'Login',
@@ -85,7 +95,6 @@ const LoggedOutMenuItems = ref<NavLink[]>([
 ]);
 
 const LoggedInMenuItems = ref<NavLink[]>([
-	// <-- And here
 	{
 		label: 'Chat Sessions',
 		to: '/chats',
@@ -130,49 +139,165 @@ const LoggedInMenuItems = ref<NavLink[]>([
 	},
 ]);
 
-// For the desktop nav
+// 4. COMPUTED PROPERTIES
 const desktopLinks = computed<NavLink[]>(() => {
-	// <-- And here
 	return isAuthenticated.value
 		? LoggedInMenuItems.value
 		: LoggedOutMenuItems.value;
 });
 
-// For the mobile nav
 const mobileLinks = computed<NavLink[]>(() => {
-	// <-- And finally here
 	const sourceMenu = isAuthenticated.value
 		? LoggedInMenuItems.value
 		: LoggedOutMenuItems.value;
 
 	return sourceMenu.map((item) => {
+		// For items with children, just fix their path and return
 		if (item.children) {
-			return item;
+			// This ensures even parent dropdown links are correct
+			return { ...item, to: getLinkPath(item) };
 		}
+
+		// For regular links, create a new object that...
 		return {
-			...item,
+			...item, // 1. Copies all original properties
+			to: getLinkPath(item), // 2. OVERWRITES the 'to' prop with the correct, absolute path
 			click: () => {
-				if (navOpen.value) {
-					closeNav();
-				}
+				// 3. Adds the click handler to close the nav
+				if (navOpen.value) closeNav();
 			},
 		};
 	});
 });
 
-// --- The rest of your script is fine and does not need changes ---
-const mobileNavbar = ref<HTMLElement | null>(null);
+// 5. LOGIC & HELPER FUNCTIONS
+function setupObserver() {
+	// Disconnect any old observer first to be safe
+	cleanupObserver();
 
+	if (route.path === '/') {
+		const anchorLinks = LoggedOutMenuItems.value.filter((link) =>
+			link.to.startsWith('#')
+		);
+
+		observer = new IntersectionObserver(
+			(entries) => {
+				entries.forEach((entry) => {
+					if (entry.isIntersecting) {
+						activeHash.value = `#${entry.target.id}`;
+					}
+				});
+			},
+			{ rootMargin: '-50% 0px -50% 0px', threshold: 0 }
+		);
+
+		anchorLinks.forEach((link) => {
+			const targetId = link.to.substring(1);
+			const targetElement = document.getElementById(targetId);
+			if (targetElement) {
+				observer?.observe(targetElement);
+			}
+		});
+	}
+}
+
+function cleanupObserver() {
+	if (observer) {
+		observer.disconnect();
+		observer = null;
+	}
+}
+function getLinkPath(link: NavLink): string {
+	// If the link is an anchor and we are NOT on the homepage...
+	if (link.to.startsWith('#') && route.path !== '/') {
+		// ...prepend the root path to navigate back to the homepage's anchor.
+		return `/${link.to}`; // This will result in '/#pricing'
+	}
+	// Otherwise, use the path as-is.
+	return link.to;
+}
+function isLinkActive(link: NavLink): boolean {
+	if (activeHash.value && link.to === activeHash.value) return true;
+	if (activeHash.value && link.to !== activeHash.value) return false;
+	if (link.exact) return route.path === link.to && !route.hash;
+	return route.path.startsWith(link.to) && link.to !== '/' && !route.hash;
+}
+
+function handleAnchorClick(link: NavLink) {
+	if (link.to.startsWith('#')) {
+		activeHash.value = link.to;
+	}
+}
+
+// 6. WATCHERS
+watch(
+	() => route.hash,
+	(newHash) => {
+		activeHash.value = newHash;
+	}
+);
+watch(
+	() => route.path,
+	() => {
+		activeHash.value = '';
+	}
+);
+
+// 6. WATCHERS
+// This watcher handles the scroll and sets the active hash
+watch(
+	() => route.hash,
+	(newHash) => {
+		activeHash.value = newHash;
+		if (newHash) {
+			setTimeout(() => {
+				const el = document.getElementById(newHash.substring(1));
+				el?.scrollIntoView({ behavior: 'smooth' });
+			}, 100);
+		}
+	}
+);
+
+// This watcher handles the observer lifecycle and clears the active hash
+watch(
+	() => route.path,
+	(newPath) => {
+		if (newPath === '/') {
+			nextTick(() => {
+				setupObserver();
+			});
+		} else {
+			cleanupObserver();
+			// Clear the hash when navigating to a different page entirely
+			activeHash.value = '';
+		}
+	},
+	{ immediate: true }
+);
+
+// 7. LIFECYCLE HOOKS (SIMPLIFIED)
+onMounted(() => {
+	// Logic for closing nav on outside click/scroll
+	window.addEventListener('click', handleOutsideClick);
+	window.addEventListener('scroll', handleScroll);
+});
+
+onBeforeUnmount(() => {
+	// Clean up all listeners
+	window.removeEventListener('click', handleOutsideClick);
+	window.removeEventListener('scroll', handleScroll);
+	cleanupObserver(); // Also clean up observer when the whole navbar is destroyed
+});
+
+// 8. METHODS
 function toggleNav() {
 	navOpen.value = !navOpen.value;
 }
-
 function closeNav() {
 	setTimeout(() => {
 		navOpen.value = false;
 	}, 800);
 }
-
 function handleOutsideClick(event: MouseEvent) {
 	if (
 		mobileNavbar.value &&
@@ -181,18 +306,7 @@ function handleOutsideClick(event: MouseEvent) {
 		navOpen.value = false;
 	}
 }
-
 function handleScroll() {
 	navOpen.value = false;
 }
-
-onMounted(() => {
-	window.addEventListener('click', handleOutsideClick);
-	window.addEventListener('scroll', handleScroll);
-});
-
-onBeforeUnmount(() => {
-	window.removeEventListener('click', handleOutsideClick);
-	window.removeEventListener('scroll', handleScroll);
-});
 </script>
