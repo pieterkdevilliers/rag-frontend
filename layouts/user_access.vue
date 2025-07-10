@@ -4,12 +4,20 @@
 			<div
 				class="container mx-auto px-4 py-2 flex justify-between items-center"
 			>
-				<h1 class="font-bold text-xl text-primary">
-					<span v-if="account_organisation">
-						{{ account_organisation }}
-					</span>
-					<span v-else> YourDocsAI </span>
-				</h1>
+				<ClientOnly>
+					<h1 class="font-bold text-xl text-primary">
+						<span v-if="account_organisation">
+							{{ account_organisation }}
+						</span>
+						<span v-else> YourDocsAI </span>
+					</h1>
+					<template #fallback>
+						<!-- Optional: A placeholder that shows while waiting for client render -->
+						<h1 class="font-bold text-xl text-primary">
+							<span>YourDocsAI</span>
+						</h1>
+					</template>
+				</ClientOnly>
 				<Navbar />
 			</div>
 		</header>
@@ -70,13 +78,15 @@ watchEffect(async () => {
 	}
 });
 
+// This will be used to determine if the tour should be shown
 onMounted(() => {
+	const showTour = ref(true);
 	if (showTour.value) {
 		const driverObj = driver({
 			showProgress: true,
 			steps: [
 				{
-					element: '#chats-button',
+					element: '#nav-link-chats',
 					popover: {
 						title: 'Chats',
 						description:
@@ -84,14 +94,14 @@ onMounted(() => {
 					},
 				},
 				{
-					element: '#users-button',
+					element: '#nav-link-users',
 					popover: {
 						title: 'Users',
 						description: 'Add or remove users from your account.',
 					},
 				},
 				{
-					element: '#documents-button',
+					element: '#nav-link-documents',
 					popover: {
 						title: 'Documents',
 						description:
@@ -99,7 +109,7 @@ onMounted(() => {
 					},
 				},
 				{
-					element: '#widgets-button',
+					element: '#nav-link-web-widgets',
 					popover: {
 						title: 'Web Widgets',
 						description:
@@ -107,12 +117,17 @@ onMounted(() => {
 					},
 				},
 				{
-					element: '#account-button',
+					element: '#nav-link-accounts',
 					popover: {
 						title: 'Your Account',
 						description: 'View and manage your subscription.',
 					},
 				},
+				// {
+				// 	element: '#nav-link-dashboards',
+				// 	popover: {
+				// 	},
+				// },
 			],
 		});
 		driverObj.drive();
