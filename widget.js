@@ -71,8 +71,8 @@
         justify-content: center; /* Center the icon in the circle */
 
         /* Initial State: A Circle */
-        width: 60px;
-        height: 60px;
+        width: 40px;
+        height: 40px;
         border-radius: 50%; /* This makes it a circle */
         padding: 0; /* Remove padding for the initial circle state */
         
@@ -100,7 +100,7 @@
 
         /* Text appearance */
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-        font-size: 16px;
+        font-size: 14px;
         font-weight: 600;
         margin-left: 0; /* No margin when hidden */
 
@@ -480,14 +480,14 @@
 	}
 
 	// --- [ Rest of your JavaScript code remains unchanged ] ---
-    // --- UI Creation Functions ---
+	// --- UI Creation Functions ---
 	function createChatToggleButton() {
 		chatToggleButton = document.createElement('button');
 		chatToggleButton.className = 'ai-chat-widget-toggle';
 
 		// The innerHTML remains the same, containing both icon and text
 		chatToggleButton.innerHTML = `
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="28px" height="28px">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24px" height="24px">
         <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 10H6v-2h12v2zm0-3H6V7h12v2z"/>
       </svg>
       <span>${config.buttonText || 'How can we help?'}</span>
@@ -661,7 +661,7 @@
 			chatToggleButton.innerHTML =
 				config.widgetButtonIcon ||
 				`
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="28px" height="28px">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24px" height="24px">
         <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 10H6v-2h12v2zm0-3H6V7h12v2z"/>
       </svg>`;
 			chatToggleButton.setAttribute('aria-label', 'Open Chat');
@@ -757,7 +757,7 @@
 			let displayName = cleanedName
 				.trim()
 				.split(' ')
-				.map(word => word.charAt(0).toUpperCase() + word.slice(1))
+				.map((word) => word.charAt(0).toUpperCase() + word.slice(1))
 				.join(' ');
 
 			const viewUrl = `${apiBaseUrl}/api/v1/files/view/${accountUniqueIdForSourceLink}/${encodeURIComponent(
@@ -820,7 +820,7 @@
 			// This is a heuristic to create paragraphs from a single block of text.
 			const sentences = responseText.split(/(?<=[.?!])\s+/);
 
-			sentences.forEach(sentence => {
+			sentences.forEach((sentence) => {
 				// Ensure we don't create empty <p> tags
 				if (sentence.trim()) {
 					const p = document.createElement('p');
@@ -834,7 +834,6 @@
 			p.textContent = responseText;
 			messageElement.appendChild(p);
 		}
-
 
 		if (
 			type === 'bot' &&
@@ -907,7 +906,7 @@
 					accountId: accountId,
 					chat_session_id: sessionId,
 					visitor_uuid: visitorUuid,
-					sources: []
+					sources: [],
 				}),
 			});
 		} catch (error) {
@@ -980,7 +979,7 @@
 							accountId: accountId,
 							chat_session_id: sessionId,
 							visitor_uuid: visitorUuid,
-							sources: data.response.sources
+							sources: data.response.sources,
 						}),
 					});
 				} catch (error) {
@@ -1129,7 +1128,6 @@
 		console.log('Widget initialized.');
 	}
 
-
 	function destroyWidget() {
 		console.log('Destroying YourDocsAI Widget...');
 
@@ -1151,15 +1149,14 @@
 		currentIframeModal = null;
 
 		console.log('Widget destroyed successfully.');
-		}
+	}
 
-		// Expose the destroy function on a global object.
-		// We also add the init function in case it's needed for advanced scenarios.
-		window.YourDocsAI = {
-			init: initializeWidget,
-			destroy: destroyWidget,
-		};
-
+	// Expose the destroy function on a global object.
+	// We also add the init function in case it's needed for advanced scenarios.
+	window.YourDocsAI = {
+		init: initializeWidget,
+		destroy: destroyWidget,
+	};
 
 	// --- Start the Widget ---
 	if (document.readyState === 'loading') {
