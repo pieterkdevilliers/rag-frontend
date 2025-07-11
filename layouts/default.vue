@@ -60,6 +60,7 @@ watchEffect(async () => {
 	}
 });
 
+// Add current page as a class to the body tag
 const route = useRoute();
 
 // This computed property will generate a class name like:

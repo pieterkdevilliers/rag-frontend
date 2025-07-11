@@ -269,6 +269,32 @@
 		@apply mx-auto;
 	}
 
+	/* In-App Styles */
+	.layout--user_access {
+		@apply pt-[80px];
+	}
+
+	/* Tour (driver.js) */
+	.tour-popover .driver-popover-title {
+		@apply font-roboto-condensed text-xl text-gradient;
+	}
+	.tour-popover .driver-popover-description {
+		@apply font-sans font-light text-sm text-slate-700;
+	}
+	.tour-popover .driver-popover-footer {
+		@apply mt-6;
+	}
+	.tour-popover .driver-popover-footer :is(button, button:hover) {
+		@apply transition-all duration-300 ease-in-out;
+	}
+	.tour-popover .driver-popover-footer button {
+		@apply bg-primary-500 text-white px-2 py-1 rounded-md font-roboto-condensed text-xs font-normal border-primary-500;
+		text-shadow: none;
+	}
+	.tour-popover .driver-popover-footer button:hover {
+		@apply bg-primary-500/70;
+	}
+
 	/* My Account */
 	/* Subscriptions */
 	.subscription-card__details strong,
@@ -605,7 +631,7 @@ to-purple-800;
 	.layout {
 		@apply mt-[60px] md:mt-[70px] lg:mt-[80px];
 	}
-	.layout.layout--default {
+	.layout:is(.layout--default, .layout--user_access) {
 		@apply mt-0 flex flex-col justify-start items-center min-h-screen;
 	}
 	:is(.layout--default, .layout--text_page) .main-header {
@@ -731,7 +757,7 @@ to-purple-800;
 	.global-footer {
 		@apply flex flex-col items-center justify-center text-sm;
 	}
-	.layout--default .global-footer {
+	:is(.layout--default, .layout--user_access) .global-footer {
 		@apply mt-auto py-6;
 	}
 	.global-footer .legal {
