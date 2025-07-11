@@ -80,9 +80,10 @@ watchEffect(async () => {
 
 // This will be used to determine if the tour should be shown
 onMounted(() => {
-	// const showTour = ref(true);
+	// const showTour = ref(true); // Turn on tour for testing
 	if (showTour.value) {
 		const driverObj = driver({
+			popoverClass: 'tour-popover',
 			showProgress: true,
 			steps: [
 				{
@@ -134,6 +135,7 @@ onMounted(() => {
 	}
 });
 
+// Add current page as a class to the body tag
 const route = useRoute();
 
 // This computed property will generate a class name like:
