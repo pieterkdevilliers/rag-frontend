@@ -9,7 +9,13 @@
 						<span v-if="account_organisation">
 							{{ account_organisation }}
 						</span>
-						<span v-else> YourDocsAI </span>
+						<div v-else class="logo">
+							<img
+								src="../assets/images/logo-w50-inverse-purple.png"
+								alt=""
+							/>
+							<span><strong>YourDocs</strong>AI</span>
+						</div>
 					</h1>
 					<template #fallback>
 						<!-- Optional: A placeholder that shows while waiting for client render -->
