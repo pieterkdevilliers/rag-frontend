@@ -5,7 +5,7 @@
 				class="container mx-auto px-4 py-2 flex justify-between items-center"
 			>
 				<div class="logo">
-					<img src="../assets/images/logo-w50-inverse.png" alt="" />
+					<img src="../assets/images/logo-w100.png" alt="" />
 					<span><strong>YourDocs</strong>AI</span>
 				</div>
 				<Navbar />
