@@ -461,10 +461,10 @@ to-purple-800;
 	}
 	.layout--default .main-header .logo,
 	.layout--text_page .main-header .logo {
-		@apply text-white font-roboto-condensed font-medium text-lg md:text-xl flex items-center justify-start;
+		@apply text-white font-roboto-condensed font-medium text-lg md:text-2xl flex items-center justify-start;
 	}
 	.main-header .logo img {
-		@apply w-8 h-8 md:w-10 md:h-10 me-2;
+		@apply w-12 h-12 md:w-12 md:h-12 me-2;
 	}
 	.main-header .logo span {
 		@apply font-light;
