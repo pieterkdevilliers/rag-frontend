@@ -3,7 +3,9 @@
 		<div class="container--default">
 			<div class="container__inner">
 				<div class="text-block text-block--center text-block--wide">
-					<h1 class="heading heading--h1">Forgot Your Password?</h1>
+					<h1 class="heading heading--h1 text-white">
+						Forgot Your Password?
+					</h1>
 					<p>
 						Enter your email address and we will send you a link to
 						reset your password.
@@ -14,7 +16,10 @@
 						<div class="form-component">
 							<form @submit.prevent="handleForgotPassword">
 								<!-- We show the message once the request is complete (success or error) -->
-								<div v-if="message" class="message mt-5">
+								<div
+									v-if="message"
+									class="message mt-5 text-gray-500"
+								>
 									{{ message }}
 								</div>
 								<div class="form__label-fields">

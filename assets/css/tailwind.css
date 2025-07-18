@@ -563,6 +563,9 @@ to-purple-800;
 	.layout--text_page .global-footer {
 		@apply bg-white text-slate-700 mt-auto w-full py-3;
 	}
+	.layout--text_page .form-component .message {
+		@apply text-slate-500 text-sm;
+	}
 }
 
 @layer components {
