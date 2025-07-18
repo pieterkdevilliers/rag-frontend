@@ -1,86 +1,90 @@
 <template>
-	<div class="query-form__container border-box">
-		<h2 class="heading heading--h2">
-			Run a test query on your processed documents
-		</h2>
-		<div class="form-container">
-			<form @submit.prevent="handleQuery">
-				<div class="form__label-fields">
-					<div class="form__label-field">
-						<label class="form__label" for="question"
-							>Question</label
-						>
-						<UInput
-							v-model="question"
-							id="question"
-							type="text"
-							placeholder="Run a test query..."
-							autocomplete="off"
-							class="form__label-field__input"
-						/>
-					</div>
-					<div
-						class="form__button-container single-button mt-4 md:mt-0"
-					>
-						<UButton
-							type="submit"
-							icon="i-heroicons:chat-bubble-left-ellipsis"
-							label="Ask Now!"
-							class="form__button"
-						/>
-					</div>
-				</div>
-			</form>
-		</div>
-		<div class="query-response__container">
-			<!-- Show error message -->
-			<p v-if="errorMessage" class="text-red-600 mt-4">
-				{{ errorMessage }}
-			</p>
-
-			<!-- Show loading state -->
-			<div v-if="loading" class="mt-4">
-				<UAlert title="Fetching response..." />
-			</div>
-
-			<!-- Show response -->
-			<div
-				id="response-anchor"
-				v-if="queryResponseText"
-				class="mt-4 p-4 border border-gray-300 rounded bg-gray-100"
-			>
-				<UCard>
-					<template #header>
-						<h3 class="text-lg font-semibold mb-2">Response:</h3>
-						<p class="mb-2">{{ queryResponseText }}</p>
-						<h3 class="text-lg font-semibold mb-2">
-							Key Source Documents:
-						</h3>
-						<ul v-if="processedSources.length > 0">
-							<li
-								v-for="source in processedSources"
-								:key="source.fileIdentifier"
-								class="mb-1"
+	<div class="query-form__container">
+		<div class="query-form__inner">
+			<h2 class="heading heading--h2">
+				Run a test query on your processed documents
+			</h2>
+			<div class="form-container">
+				<form @submit.prevent="handleQuery">
+					<div class="form__label-fields">
+						<div class="form__label-field">
+							<label class="form__label" for="question"
+								>Question</label
 							>
-								<!-- This link will eventually open the modal. For now, it's a placeholder link -->
-								<!-- We'll use UButton with 'to' prop to make it look like a link but handle click later -->
-								<UButton
-									variant="link"
-									:label="source.displayName"
-									@click.prevent="
-										prepareToOpenDocument(
-											source.fileIdentifier
-										)
-									"
-									class="p-0 text-left"
-								/>
-								<!-- For debugging, you can show the fileIdentifier or viewUrl -->
-								<!-- <span class="text-xs text-gray-400 ml-2"> (Debug: {{ source.fileIdentifier }})</span> -->
-							</li>
-						</ul>
-						<p v-else>No specific sources cited.</p>
-					</template>
-				</UCard>
+							<UInput
+								v-model="question"
+								id="question"
+								type="text"
+								placeholder="Run a test query..."
+								autocomplete="off"
+								class="form__label-field__input"
+							/>
+						</div>
+						<div
+							class="form__button-container single-button mt-4 md:mt-0"
+						>
+							<UButton
+								type="submit"
+								icon="i-heroicons:chat-bubble-left-ellipsis"
+								label="Ask Now!"
+								class="form__button"
+							/>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="query-response__container">
+				<!-- Show error message -->
+				<p v-if="errorMessage" class="text-red-600 mt-4">
+					{{ errorMessage }}
+				</p>
+
+				<!-- Show loading state -->
+				<div v-if="loading" class="mt-4">
+					<UAlert title="Fetching response..." />
+				</div>
+
+				<!-- Show response -->
+				<div
+					id="response-anchor"
+					v-if="queryResponseText"
+					class="mt-4 p-4 border border-gray-300 rounded bg-gray-100"
+				>
+					<UCard>
+						<template #header>
+							<h3 class="text-lg font-semibold mb-2">
+								Response:
+							</h3>
+							<p class="mb-2">{{ queryResponseText }}</p>
+							<h3 class="text-lg font-semibold mb-2">
+								Key Source Documents:
+							</h3>
+							<ul v-if="processedSources.length > 0">
+								<li
+									v-for="source in processedSources"
+									:key="source.fileIdentifier"
+									class="mb-1"
+								>
+									<!-- This link will eventually open the modal. For now, it's a placeholder link -->
+									<!-- We'll use UButton with 'to' prop to make it look like a link but handle click later -->
+									<UButton
+										variant="link"
+										:label="source.displayName"
+										@click.prevent="
+											prepareToOpenDocument(
+												source.fileIdentifier
+											)
+										"
+										class="p-0 text-left"
+									/>
+									<!-- For debugging, you can show the fileIdentifier or viewUrl -->
+									<!-- <span class="text-xs text-gray-400 ml-2"> (Debug: {{ source.fileIdentifier }})</span> -->
+								</li>
+							</ul>
+							<p v-else>No specific sources cited.</p>
+						</template>
+					</UCard>
+				</div>
 			</div>
 		</div>
 

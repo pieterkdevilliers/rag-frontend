@@ -31,7 +31,9 @@
 		</header>
 		<div class="container mx-auto p-4">
 			<slot />
-			<Queries />
+			<div class="container container--default mt-6">
+				<Queries />
+			</div>
 		</div>
 		<Footer />
 

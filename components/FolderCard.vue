@@ -18,7 +18,7 @@
 						@click="emitEditFolder"
 					/>
 				</UTooltip>
-				<UTooltip text="Delete folder">
+				<UTooltip text="Delete folder" class="ms-auto">
 					<UButton
 						icon="i-heroicons-trash"
 						aria-label="Delete folder"

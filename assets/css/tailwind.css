@@ -329,6 +329,15 @@
 	}
 
 	/* Query Form */
+	.query-form__container {
+		@apply bg-gradient-to-br from-purple-800 to-pink-500 p-1 rounded-xl;
+	}
+	.query-form__inner {
+		@apply bg-white rounded-lg p-3 md:p-6;
+	}
+	.query-form__container .heading {
+		@apply text-center text-gradient mt-0;
+	}
 	.query-form__container .form-container {
 		@apply p-0 max-w-xl mx-auto;
 	}
@@ -336,13 +345,24 @@
 		@apply w-full;
 	}
 	.query-form__container .form__label-fields {
-		@apply w-full flex flex-col md:flex-row gap-3 md:gap-6 justify-center;
+		@apply w-full flex flex-col md:flex-row gap-3 md:gap-6 justify-center items-center;
 	}
 	.query-form__container .form__label-field {
 		@apply w-full md:max-w-[66%];
 	}
+	.query-form__container .form__label {
+		@apply text-purple-800 font-roboto-condensed text-lg font-medium;
+	}
+	.query-form__container .form__label-field input[type='text'] {
+		@apply ring-1 ring-purple-500 focus:ring-2 placeholder:text-slate-400;
+	}
 	.query-form__container .form__button-container {
 		@apply mt-0 md:self-end;
+	}
+
+	/* Layout - user_access */
+	.layout--user_access {
+		@apply font-normal text-slate-500;
 	}
 
 	/* Page Headers */
@@ -350,10 +370,10 @@
 		@apply pt-3;
 	}
 	.layout--user_access .page-header {
-		@apply flex flex-col items-start lg:flex-row lg:items-center justify-between mb-3;
+		@apply flex flex-col items-start lg:flex-row lg:items-center justify-between mb-5;
 	}
 	.layout--user_access .page__title {
-		@apply text-gradient;
+		@apply text-gradient text-4xl;
 	}
 	.layout--user_access .search-input__container {
 		@apply flex mt-3;
@@ -363,6 +383,20 @@
 	}
 	.search-pagination-container {
 		@apply flex flex-col lg:flex-row justify-between items-start lg:items-center mt-3;
+	}
+
+	/* Cards */
+	.layout--user_access .card-grid {
+		@apply mt-3;
+	}
+	.layout--user_access .card__outer {
+		@apply bg-gradient-to-br from-purple-800 to-pink-500 rounded-xl p-1;
+	}
+	.layout--user_access .card__footer {
+		@apply px-1 py-2;
+	}
+	.layout--user_access .card__footer :is(a, button) {
+		@apply bg-white text-primary-500 hover:bg-primary-500/10 text-base font-medium font-roboto-condensed rounded-md px-2 py-1 shadow-none;
 	}
 
 	/* Pagination */
