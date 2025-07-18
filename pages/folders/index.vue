@@ -1,20 +1,20 @@
 <template>
 	<section class="folders container--default mx-auto">
 		<div class="page-header">
-			<h2 class="heading heading--h2">Folders</h2>
+			<h2 class="heading heading--h2 page__title">Documents</h2>
 			<div class="flex justify-start sm:justify-end gap-6 my-2">
 				<UTooltip text="Add new files to AI database">
 					<UButton
 						icon="i-heroicons-arrow-path-20-solid"
 						label="Update AI Database"
-						variant="solid"
+						variant="outline"
 						@click="openRefreshDBModal"
 					/>
 				</UTooltip>
 				<UTooltip text="Add a new folder">
 					<UButton
 						icon="i-heroicons:plus-circle-16-solid"
-						variant="outline"
+						variant="solid"
 						label="Add Folder"
 						@click="openModal"
 					/>
@@ -28,7 +28,11 @@
 			</div>
 		</div>
 		<div class="card-grid">
-			<div v-for="folder in filteredFolders" :key="folder.id">
+			<div
+				v-for="folder in filteredFolders"
+				:key="folder.id"
+				class="card__outer"
+			>
 				<FolderCard
 					:folder="folder"
 					@folder-deleted="handleFolderRemoved"
@@ -101,7 +105,6 @@ const {
 	},
 });
 
-
 const handleFolderRemoved = (deletedFolderId: number) => {
 	console.log(
 		`Folder with ID ${deletedFolderId} was reported as deleted. Triggering refresh.`
@@ -115,7 +118,7 @@ if (error.value) {
 } else {
 	// Check if the response has the expected structure
 	if (folders.value) {
-		authStore.setProcessedDocsCount(folders.value.processed_docs_count)
+		authStore.setProcessedDocsCount(folders.value.processed_docs_count);
 		console.log('Folders:', folders.value);
 		console.log('Stored Unique Account ID:', authStore.uniqueAccountId);
 	} else {
