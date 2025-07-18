@@ -5,7 +5,9 @@
 				class="container mx-auto px-4 py-2 flex justify-between items-center"
 			>
 				<ClientOnly>
-					<h1 class="font-bold text-xl text-primary">
+					<h1
+						class="font-normal text-xl text-slate-50 font-roboto-condensed"
+					>
 						<span v-if="account_organisation">
 							{{ account_organisation }}
 						</span>
