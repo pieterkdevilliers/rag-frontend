@@ -1,11 +1,11 @@
 <template>
 	<section class="users container--default mx-auto">
 		<div class="page-header">
-			<h2 class="heading heading--h2">Users</h2>
+			<h2 class="heading heading--h2 page__title">Users</h2>
 			<div class="flex justify-start sm:justify-end gap-6 my-2">
 				<UButton
 					icon="i-heroicons:plus-circle-16-solid"
-					variant="outline"
+					variant="solid"
 					label="Add User"
 					@click="openModal"
 				/>
@@ -14,7 +14,7 @@
 		<div class="search-pagination-container"></div>
 
 		<div class="user-grid card-grid">
-			<div v-for="user in users?.users">
+			<div v-for="user in users?.users" class="card__outer">
 				<UserCard
 					:key="user.id"
 					:user="user"

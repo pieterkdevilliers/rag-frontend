@@ -1,23 +1,34 @@
 <template>
 	<UCard>
-		<div>
-			<p><strong>Email:</strong> {{ user.user_email }}</p>
-			<p><strong>User ID:</strong> {{ user.id }}</p>
+		<p class="paragraph-label-text">
+			<strong class="paragraph-label-text__label">Email:</strong>
+			<UTooltip
+				:text="user.user_email"
+				class="paragraph-label-text__text"
+			>
+				<span>
+					{{ user.user_email }}
+				</span>
+			</UTooltip>
+		</p>
+		<p class="paragraph-label-text">
+			<strong class="paragraph-label-text__label">User ID:</strong
+			><span class="paragraph-label-text__text">{{ user.id }}</span>
+		</p>
 
-			<!-- New Toggle for Receive Notifications -->
-			<div class="flex items-center justify-between mt-4">
-				<label :for="`notifications-toggle-${user.id}`"
-					><strong>Receive Notifications:</strong></label
-				>
-				<UTooltip text="Should this user receive email notifications?">
-					<UToggle
-						:id="`notifications-toggle-${user.id}`"
-						v-model="localReceiveNotifications"
-						:loading="isUpdatingNotifications"
-						@update:model-value="handleToggleReceiveNotifications"
-					/>
-				</UTooltip>
-			</div>
+		<!-- New Toggle for Receive Notifications -->
+		<div class="flex items-center justify-between mt-4">
+			<label :for="`notifications-toggle-${user.id}`"
+				><strong>Receive Notifications:</strong></label
+			>
+			<UTooltip text="Should this user receive email notifications?">
+				<UToggle
+					:id="`notifications-toggle-${user.id}`"
+					v-model="localReceiveNotifications"
+					:loading="isUpdatingNotifications"
+					@update:model-value="handleToggleReceiveNotifications"
+				/>
+			</UTooltip>
 		</div>
 		<template #footer>
 			<div class="flex gap-2">
@@ -27,7 +38,7 @@
 						@click="emitEditUser"
 					/>
 				</UTooltip>
-				<UTooltip text="Delete User">
+				<UTooltip text="Delete User" class="ms-auto">
 					<UButton
 						icon="i-heroicons:trash"
 						@click="openConfirmDeleteModal"
@@ -167,4 +178,8 @@ const emitEditUser = () => {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.paragraph-label-text__text {
+	display: block;
+}
+</style>
