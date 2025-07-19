@@ -382,7 +382,7 @@
 		@apply ring-purple-500;
 	}
 	.search-pagination-container {
-		@apply flex flex-col lg:flex-row justify-between items-start lg:items-center mt-3;
+		@apply flex flex-col lg:flex-row justify-between items-start lg:items-center mt-3 md:min-h-12;
 	}
 
 	/* Cards */
@@ -397,6 +397,14 @@
 	}
 	.layout--user_access .card__footer :is(a, button) {
 		@apply bg-white text-primary-500 hover:bg-primary-500/10 text-base font-medium font-roboto-condensed rounded-md px-2 py-1 shadow-none;
+	}
+
+	/* Card Content */
+	.paragraph-label-text {
+		@apply grid grid-cols-[auto_1fr] gap-1 w-full;
+	}
+	.paragraph-label-text__text {
+		@apply whitespace-nowrap overflow-hidden text-ellipsis min-w-0;
 	}
 
 	/* Pagination */

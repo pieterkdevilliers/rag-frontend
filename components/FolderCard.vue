@@ -1,7 +1,17 @@
 <template>
 	<UCard>
 		<p><strong>ID:</strong> {{ folder.id }}</p>
-		<p><strong>Name:</strong> {{ folder.folder_name }}</p>
+		<p class="paragraph-label-text">
+			<strong class="paragraph-label-text__label">Name:</strong>
+			<UTooltip
+				:text="folder.folder_name"
+				class="paragraph-label-text__text"
+			>
+				<span>
+					{{ folder.folder_name }}
+				</span>
+			</UTooltip>
+		</p>
 		<template #footer>
 			<div class="flex gap-2">
 				<UTooltip text="View folder contents">
@@ -109,5 +119,11 @@ const emitEditFolder = () => {
 </script>
 
 <style scoped>
-/* Your styles */
+/*
+	<UTooltip> adds inline-flex, which breaks the truncation ellipsis.
+	Adding block to tailwind.css still gets overridden by <UTooltip>.
+ */
+.paragraph-label-text__text {
+	display: block;
+}
 </style>
