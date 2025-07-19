@@ -24,7 +24,7 @@
 					class="mt-1 text-sm text-gray-500 dark:text-gray-300"
 					id="file_input_help"
 				>
-					Supported File Types: .pdf, .docx, .doc, .md, .txt
+					Supported File Types: .pdf, .docx, .doc, .md, .txt, .xls, .xlsx
 				</p>
 			</UFormGroup>
 
@@ -63,7 +63,7 @@
 
 <script setup lang="ts">
 
-const ALLOWED_EXTENSIONS = ['.pdf', '.docx', '.doc', '.md', '.txt'];
+const ALLOWED_EXTENSIONS = ['.pdf', '.docx', '.doc', '.md', '.txt', '.xls', '.xlsx'];
 
 const config = useRuntimeConfig();
 import { ref, reactive, computed } from 'vue';
