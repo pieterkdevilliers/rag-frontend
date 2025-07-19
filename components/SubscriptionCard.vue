@@ -3,20 +3,38 @@
 	<UCard>
 		<template #header>
 			<!-- Use props.subscription instead of just subscription -->
-			<h3 class="heading heading--h3 text-pretty">
+			<h3 class="heading heading--h3 text-pretty card__title">
 				{{ props.subscription.related_product_title }}
 			</h3>
 		</template>
 		<div class="subscription-card__details">
 			<!-- Update all references to use props.subscription -->
 			<p><strong>Type:</strong> {{ displayType }}</p>
-			<p>
-				<strong>Subscription Reference:</strong>
-				{{ props.subscription.stripe_subscription_id }}
+			<p class="paragraph-label-text block">
+				<strong class="paragraph-label-text__label"
+					>Subscription Reference:</strong
+				>
+				<UTooltip
+					:text="props.subscription.stripe_subscription_id"
+					class="paragraph-label-text__text"
+				>
+					<span>
+						{{ props.subscription.stripe_subscription_id }}
+					</span>
+				</UTooltip>
 			</p>
-			<p>
-				<strong>Customer Reference:</strong>
-				{{ props.subscription.stripe_customer_id }}
+			<p class="paragraph-label-text block">
+				<strong class="paragraph-label-text__label"
+					>Customer Reference:</strong
+				>
+				<UTooltip
+					:text="props.subscription.stripe_customer_id"
+					class="paragraph-label-text__text"
+				>
+					<span>
+						{{ props.subscription.stripe_customer_id }}
+					</span>
+				</UTooltip>
 			</p>
 			<p>
 				<strong>Trial Start:</strong>
@@ -43,7 +61,9 @@
 		<template #footer>
 			<div class="subscription-card__footer">
 				<!-- This will now display the correct status -->
-				<p><strong>Status:</strong> {{ props.subscription.status }}</p>
+				<p class="subscription-status">
+					<strong>Status:</strong> {{ props.subscription.status }}
+				</p>
 			</div>
 			<div v-if="props.subscription.status === 'active'">
 				<UTooltip text="Cancel Subscription">
@@ -125,7 +145,6 @@ function formatDateTime(isoString: string | null | undefined): string {
 	return format(parseISO(isoString), 'd MMMM yyyy');
 }
 
-
 const handleCancelSubscription = async () => {
 	isCancelling.value = true;
 	closeConfirmCancelModal(); // Close modal immediately
@@ -152,10 +171,21 @@ const handleCancelSubscription = async () => {
 	} catch (error: any) {
 		console.error('Error canceling subscription:', error);
 		const errorMessage =
-			error.data?.detail || error.message || 'Could not cancel subscription.';
+			error.data?.detail ||
+			error.message ||
+			'Could not cancel subscription.';
 		toast.add({ title: 'Error', description: errorMessage, color: 'red' });
 	} finally {
 		isCancelling.value = false;
 	}
 };
 </script>
+<style scoped>
+/*
+	<UTooltip> adds inline-flex, which breaks the truncation ellipsis.
+	Adding block to tailwind.css still gets overridden by <UTooltip>.
+ */
+.paragraph-label-text__text {
+	display: block;
+}
+</style>

@@ -179,6 +179,10 @@ const emitEditUser = () => {
 </script>
 
 <style scoped>
+/*
+	<UTooltip> adds inline-flex, which breaks the truncation ellipsis.
+	Adding block to tailwind.css still gets overridden by <UTooltip>.
+ */
 .paragraph-label-text__text {
 	display: block;
 }
