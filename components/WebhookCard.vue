@@ -1,8 +1,18 @@
 <template>
 	<UCard>
-		<div>
-			<p><strong>Webhook Destination URL:</strong> {{ webhook.account.webhook_url }} </p>
-		</div>
+		<p class="paragraph-label-text block">
+			<strong class="paragraph-label-text__label"
+				>Webhook Destination URL:</strong
+			>
+			<UTooltip
+				:text="webhook.account.webhook_url"
+				class="paragraph-label-text__text"
+			>
+				<span>
+					{{ webhook.account.webhook_url }}
+				</span>
+			</UTooltip>
+		</p>
 		<template #footer>
 			<div class="flex gap-2">
 				<UTooltip text="Edit Webhook Destination URL">
@@ -28,7 +38,7 @@ const { webhook } = defineProps<{
 }>();
 
 const emit = defineEmits(['editWebhookClicked']);
-console.log("Card Webhook: ", webhook)
+console.log('Card Webhook: ', webhook);
 const toast = useToast(); // For notifications
 const authStore = useAuthStore();
 const isModalOpen = ref(false);
@@ -41,4 +51,12 @@ const emitEditWebhook = () => {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+/*
+	<UTooltip> adds inline-flex, which breaks the truncation ellipsis.
+	Adding block to tailwind.css still gets overridden by <UTooltip>.
+ */
+.paragraph-label-text__text {
+	display: block;
+}
+</style>

@@ -297,9 +297,8 @@
 
 	/* My Account */
 	/* Subscriptions */
-	.subscription-card__details strong,
-	.subscription-card__footer strong {
-		@apply font-roboto-condensed;
+	.subscription-card__footer .subscription-status {
+		@apply text-center;
 	}
 
 	/* Chat Sessions */
@@ -392,6 +391,9 @@
 	.layout--user_access .card__outer {
 		@apply bg-gradient-to-br from-purple-800 to-pink-500 rounded-xl p-1;
 	}
+	.layout--user_access .card__title {
+		@apply text-purple-800;
+	}
 	.layout--user_access .card__footer {
 		@apply px-1 py-2;
 	}
@@ -400,6 +402,9 @@
 	}
 
 	/* Card Content */
+	.card-grid__card .card__body .paragraph-label-text:not(:first-of-type) {
+		@apply mt-3;
+	}
 	.paragraph-label-text {
 		@apply grid grid-cols-[auto_1fr] gap-1 w-full;
 	}
